@@ -1,0 +1,25 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+GET     /                                       Application.index
+
+# Ignore favicon requests
+GET     /favicon.ico                            404
+
+# Map static resources from the /app/public folder to the /public path
+GET     /public/                                staticDir:public
+
+# WebServices
+POST   	/services/{controller}/{action}         webservices.{controller}.{action}
+
+#Secure module
+GET		/login									Secure.login
+POST    /login         							Secure.authenticate
+GET     /logout         						Secure.logout
+
+WS   	/startDisasterRecovery            		WSDisasterRecovery.startOperation
+
+# Catch all
+*       /{controller}/{action}                  {controller}.{action}

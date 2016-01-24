@@ -1,0 +1,20 @@
+#{extends 'main.html' /}
+#{set title:'Home' /}
+
+<h1>Getting server updates</h1>
+<div id="result"></div>
+
+<p>Notification: <span id="display"></span></p>
+<button id="test" onclick="startOperation()">Start operation</button>
+
+<script>
+
+    function startOperation() {
+       var socket = new WebSocket("@@{WSDisasterRecovery.startOperation()}");
+
+	    socket.onmessage = function(msg){
+	        console.log(msg.data);
+	    }
+    }
+	
+</script>

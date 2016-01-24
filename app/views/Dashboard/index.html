@@ -1,0 +1,113 @@
+#{extends 'main.html' /}
+#{set title:messages.get('dashboard.title') /}
+
+#{set 'moreStyles'}
+
+<link href="@{'/public/sbadmin/bower_components/morrisjs/morris.css'}" rel="stylesheet">
+<link href="@{'/public/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css'}" rel="stylesheet">
+
+#{/}
+
+<!-- /.row -->
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label class="control-label" for="date">&{'dashboard.date'}</label>
+                            <div class='input-group date'>
+                                <input type='text' class="form-control" id="date" name="date" maxlength="10" value="${new Date().format('dd/MM/yyyy')}" />
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.form -->
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+
+<div class="row">
+    <div class="col-lg-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                &{'dashboard.averageWaitingTime'}
+            </div>
+            <div class="panel-body">
+                <div id="average_waiting_time"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                &{'dashboard.averageAttentionTime'}
+            </div>
+            <div class="panel-body">
+                <div id="average_attention_time"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                &{'dashboard.totalHoldTime'}
+            </div>
+            <div class="panel-body">
+                <div id="total_hold_time"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                &{'dashboard.turnsCreated'}
+            </div>
+            <div class="panel-body">
+                <div id="turns_created"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                &{'dashboard.turnsServed'}
+            </div>
+            <div class="panel-body">
+                <div id="turns_served"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                &{'dashboard.turnsAbandoned'}
+            </div>
+            <div class="panel-body">
+                <div id="turns_abandoned"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+#{set 'moreScripts'}
+
+<script type="text/javascript" src="@{'/public/bootstrap-datetimepicker/js/moment-with-locales.js'}"></script>
+<script type="text/javascript" src="@{'/public/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js'}"></script>
+
+<script src="@{'/public/sbadmin/bower_components/raphael/raphael-min.js'}"></script>
+<script src="@{'/public/sbadmin/bower_components/morrisjs/morris.min.js'}"></script>
+
+#{/}

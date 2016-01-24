@@ -1,0 +1,11 @@
+%{
+serializedAttrs  = play.templates.FastTags.serialize(_attrs, "class", "name")
+}%
+
+<div class="form-group ${_error ? 'has-error' : ''}">
+    <label class="control-label" for="${_name}">${messages.get(_name)}</label>
+    <div class="form-input">
+        <input name="${_name}" id="${_name}" class="form-control" ${serializedAttrs.raw()}/>
+        #{if _error}<p id="${_name}-error" class="help-block">${_error}</p>#{/if}
+    </div>
+</div>

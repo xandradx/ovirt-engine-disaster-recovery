@@ -1,0 +1,22 @@
+<div class="col-lg-6">
+    <div class="form-group">
+        <label class="control-label" for="startDate">&{'form.startDate'}</label>
+        <div class='input-group date'>
+            <input type='text' class="form-control" id="startDate" name="startDate" maxlength="10" value="${_startDate?.format('dd/MM/yyyy')}" />
+            <span class="input-group-addon">
+                <span class="glyphicon glyphicon-calendar"></span>
+            </span>
+        </div>
+    </div>
+</div>
+<div class="col-lg-6">
+    <div class="form-group">
+        <label class="control-label" for="endDate">&{'form.endDate'}</label>
+        <div class='input-group date'>
+            <input type='text' class="form-control" id="endDate" name="endDate" maxlength="10" value="${_endDate?.format('dd/MM/yyyy')}"/>
+            <span class="input-group-addon">
+                <span class="glyphicon glyphicon-calendar"></span>
+            </span>
+        </div>
+    </div>
+</div>

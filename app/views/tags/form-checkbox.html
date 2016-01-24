@@ -1,0 +1,9 @@
+#{field _fieldName}
+<div class="form-group">
+    <label>${messages.get(field.name)}</label>
+    <label class="checkbox-inline">
+		&nbsp;<input type="checkbox" ${ field.flash == "on" ? "checked" : ((_value) ? "checked" : "")} name="${field.name}" id="${field.id}">&nbsp;
+		<input name="${field.name}" type="hidden" value="false"/>
+    </label>
+</div>
+#{/}

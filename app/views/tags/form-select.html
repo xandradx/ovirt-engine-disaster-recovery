@@ -1,0 +1,27 @@
+
+%{
+    if (_propertyName == null) {
+        if (_valueProperty != null ) {
+            pName = _fieldName + "." + _valueProperty;
+        } else {
+            pName = _fieldName;
+        }
+    } else {
+        pName = _propertyName;
+    }
+}%
+
+#{field _fieldName}
+<div class="form-group ${field.error ? 'has-error':''}">
+    <label class="control-label" for="${field.id}">${messages.get(_label?:field.name)}</label>
+    <div class="form-input">
+        #{if _multiple}
+            #{select-multiple pName, items: _items, valueProperty:_valueProperty, labelProperty:_labelProperty, values:_value, class:"form-control", id:field.id /}
+        #{/if}
+        #{else}
+            #{select pName, items: _items, valueProperty:_valueProperty, labelProperty:_labelProperty, value:field.flash?:_value, class:"form-control", id:field.id /}
+        #{/else}
+        #{if field.error}<p id="${field.id}-error" class="help-block">${field.error}</p>#{/if}
+    </div>
+</div>
+#{/}

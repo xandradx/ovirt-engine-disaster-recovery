@@ -1,0 +1,15 @@
+# Application dependencies
+
+require:
+    - play
+    - play -> html5validation 1.2.2
+    - play -> excel 1.2.3x
+    - org.ovirt.engine.sdk -> ovirt-engine-sdk-java 3.4.0.1-1
+    - postgresql -> postgresql 9.1-901-1.jdbc4
+
+repositories:
+    - ovirt:
+        type: iBiblio
+        root: "https://oss.sonatype.org/content/repositories/releases/"
+        contains:
+            - org.ovirt.engine.sdk -> *

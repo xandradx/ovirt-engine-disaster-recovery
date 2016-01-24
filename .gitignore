@@ -1,0 +1,24 @@
+/tmp/
+
+/eclipse/
+
+/.settings/
+
+/.project
+/.classpath
+
+/server.pid
+/logs/
+/ColasBackend.iws
+/ColasBackend.ipr
+/ColasBackend.iml
+
+/precompiled/
+
+/oVirt Dashboard.iws
+/oVirt Dashboard.ipr
+/oVirt Dashboard.iml
+
+/modules/
+
+/lib/

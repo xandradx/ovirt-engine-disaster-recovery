@@ -1,0 +1,16 @@
+UserRole(admin):
+    name: Administrador
+    code: ADMINISTRATOR
+    description: Usuario con los permisos para utilizar toda la plataforma.
+
+UserRole(tech):
+    name: Tecnico
+    code: TECNICO
+    description: Usuario con permisos de iniciar fail over y fail back.
+
+User(administradorMaestro):
+    username: admin
+    password: admin
+    firstName: Administrador
+    lastName: Maestro
+    role: [admin]

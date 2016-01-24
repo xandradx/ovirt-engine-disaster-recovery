@@ -1,0 +1,14 @@
+#{field _fieldName}
+<div class="form-group ${field.error ? 'has-error':''}">
+    <label class="control-label" for="${field.id}">${messages.get(field.name)}</label>
+    <div class="form-input">
+
+        %{
+            fieldValue = field.flash != null ? field.flash : field.value;
+        }%
+
+        #{input for:field.name, id:field.id, class:"form-control", value:fieldValue /}
+        #{if field.error}<p id="${field.id}-error" class="help-block">${field.error}</p>#{/if}
+    </div>
+</div>
+#{/}
