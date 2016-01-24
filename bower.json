@@ -1,0 +1,19 @@
+{
+  "name": "OvirtDashboard",
+  "version": "1.0",
+  "authors": [
+    "Jose Andrade <jandrad@chocomango.net>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/components/",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "patternfly": "~2.9.0"
+  }
+}

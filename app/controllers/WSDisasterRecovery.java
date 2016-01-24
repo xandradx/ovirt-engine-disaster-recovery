@@ -1,14 +1,8 @@
 package controllers;
 
-import com.ning.http.client.websocket.WebSocket;
 import drp.DisasterRecovery;
 import drp.objects.OperationListener;
-import jobs.DRPOperationJob;
 import models.RemoteHost;
-import play.Logger;
-import play.libs.F;
-import play.mvc.Http;
-import play.mvc.Http.WebSocketEvent;
 import play.mvc.WebSocketController;
 
 /**
