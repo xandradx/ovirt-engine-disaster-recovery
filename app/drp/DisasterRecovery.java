@@ -28,10 +28,10 @@ import java.util.List;
  */
 public class DisasterRecovery {
 
-    private static String API_URL = "https://nrhevm.itmlabs.local:443/api";
-    private static String USER = "admin@internal";
-    private static String PASSWORD = "pruebas";
-    private static String TRUSTSTORE_PATH = "/conf/server.truststore";
+    public static String API_URL = "https://nrhevm.itmlabs.local:443/api";
+    public static String USER = "admin@internal";
+    public static String PASSWORD = "pruebas";
+    public static String TRUSTSTORE_PATH = "/conf/server.truststore";
 
     private static String DB_HOST = "nrhevm.itmlabs.local";
     private static String DB_PORT = "5432";

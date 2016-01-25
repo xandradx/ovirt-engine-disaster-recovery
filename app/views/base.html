@@ -1,132 +1,111 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<!--[if IE 9]><html lang="en-us" class="ie9"><![endif]-->
+<!--[if gt IE 9]><!-->
+<html lang="en-us">
+<!--<![endif]-->
     <head>
-
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="">
-        <meta name="author" content="">
-
-        <title>#{get 'title'/}</title>
-        
-        #{get 'moreStyles'/}
-
-        <!-- Bootstrap Core CSS -->
-        <link href="@{'/public/sbadmin/bower_components/bootstrap/dist/css/bootstrap.min.css'}" rel="stylesheet">
-
-        <!-- MetisMenu CSS -->
-        <link href="@{'/public/sbadmin/bower_components/metisMenu/dist/metisMenu.min.css'}" rel="stylesheet">
-
-        <!-- Timeline CSS -->
-        <link href="@{'/public/sbadmin/dist/css/timeline.css'}" rel="stylesheet">
-
-        <!-- Custom CSS -->
-        <link href="@{'/public/sbadmin/dist/css/sb-admin-2.css'}" rel="stylesheet">
-
-        <!-- Custom Fonts -->
-        <link href="@{'/public/sbadmin/bower_components/font-awesome/css/font-awesome.min.css'}" rel="stylesheet" type="text/css">
-        
-        <!-- Custom Styles -->
-        <link href="@{'/public/stylesheets/template.css'}" rel="stylesheet" type="text/css">
-
-        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!--[if lt IE 9]>
-            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-        <![endif]-->
-
-        <link rel="stylesheet" href="@{'/public/multiselect/bootstrap-multiselect.css'}" type="text/css"/>
-        
+        <title>Basic - PatternFly</title>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="shortcut icon" href="@{'/public/components/patternfly/dist/img/favicon.ico'}">
+        <!-- iPad retina icon -->
+        <link rel="apple-touch-icon-precomposed" sizes="152x152" href="@{'/public/components/patternfly/dist/img/apple-touch-icon-precomposed-152.png'}">
+        <!-- iPad retina icon (iOS < 7) -->
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="@{'/public/components/patternfly/dist/img/apple-touch-icon-precomposed-144.png'}">
+        <!-- iPad non-retina icon -->
+        <link rel="apple-touch-icon-precomposed" sizes="76x76" href="@{'/public/components/patternfly/dist/img/apple-touch-icon-precomposed-76.png'}">
+        <!-- iPad non-retina icon (iOS < 7) -->
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="@{'/public/components/patternfly/dist/img/apple-touch-icon-precomposed-72.png'}">
+        <!-- iPhone 6 Plus icon -->
+        <link rel="apple-touch-icon-precomposed" sizes="120x120" href="@{'/public/components/patternfly/dist/img/apple-touch-icon-precomposed-180.png'}">
+        <!-- iPhone retina icon (iOS < 7) -->
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="@{'/public/components/patternfly/dist/img/apple-touch-icon-precomposed-114.png'}">
+        <!-- iPhone non-retina icon (iOS < 7) -->
+        <link rel="apple-touch-icon-precomposed" sizes="57x57" href="@{'/public/components/patternfly/dist/img/apple-touch-icon-precomposed-57.png'}">
+        <link rel="stylesheet" href="@{'/public/components/patternfly/dist/css/patternfly.min.css'}" >
+        <link rel="stylesheet" href="@{'/public/components/patternfly/dist/css/patternfly-additions.min.css'}" >
+        <script src="@{'/public/components/patternfly/components/jquery/dist/jquery.min.js'}"></script>
+        <script src="@{'/public/components/patternfly/components/bootstrap/dist/js/bootstrap.min.js'}"></script>
+        <script src="@{'/public/components/patternfly/components/datatables/media/js/jquery.dataTables.js'}"></script>
+        <script src="@{'/public/components/patternfly/dist/js/patternfly.min.js'}"></script>
+        <script src="@{'/public/components/patternfly/components/bootstrap-select/dist/js/bootstrap-select.min.js'}"></script>
+        <script src="@{'/public/components/patternfly/components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js'}"></script>
     </head>
 
     <body>
 
-        #{doLayout/}
+    #{doLayout/}
 
-        <!-- jQuery -->
-        <script src="@{'/public/sbadmin/bower_components/jquery/dist/jquery.min.js'}"></script>
+    <script>
 
-        <!-- Bootstrap Core JavaScript -->
-        <script src="@{'/public/sbadmin/bower_components/bootstrap/dist/js/bootstrap.min.js'}"></script>
+        #{get 'moreFunctions'/}
 
-        <!-- Metis Menu Plugin JavaScript -->
-        <script src="@{'/public/sbadmin/bower_components/metisMenu/dist/metisMenu.min.js'}"></script>
+        *{
+        jQuery.extend(jQuery.validator.messages, {
+            required: "&{'jvalidation.required'}",
+            remote: "&{'jvalidation.remote'}",
+            email: "&{'jvalidation.email'}",
+            url: "&{'jvalidation.url'}",
+            date: "&{'jvalidation.date'}",
+            dateISO: "&{'jvalidation.dateISO'}",
+            number: "&{'jvalidation.number'}",
+            digits: "&{'jvalidation.digits'}",
+            creditcard: "&{'jvalidation.creditcard'}",
+            equalTo: "&{'jvalidation.equalTo'}",
+            accept: "&{'jvalidation.accept'}",
+            maxlength: jQuery.validator.format("&{'jvalidation.maxlength'}"),
+            minlength: jQuery.validator.format("&{'jvalidation.minlength'}"),
+            rangelength: jQuery.validator.format("&{'jvalidation.rangelength'}"),
+            range: jQuery.validator.format("&{'jvalidation.range'}"),
+            max: jQuery.validator.format("&{'jvalidation.max'}"),
+            min: jQuery.validator.format("&{'jvalidation.min'}")
+        });
 
-        <!-- Custom Theme JavaScript -->
-        <script src="@{'/public/sbadmin/dist/js/sb-admin-2.js'}"></script>
-        
-        <!-- JQuery Validate -->
-        <script src="@{'/public/javascripts/jquery.validate.min.js'}"></script>
+        jQuery.validator.setDefaults({
+            errorClass : "help-block",
+            errorElement: "p",
+            highlight: function(element, errorClass) {
+                $(element).parent('div').addClass("has-error");
+            },
+            unhighlight: function(element, errorClass) {
+                $(element).parent('div').removeClass("has-error");
+            },
+            errorPlacement: function(error, element) {
+                error.appendTo(element.parent());
+            }
+        });
 
-        <script type="text/javascript" src="@{'/public/multiselect/bootstrap-multiselect.js'}"></script>
+        $('select').multiselect({
+            buttonContainer: '<div class="btn-group btn-block" />',
+            buttonClass: 'btn btn-default btn-block',
+            enableCaseInsensitiveFiltering: true,
+            filterPlaceholder: '&{'select.search'}',
+            selectAllText: '&{'select.selectAll'}',
+            nonSelectedText: '&{'select.nonSelected'}',
+            nSelectedText: '&{'select.selected'}',
+            allSelectedText: '&{'select.allSelected'}',
+            onChange: function(element, checked) {
+                #{get 'selectOnChange'/}
+            }
+        });
+        }*
 
-		<script>
+        $(document).ready(function() {
 
-		    #{get 'moreFunctions'/}
-
-			jQuery.extend(jQuery.validator.messages, {
-		        required: "&{'jvalidation.required'}",
-		        remote: "&{'jvalidation.remote'}",
-		        email: "&{'jvalidation.email'}",
-		        url: "&{'jvalidation.url'}",
-		        date: "&{'jvalidation.date'}",
-		        dateISO: "&{'jvalidation.dateISO'}",
-		        number: "&{'jvalidation.number'}",
-		        digits: "&{'jvalidation.digits'}",
-		        creditcard: "&{'jvalidation.creditcard'}",
-		        equalTo: "&{'jvalidation.equalTo'}",
-		        accept: "&{'jvalidation.accept'}",
-		        maxlength: jQuery.validator.format("&{'jvalidation.maxlength'}"),
-		        minlength: jQuery.validator.format("&{'jvalidation.minlength'}"),
-		        rangelength: jQuery.validator.format("&{'jvalidation.rangelength'}"),
-		        range: jQuery.validator.format("&{'jvalidation.range'}"),
-		        max: jQuery.validator.format("&{'jvalidation.max'}"),
-		        min: jQuery.validator.format("&{'jvalidation.min'}")
-		    });
-		    
-		    jQuery.validator.setDefaults({
-                errorClass : "help-block",
-                errorElement: "p",
-                highlight: function(element, errorClass) {
-                    $(element).parent('div').addClass("has-error");
-                },
-                unhighlight: function(element, errorClass) {
-                    $(element).parent('div').removeClass("has-error");
-                },
-                errorPlacement: function(error, element) {
-                    error.appendTo(element.parent());
-		    	}
+            *{
+            $('#form').validate({
+                ignore: ":hidden:not(select)"
             });
+            }*
 
-            $('select').multiselect({
-                buttonContainer: '<div class="btn-group btn-block" />',
-                buttonClass: 'btn btn-default btn-block',
-                enableCaseInsensitiveFiltering: true,
-                filterPlaceholder: '&{'select.search'}',
-                selectAllText: '&{'select.selectAll'}',
-                nonSelectedText: '&{'select.nonSelected'}',
-                nSelectedText: '&{'select.selected'}',
-                allSelectedText: '&{'select.allSelected'}',
-                onChange: function(element, checked) {
-                    #{get 'selectOnChange'/}
-                }
-            });
+            #{get 'onDocumentReady'/}
 
-            $(document).ready(function() {
-                $('#form').validate({
-                    ignore: ":hidden:not(select)"
-                });
+        });
 
-                #{get 'onDocumentReady'/}
+	</script>
 
-            });
-
-		</script>
-        
-        #{get 'moreScripts'/}
+    #{get 'moreScripts'/}
 
     </body>
-
 </html>

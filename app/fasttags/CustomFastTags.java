@@ -20,6 +20,7 @@ public class CustomFastTags extends FastTags {
                                ExecutableTemplate template, int fromLine) {
 
         Object value = args.get("arg");
+        String valueString = String.valueOf(value);
 
         TagContext context = TagContext.parent("select-multiple");
         boolean selected = false;
@@ -27,18 +28,19 @@ public class CustomFastTags extends FastTags {
             Object selection = context.data.get("selected");
 
             if (selection instanceof List) {
-                List<Object> selectionList = (List<Object>) selection;
+                List<String> selectionList = (List<String>) selection;
 
                 selected = selection != null
-                        && value != null
+                        && valueString != null
                         && selectionList != null
-                        && selectionList.contains(value);
+                        && selectionList.contains(valueString);
             }
         } else {
             context = TagContext.parent("select");
             if (context!=null && context.data!=null) {
-                Object selection = context.data.get("selected");
-                selected = value!=null && selection!=null && selection.equals(value);
+                Object selectedValue = context.data.get("selected");
+                String selectedString = String.valueOf(selectedValue);
+                selected = value!=null && selectedString!=null && selectedString.equals(valueString);
             }
         }
 

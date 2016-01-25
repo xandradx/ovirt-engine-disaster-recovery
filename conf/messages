@@ -5,7 +5,7 @@
 ################################################
 #Data tables messages
 ################################################
-datatables.sSearch = Buscar:
+datatables.sSearch =
 datatables.sLengthMenu = Mostrar _MENU_
 datatables.sProcessing = Procesando...
 datatables.sZeroRecords = No se encontraron resultados

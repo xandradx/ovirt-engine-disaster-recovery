@@ -1,18 +1,16 @@
-<ul class="nav navbar-top-links navbar-right">
-    <!-- /.dropdown -->
+<ul class="nav navbar-nav navbar-utility">
     <li class="dropdown">
-        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-            <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <span class="pficon pficon-user"></span>
+            ${_user?.getFullName()} <b class="caret"></b>
         </a>
-        <ul class="dropdown-menu dropdown-user">
-            <li><a href="@{Profile.index()}"><i class="fa fa-user fa-fw"></i> &{'menu.user.profile'}</a>
+        <ul class="dropdown-menu">
+            <li>
+                <a href="@{Profile.index()}">&{'menu.user.profile'}</a>
             </li>
-            <li class="divider"></li>
-            <li><a href="@{Secure.logout()}"><i class="fa fa-sign-out fa-fw"></i> &{'menu.user.logout'}</a>
+            <li>
+                <a href="@{Secure.logout()}">&{'menu.user.logout'}</a>
             </li>
         </ul>
-        <!-- /.dropdown-user -->
     </li>
-    <!-- /.dropdown -->
 </ul>
-<!-- /.navbar-top-links -->

@@ -1,113 +1,111 @@
 #{extends 'main.html' /}
 #{set title:messages.get('dashboard.title') /}
 
-#{set 'moreStyles'}
-
-<link href="@{'/public/sbadmin/bower_components/morrisjs/morris.css'}" rel="stylesheet">
-<link href="@{'/public/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css'}" rel="stylesheet">
-
-#{/}
-
-<!-- /.row -->
 <div class="row">
-    <div class="col-lg-12">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="form-group">
-                            <label class="control-label" for="date">&{'dashboard.date'}</label>
-                            <div class='input-group date'>
-                                <input type='text' class="form-control" id="date" name="date" maxlength="10" value="${new Date().format('dd/MM/yyyy')}" />
-                                <span class="input-group-addon">
-                                    <span class="glyphicon glyphicon-calendar"></span>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- /.form -->
-            </div>
-            <!-- /.panel-body -->
-        </div>
-        <!-- /.panel -->
-    </div>
-    <!-- /.col-lg-12 -->
-</div>
-<!-- /.row -->
-
-<div class="row">
-    <div class="col-lg-4">
+    <div class="col-md-6">
         <div class="panel panel-default">
             <div class="panel-heading">
-                &{'dashboard.averageWaitingTime'}
+                <h3 class="panel-title">&{'dashboard.datacenters'}</h3>
             </div>
-            <div class="panel-body">
-                <div id="average_waiting_time"></div>
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-4">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                &{'dashboard.averageAttentionTime'}
-            </div>
-            <div class="panel-body">
-                <div id="average_attention_time"></div>
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-4">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                &{'dashboard.totalHoldTime'}
-            </div>
-            <div class="panel-body">
-                <div id="total_hold_time"></div>
-            </div>
+            <table class="table table-striped" id="table_data_centers">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Username</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>@mdo</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Jacob</td>
+                    <td>Thornton</td>
+                    <td>@fat</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td colspan="2">Larry the Bird</td>
+                    <td>@twitter</td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
 
 <div class="row">
-    <div class="col-lg-4">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                &{'dashboard.turnsCreated'}
+    <div class="col-sm-12 sidebar-pf sidebar-pf-right">
+        <div class="sidebar-header sidebar-header-bleed-left sidebar-header-bleed-right">
+            <div class="actions pull-right" id="actions_bar">
+
             </div>
-            <div class="panel-body">
-                <div id="turns_created"></div>
-            </div>
+            <h2 class="h5">DRP</h2>
         </div>
-    </div>
-    <div class="col-lg-4">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                &{'dashboard.turnsServed'}
-            </div>
-            <div class="panel-body">
-                <div id="turns_served"></div>
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-4">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                &{'dashboard.turnsAbandoned'}
-            </div>
-            <div class="panel-body">
-                <div id="turns_abandoned"></div>
-            </div>
-        </div>
+        <ul class="list-group" id="operation_list">
+
+        </ul>
     </div>
 </div>
 
-#{set 'moreScripts'}
 
-<script type="text/javascript" src="@{'/public/bootstrap-datetimepicker/js/moment-with-locales.js'}"></script>
-<script type="text/javascript" src="@{'/public/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js'}"></script>
 
-<script src="@{'/public/sbadmin/bower_components/raphael/raphael-min.js'}"></script>
-<script src="@{'/public/sbadmin/bower_components/morrisjs/morris.min.js'}"></script>
 
-#{/}
+<script>
+
+    function setStartButton() {
+       var html = '<button onclick="startOperation()" class="btn btn-small btn-primary" id="button_start">Start</button>';
+       $("#actions_bar").html(html);
+    }
+
+    function setLoading() {
+       var html = '<div class="spinner"></div>';
+       $("#actions_bar").html(html);
+    }
+
+    function clearActions() {
+       $("#actions_bar").html("");
+    }
+
+    function startOperation() {
+
+        if ("WebSocket" in window) {
+            var operationList = $("#operation_list");
+            operationList.html("");
+
+            setLoading();
+
+            var socket = new WebSocket("@@{WSDisasterRecovery.startOperation()}");
+
+	        socket.onmessage = function(msg){
+	            addMessage("Message", msg.data);
+	        };
+
+	        socket.onclose = function() {
+	            clearActions();
+	        };
+        } else {
+        }
+
+    }
+
+    function addMessage(title, message) {
+        var operationList = $("#operation_list");
+        var cellHtml = "";
+        cellHtml += '<li class="list-group-item">';
+        //cellHtml += '<h3 class="list-group-item-heading">'+title+'</h3>';
+        cellHtml += '<p class="list-group-item-text">'+message+'</p>';
+        cellHtml += '</li>';
+
+        operationList.append(cellHtml);
+    }
+
+    setStartButton();
+
+</script>

@@ -12,19 +12,19 @@ public class Application extends AuthenticatedController {
 	
     public static void index() {
 
-//    	User user = getUser();
-//    	if (user.role!=null) {
-//    		switch (user.role.code) {
-//    		case TECNICO:
-//                Dashboard.index();
-//    			break;
-//    		case ADMINISTRATOR:
-//    			Dashboard.index();
-//    			break;
-//    		default:
-//    			break;
-//    		}
-//    	}
+    	User user = getUser();
+    	if (user.role!=null) {
+    		switch (user.role.code) {
+    		case TECNICO:
+                Dashboard.index();
+    			break;
+    		case ADMINISTRATOR:
+    			Dashboard.index();
+    			break;
+    		default:
+    			break;
+    		}
+    	}
 
 		render();
     }
