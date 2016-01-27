@@ -15,7 +15,8 @@ public class RemoteHost extends BaseModel {
 
     public enum RecoveryType {
         FAILOVER,
-        FAILBACK
+        FAILBACK,
+        NONE
     }
 
     @Required

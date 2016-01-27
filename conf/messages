@@ -154,3 +154,31 @@ configuration.edit.title = Configuración general
 dashboard.title = Tablero
 
 dashboard.date = Fecha
+
+################################################
+#Hosts configuration
+################################################
+
+host.name = Nombre
+host.ip = Dirección ip
+host.status = Estado
+host.configuration = Configuración
+
+unassigned = No asignado
+down = Abajo
+maintenance = En mantenimiento
+up = Arriba
+non_responsive = No responde
+error = Error
+installing = Instalando
+install_failed = Instalación fallida
+reboot = Reiniciando
+preparing_for_maintenance = Preparandose para mantenimiento
+non_operational = No operacional
+pending_approval = Pendiente de aprobación
+initializing = Inicializando
+problematic = Promemático
+
+none = Ninguno
+failover.remotehost = Destino en recuperación
+failback.remotehost = Destino en regreso
