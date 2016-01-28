@@ -151,9 +151,15 @@ configuration.edit.title = Configuración general
 ################################################
 #Dashboard messages
 ################################################
+
 dashboard.title = Tablero
 
-dashboard.date = Fecha
+dashboard.datacenters = Data centros
+dashboard.data_center.name = Nombre
+dashboard.data_center.status = Estado
+
+dashboard.datacenters.up = Data centros arriba
+dashboard.datacenters.problematic = Data centros problemáticos
 
 ################################################
 #Hosts configuration
@@ -177,7 +183,7 @@ preparing_for_maintenance = Preparandose para mantenimiento
 non_operational = No operacional
 pending_approval = Pendiente de aprobación
 initializing = Inicializando
-problematic = Promemático
+problematic = Problemático
 
 none = Ninguno
 failover.remotehost = Destino en recuperación

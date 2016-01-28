@@ -23,7 +23,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            #{list configurationDto.data.hosts, as: 'host'}
+                            #{list configurationDto?.data?.hosts, as: 'host'}
                             <tr>
                                 <td>${host.name}</td>
                                 <td>${host.ip}</td>
@@ -43,33 +43,9 @@
                     </div>
 
                     <div class="col-md-6">
-                        <table class="table table-striped table-bordered">
-                            <thead>
-                            <tr>
-                                <th>&{'host.name'}</th>
-                                <th>&{'host.ip'}</th>
-                                <th>&{'host.status'}</th>
-                                <th>&{'host.configuration'}</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            #{list configurationDto.data.hosts, as: 'host'}
-                            <tr>
-                                <td>${host.name}</td>
-                                <td>${host.ip}</td>
-                                <td>${host.status}</td>
-                                <td>
-                                    <input type="hidden" name="host.name" value="${host.name}"/>
-                                    <select name="host.type">
-                                        <option value="${models.RemoteHost.RecoveryType.NONE}" ${(host.type == models.RemoteHost.RecoveryType.NONE) ? 'selected' : '' }>${'none'}</option>
-                                        <option value="${models.RemoteHost.RecoveryType.FAILOVER}" ${(host.type == models.RemoteHost.RecoveryType.FAILOVER) ? 'selected' : '' }>${'failover.remotehost'}</option>
-                                        <option value="${models.RemoteHost.RecoveryType.FAILBACK}" ${(host.type == models.RemoteHost.RecoveryType.FAILBACK) ? 'selected' : '' }>${'failback.remotehost'}</option>
-                                    </select>
-                                </td>
-                            </tr>
-                            #{/list}
-                            </tbody>
-                        </table>
+                        <select id="origin" multiple></select>
+                        <select id="available" multiple></select>
+                        <select id="destination" multiple></select>
                     </div>
                 </div>
 

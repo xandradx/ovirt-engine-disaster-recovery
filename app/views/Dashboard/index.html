@@ -1,44 +1,62 @@
 #{extends 'main.html' /}
 #{set title:messages.get('dashboard.title') /}
 
+#{set 'moreStyles'}
+<link rel="stylesheet" href="@{'/public/components/patternfly/components/c3/c3.css'}" >
+#{/}
+
+#{set 'moreScriptsTop'}
+<script src="@{'/public/components/patternfly/components/c3/c3.min.js'}"></script>
+<script src="@{'/public/components/patternfly/components/d3/d3.min.js'}"></script>
+#{/}
+
 <div class="row">
     <div class="col-md-6">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">&{'dashboard.datacenters'}</h3>
             </div>
+            <div class="panel-body" id="spinner_data_centers">
+                <div class="spinner spinner-md"></div>
+            </div>
             <table class="table table-striped" id="table_data_centers">
                 <thead>
                 <tr>
-                    <th>#</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Username</th>
+                    <th>&{'dashboard.data_center.name'}</th>
+                    <th>&{'dashboard.data_center.status'}</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td colspan="2">Larry the Bird</td>
-                    <td>@twitter</td>
-                </tr>
                 </tbody>
             </table>
         </div>
     </div>
+    <div class="col-md-3">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">&{'dashboard.datacenters.up'}</h3>
+            </div>
+            <div class="panel-body">
+                <div class="spinner spinner-md" id="spinner_data_centers_chart"></div>
+                <div id="donut-1"></div>
+            </div>
+
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">&{'dashboard.datacenters.problematic'}</h3>
+            </div>
+            <div class="panel-body">
+                <div class="spinner spinner-md" id="spinner_data_centers_problematic_chart"></div>
+                <div id="donut-2"></div>
+            </div>
+
+        </div>
+    </div>
 </div>
+
 
 <div class="row">
     <div class="col-sm-12 sidebar-pf sidebar-pf-right">
@@ -55,10 +73,81 @@
 </div>
 
 
-
-
 <script>
 
+    function setDataCentersData(data) {
+        var donutChartConfig1 = jQuery().c3ChartDefaults().getDefaultDonutConfig('A');
+        donutChartConfig1.bindto = '#donut-1';
+        donutChartConfig1.data = {
+            type: "donut",
+            columns: [
+                ["Arriba", data.up],
+                ["Otro", data.total - data.up]
+            ]
+        };
+
+        var donut1 = c3.generate(donutChartConfig1);
+        var donutChartTitle = d3.select("#donut-1").select('text.c3-chart-arcs-title');
+        donutChartTitle.text("");
+        donutChartTitle.insert('tspan').text(data.up).classed('donut-title-big-pf', true).attr('dy', 0).attr('x', 0);
+        donutChartTitle.insert('tspan').text("de " + data.total + " data centros").classed('donut-title-small-pf', true).attr('dy', 20).attr('x', 0);
+
+        var donutChartConfig2 = jQuery().c3ChartDefaults().getDefaultDonutConfig('A');
+        donutChartConfig2.bindto = '#donut-2';
+        donutChartConfig2.data = {
+            type: "donut",
+            columns: [
+                ["Problemático", data.problematic],
+                ["Otro", data.total - data.problematic]
+            ]
+        };
+
+        var donut2 = c3.generate(donutChartConfig2);
+        var donutChartTitle2 = d3.select("#donut-2").select('text.c3-chart-arcs-title');
+        donutChartTitle2.text("");
+        donutChartTitle2.insert('tspan').text(data.problematic).classed('donut-title-big-pf', true).attr('dy', 0).attr('x', 0);
+        donutChartTitle2.insert('tspan').text("de " + data.total + " data centros").classed('donut-title-small-pf', true).attr('dy', 20).attr('x', 0);
+    }
+
+    function updateDataCenters() {
+
+        $("#table_data_centers").hide();
+
+        $.ajax({
+		    type: "POST",
+		    url: "@{Dashboard.getDataCenters}"
+	    }).done(function( data ) {
+
+	        if (data.success) {
+	            $("#table_data_centers").show();
+	            var html = "";
+	            $.each(data.data.list, function(index, dataCenter) {
+	                html+= '<tr>';
+	                html+= '<td>' + dataCenter.name + '</td>';
+	                html+= '<td>' + dataCenter.status + '</td>';
+	                html += '</tr>';
+	            });
+
+	            $("#table_data_centers tbody").html(html);
+	            setDataCentersData(data.data.statusCount);
+
+	        } else {
+
+	        }
+	    }).always(function() {
+	        $("#spinner_data_centers").hide();
+	        $("#spinner_data_centers_chart").hide();
+	        $("#spinner_data_centers_problematic_chart").hide();
+	    });
+    }
+
+    $(document).ready(function() {
+        updateDataCenters();
+    });
+
+</script>
+
+<script>
     function setStartButton() {
        var html = '<button onclick="startOperation()" class="btn btn-small btn-primary" id="button_start">Start</button>';
        $("#actions_bar").html(html);

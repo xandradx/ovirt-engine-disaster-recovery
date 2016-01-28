@@ -8,6 +8,9 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=Edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        #{get 'moreStyles'/}
+
         <link rel="shortcut icon" href="@{'/public/components/patternfly/dist/img/favicon.ico'}">
         <!-- iPad retina icon -->
         <link rel="apple-touch-icon-precomposed" sizes="152x152" href="@{'/public/components/patternfly/dist/img/apple-touch-icon-precomposed-152.png'}">
@@ -31,6 +34,8 @@
         <script src="@{'/public/components/patternfly/dist/js/patternfly.min.js'}"></script>
         <script src="@{'/public/components/patternfly/components/bootstrap-select/dist/js/bootstrap-select.min.js'}"></script>
         <script src="@{'/public/components/patternfly/components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js'}"></script>
+
+        #{get 'moreScriptsTop'/}
     </head>
 
     <body>
