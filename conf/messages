@@ -165,7 +165,6 @@ dashboard.host.name = Nombre
 dashboard.host.status = Estado
 
 
-
 ################################################
 #Hosts configuration
 ################################################
@@ -189,7 +188,46 @@ non_operational = No operacional
 pending_approval = Pendiente de aprobación
 initializing = Inicializando
 problematic = Problemático
+other = Otro
 
 none = Ninguno
 failover.remotehost = Destino en recuperación
 failback.remotehost = Destino en regreso
+
+ws.api.error.connection = No fue posible conectarse con el API
+ws.error.exception = Occurió un error inesperado, por favor intente de nuevo más tarde
+
+################################################
+#DRP
+################################################
+
+drp.verifyinghosts = Verificando hosts
+drp.originhost = Host de origen (%s) estado: %s
+drp.destinationhost = Host de destino (%s) estado: %s
+drp.hostsmaintenancerequired = Todos los hosts deben estar en mantenimiento para iniciar el proceso controlado
+drp.hostsnotready = Hosts remotos no se encuentran listos para la operación
+drp.hostsready = Hosts listos para el proceso controlado
+drp.nohosts = No existen hosts disponibles
+drp.fetchinghosts = Obteniendo hosts...
+drp.nohostsconfigured = No existen hosts configurados
+drp.disablingpm = Deshabilitando manejo de encendido en host: %s
+drp.fencinghost = Cercando host: %s
+drp.deactivatinghost = Desactivando host: %s
+drp.updatingdbconnections = Actualizando conexiones de base de datos
+drp.activatinghost = Activando host: %s
+drp.enablingpm = Habilitando manejo de encendido en host: %s
+drp.alreadystarted = Operación de recuperación de desastres ya se encuentra en proceso
+drp.starting = Iniciando proceso: %s
+drp.connectingapi = Conectandose a API...
+drp.finished = Operación finalizada
+drp.db.connection = iqn: %s -- conexión: %s
+drp.db.noconnections = No existen conexiones configuradas
+drp.db.currentconnections = Conexiones actuales
+drp.db.modifiedconnections = Conexiones modificadas
+drp.db.couldnotconnect = No se pudo establecer la conexión con la base de datos
+drp.db.nodriver = No existe un controlador para la conexión
+drp.db.couldnotdisconnect = No se pudo desconectar de la base de datos
+drp.invalidconfiguration = Configuración inválida
+
+FAILOVER = Failover
+FAILBACK = Failback

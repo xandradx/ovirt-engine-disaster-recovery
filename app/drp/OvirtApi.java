@@ -21,7 +21,7 @@ public class OvirtApi {
 
         Configuration configuration = Configuration.generalConfiguration();
         if (configuration.apiURL == null || configuration.apiPassword == null || configuration.apiUser == null) {
-            throw new InvalidConfigurationException(Messages.get("Invalid configuration"));
+            throw new InvalidConfigurationException(Messages.get("drp.invalidconfiguration"));
         }
 
         File cert = configuration.trustStore.getFile();

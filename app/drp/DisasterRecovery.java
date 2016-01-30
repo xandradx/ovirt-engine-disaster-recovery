@@ -49,7 +49,7 @@ public class DisasterRecovery {
 
         long pendingOperations = DisasterRecoveryOperation.count("status = ?", DisasterRecoveryOperation.OperationStatus.PROGRESS);
         if (pendingOperations > 0) {
-            finishOperation(Messages.get("DRP operation already in progress"));
+            finishOperation(Messages.get("drp.alreadystarted"));
             return;
         }
 
@@ -65,9 +65,9 @@ public class DisasterRecovery {
 
 
         try {
-            reportMessage(Messages.get("Starting " + type));
+            reportMessage(Messages.get("drp.starting",  Messages.get(type)));
 
-            reportMessage(Messages.get("Connecting to manager..."));
+            reportMessage(Messages.get("drp.connectingapi"));
             api = OvirtApi.getApi();
 
             performOperation();
@@ -83,57 +83,57 @@ public class DisasterRecovery {
                 api.shutdown();
             }
 
-            finishOperation(Messages.get("Operation finished"));
+            finishOperation(Messages.get("drp.finished"));
         }
     }
 
     private void performOperation() throws Exception {
 
-        reportMessage(Messages.get("Fetching hosts..."));
+        reportMessage(Messages.get("drp.fetchinghosts"));
         Hosts hosts = api.getHosts();
 
         DisasterRecoveryDefinition definition = getDefinition(hosts.list(), type);
 
         if (definition.getLocalHosts().isEmpty() || definition.getRemoteHosts().isEmpty()) {
-            reportError(Messages.get("No hosts configured"));
+            reportError(Messages.get("drp.nohostsconfigured"));
         } else {
             List<Host> powerManagementHosts = new ArrayList<Host>();
             for (Host localHost : definition.getLocalHosts()) {
 
                 if (DisasterRecoveryActions.hasPowerManagement(localHost)) {
-                    reportMessage(Messages.get("Disabling power management in host: ") + localHost.getName());
+                    reportMessage(Messages.get("drp.disablingpm", localHost.getName()));
                     DisasterRecoveryActions.disablePowerManagement(localHost);
                     powerManagementHosts.add(localHost);
                 }
 
                 String status = localHost.getStatus().getState();
                 if ("non_responsive".equals(status)) {
-                    reportMessage(Messages.get("Fencing host: ") + localHost.getName());
+                    reportMessage(Messages.get("drp.fencinghost",localHost.getName()));
                     DisasterRecoveryActions.fenceHost(localHost);
-                    reportMessage(Messages.get("Deactivating host: ") + localHost.getName());
+                    reportMessage(Messages.get("drp.deactivatinghost", localHost.getName()));
                     DisasterRecoveryActions.deactivateHost(localHost);
                 }
             }
 
-            reportMessage(Messages.get("Updating database connections"));
+            reportMessage(Messages.get("drp.updatingdbconnections"));
             updateDatabase(type);
 
             for (Host remoteHost : definition.getRemoteHosts()) {
 
                 if (DisasterRecoveryActions.hasPowerManagement(remoteHost)) {
-                    reportMessage(Messages.get("Disabling power management in host: ") + remoteHost.getName());
+                    reportMessage(Messages.get("drp.disablingpm", remoteHost.getName()));
                     DisasterRecoveryActions.disablePowerManagement(remoteHost);
                     powerManagementHosts.add(remoteHost);
                 }
 
-                reportMessage(Messages.get("Activating host: ") + remoteHost.getName());
+                reportMessage(Messages.get("drp.activatinghost", remoteHost.getName()));
                 DisasterRecoveryActions.activateHost(remoteHost);
             }
 
             //TODO: Check status until host is UP or timeout
 
             for (Host localHost : powerManagementHosts) {
-                reportMessage(Messages.get("Enabling power management in host ") + localHost.getName());
+                reportMessage(Messages.get("drp.enablingpm", localHost.getName()));
                 DisasterRecoveryActions.enablePowerManagement(localHost);
             }
         }
@@ -142,7 +142,7 @@ public class DisasterRecovery {
 
     private DisasterRecoveryDefinition getDefinition(List<Host> hostList, RemoteHost.RecoveryType type) throws HostsConditionsException {
 
-        reportMessage(Messages.get("Verifying hosts"));
+        reportMessage(Messages.get("drp.verifyinghosts"));
         DisasterRecoveryDefinition definition = new DisasterRecoveryDefinition();
 
         List<String> remoteHosts = RemoteHost.find("SELECT h.hostName FROM RemoteHost h WHERE h.type = ? AND h.active = ?", type, true).fetch();
@@ -161,7 +161,7 @@ public class DisasterRecovery {
 
             for (Host host : definition.getLocalHosts()) {
                 String state = host.getStatus().getState();
-                reportMessage(Messages.get("Origin host (%s) status: %s", host.getName(), state));
+                reportMessage(Messages.get("drp.originhost", host.getName(), Messages.get(state)));
                 if (!"up".equalsIgnoreCase(state)) {
                     originNotUp++;
                 } else {
@@ -171,26 +171,26 @@ public class DisasterRecovery {
 
             for (Host host : definition.getRemoteHosts()) {
                 String state = host.getStatus().getState();
-                reportMessage(Messages.get("Destination host (%s) status: %s", host.getName(), state));
+                reportMessage(Messages.get("drp.destinationhost", host.getName(), Messages.get(state)));
                 if ("maintenance".equalsIgnoreCase(state)) {
                     destinationMaintenance++;
                 }
             }
 
             if (originUp > 0) {
-                throw new HostsConditionsException(Messages.get("All Host must be in maintenance status, to start controlled DRP process"));
+                throw new HostsConditionsException(Messages.get("drp.hostsmaintenancerequired"));
             }
 
             if (originNotUp > 0) {
                 if (destinationMaintenance != definition.getRemoteHosts().size()) {
-                    throw new HostsConditionsException(Messages.get("Remote hosts not ready for operation"));
+                    throw new HostsConditionsException(Messages.get("drp.hostsnotready"));
                 }
             }
 
-            reportMessage(Messages.get("Hosts ready for controlled DRP process"));
+            reportMessage(Messages.get("drp.hostsready"));
 
         } else {
-            throw new HostsConditionsException(Messages.get("No hosts available"));
+            throw new HostsConditionsException(Messages.get("drp.nohosts"));
         }
 
         return definition;

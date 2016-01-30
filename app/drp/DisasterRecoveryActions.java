@@ -112,7 +112,7 @@ public class DisasterRecoveryActions {
     public static void updateConnections(DatabaseManager manager, List<DatabaseConnection> connections, List<DatabaseIQN> iqns, boolean revert, OperationListener listener) throws ConnectionUpdateException {
 
         if (connections.isEmpty() && iqns.isEmpty()) {
-            throw new ConnectionUpdateException(Messages.get("No connections defined"));
+            throw new ConnectionUpdateException(Messages.get("drp.db.noconnections"));
         }
 
         Connection connection = null;
@@ -122,26 +122,26 @@ public class DisasterRecoveryActions {
             String databaseURL = "jdbc:postgresql://" + manager.getDbHost() + ":" + manager.getDbPort() + "/" + manager.getDbName() + "";
             connection = DriverManager.getConnection(databaseURL, manager.getDbUser(), manager.getDbPassword());
 
-            listener.onMessage(Messages.get("Current connections"));
+            listener.onMessage(Messages.get("drp.db.currentconnections"));
             listConnections(connection, listener);
 
             updateConnections(connection, connections, revert, listener);
             updateIQN(connection, iqns, revert, listener);
 
-            listener.onMessage(Messages.get("Modified connections"));
+            listener.onMessage(Messages.get("drp.db.modifiedconnections"));
             listConnections(connection, listener);
 
         } catch (SQLException se) {
             Logger.error(se, "Error");
-            throw new ConnectionUpdateException(Messages.get("Could not connect to database"));
+            throw new ConnectionUpdateException(Messages.get("drp.db.couldnotconnect"));
         } catch (ClassNotFoundException ce) {
-            throw new ConnectionUpdateException(Messages.get("Could not find driver"));
+            throw new ConnectionUpdateException(Messages.get("drp.db.nodriver"));
         } finally {
             if (connection!=null) {
                 try {
                     connection.close();
                 } catch (SQLException e) {
-                    listener.onError(e, Messages.get("Could not close database connection"));
+                    listener.onError(e, Messages.get("drp.db.couldnotdisconnect"));
                 }
             }
         }
@@ -157,7 +157,7 @@ public class DisasterRecoveryActions {
 
             ResultSet resultSet = statement.executeQuery(query);
             while (resultSet.next()) {
-                listener.onMessage(Messages.get("iqn: %s -- connection: %s", resultSet.getString(2), resultSet.getString(1)));
+                listener.onMessage(Messages.get("drp.connection", resultSet.getString(2), resultSet.getString(1)));
             }
 
         } catch (SQLException e) {
