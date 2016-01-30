@@ -8,6 +8,8 @@ import dto.response.ServiceResponse;
 import helpers.GlobalConstants;
 import jobs.services.DataCentersJob;
 import jobs.services.HostsJob;
+import jobs.services.ReachableJob;
+import models.Configuration;
 import org.ovirt.engine.sdk.Api;
 import org.ovirt.engine.sdk.decorators.DataCenter;
 import play.Logger;
@@ -40,6 +42,15 @@ public class Dashboard extends AuthenticatedController {
     public static void getHosts() {
         F.Promise<ServiceResponse> dataCentersResponse = new HostsJob().now();
         ServiceResponse serviceResponse = await(dataCentersResponse);
+        renderJSON(serviceResponse);
+    }
+
+    public static void checkManagerStatus() {
+
+        F.Promise<Boolean> apiReachable = new ReachableJob().now();
+        Boolean reachable = await(apiReachable);
+
+        ServiceResponse serviceResponse = ServiceResponse.success(reachable);
         renderJSON(serviceResponse);
     }
 

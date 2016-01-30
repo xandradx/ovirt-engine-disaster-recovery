@@ -1,10 +1,13 @@
 package drp;
 
+import drp.exceptions.InvalidConfigurationException;
+import models.Configuration;
 import org.ovirt.engine.sdk.Api;
 import org.ovirt.engine.sdk.exceptions.ServerException;
 import org.ovirt.engine.sdk.exceptions.UnsecuredConnectionAttemptError;
 import play.Logger;
 import play.Play;
+import play.i18n.Messages;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,19 +17,15 @@ import java.io.IOException;
  */
 public class OvirtApi {
 
-    public static String API_URL = "https://nrhevm.itmlabs.local:443/api";
-    public static String USER = "admin@internal";
-    public static String PASSWORD = "pruebas";
-    public static String TRUSTSTORE_PATH = "/conf/server.truststore";
-    public static String SESSION_ID = "test123123";
+    public static Api getApi() throws UnsecuredConnectionAttemptError, IOException, ServerException, InvalidConfigurationException {
 
-    public static Api getApi() throws UnsecuredConnectionAttemptError, IOException, ServerException {
+        Configuration configuration = Configuration.generalConfiguration();
+        if (configuration.apiURL == null || configuration.apiPassword == null || configuration.apiUser == null) {
+            throw new InvalidConfigurationException(Messages.get("Invalid configuration"));
+        }
 
-        Api api = null;
-        File cert = Play.getFile(TRUSTSTORE_PATH);
-        api = new Api(API_URL, USER, PASSWORD, cert.getAbsolutePath());
-        api.setSessionid(SESSION_ID);
-
+        File cert = configuration.trustStore.getFile();
+        Api api = new Api(configuration.apiURL, configuration.apiUser, configuration.apiPassword, cert.getAbsolutePath());
         return api;
     }
 }
