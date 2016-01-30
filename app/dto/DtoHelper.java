@@ -18,7 +18,7 @@ import java.util.List;
 public class DtoHelper {
 
     public static HostDto getHostDto(Host host) {
-        return new HostDto(host.getName(), host.getAddress(), host.getDescription(), host.getStatus().getState());
+        return new HostDto(host.getName(), host.getAddress(), host.getDescription(), Messages.get(host.getStatus().getState()));
     }
 
     public static ConnectionDto getConnectionDto(StorageConnection connection) {

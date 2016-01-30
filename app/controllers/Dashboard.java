@@ -7,6 +7,7 @@ import dto.objects.DataCenterDto;
 import dto.response.ServiceResponse;
 import helpers.GlobalConstants;
 import jobs.services.DataCentersJob;
+import jobs.services.HostsJob;
 import org.ovirt.engine.sdk.Api;
 import org.ovirt.engine.sdk.decorators.DataCenter;
 import play.Logger;
@@ -36,9 +37,10 @@ public class Dashboard extends AuthenticatedController {
         renderJSON(serviceResponse);
     }
 
-    public static void listDashboardData() {
-
-
+    public static void getHosts() {
+        F.Promise<ServiceResponse> dataCentersResponse = new HostsJob().now();
+        ServiceResponse serviceResponse = await(dataCentersResponse);
+        renderJSON(serviceResponse);
     }
 
 }

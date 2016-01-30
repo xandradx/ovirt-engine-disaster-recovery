@@ -6,6 +6,7 @@ import drp.exceptions.HostActivateException;
 import drp.exceptions.HostDeactivateException;
 import drp.objects.DatabaseManager;
 import drp.objects.DisasterRecoveryDefinition;
+import drp.objects.OperationListener;
 import models.DatabaseConnection;
 import models.DatabaseIQN;
 import models.RemoteHost;
@@ -13,6 +14,7 @@ import org.ovirt.engine.sdk.decorators.Host;
 import org.ovirt.engine.sdk.entities.Action;
 import org.ovirt.engine.sdk.entities.PowerManagement;
 import play.Logger;
+import play.i18n.Messages;
 
 import java.sql.*;
 import java.util.List;
@@ -107,45 +109,45 @@ public class DisasterRecoveryActions {
 //        }
     }
 
-    public static void updateConnections(DatabaseManager manager, List<DatabaseConnection> connections, List<DatabaseIQN> iqns, boolean revert) throws ConnectionUpdateException {
+    public static void updateConnections(DatabaseManager manager, List<DatabaseConnection> connections, List<DatabaseIQN> iqns, boolean revert, OperationListener listener) throws ConnectionUpdateException {
 
-//        if (connections.isEmpty() && iqns.isEmpty()) {
-//            throw new ConnectionUpdateException("No connections defined");
-//        }
-//
-//        Connection connection = null;
-//
-//        try {
-//            Class.forName("org.postgresql.Driver");
-//            String databaseURL = "jdbc:postgresql://" + manager.getDbHost() + ":" + manager.getDbPort() + "/" + manager.getDbName() + "";
-//            connection = DriverManager.getConnection(databaseURL, manager.getDbUser(), manager.getDbPassword());
-//
-//            Logger.debug("Current connections");
-//            listConnections(connection);
-//
-//            updateConnections(connection, connections, revert);
-//            updateIQN(connection, iqns, revert);
-//
-//            Logger.debug("Modified connections");
-//            listConnections(connection);
-//
-//        } catch (SQLException se) {
-//            Logger.error(se, "Error");
-//            throw new ConnectionUpdateException("Could not connect to database");
-//        } catch (ClassNotFoundException ce) {
-//            throw new ConnectionUpdateException("Could not find driver");
-//        } finally {
-//            if (connection!=null) {
-//                try {
-//                    connection.close();
-//                } catch (SQLException e) {
-//                    Logger.debug(e, "Could not close database connection");
-//                }
-//            }
-//        }
+        if (connections.isEmpty() && iqns.isEmpty()) {
+            throw new ConnectionUpdateException(Messages.get("No connections defined"));
+        }
+
+        Connection connection = null;
+
+        try {
+            Class.forName("org.postgresql.Driver");
+            String databaseURL = "jdbc:postgresql://" + manager.getDbHost() + ":" + manager.getDbPort() + "/" + manager.getDbName() + "";
+            connection = DriverManager.getConnection(databaseURL, manager.getDbUser(), manager.getDbPassword());
+
+            listener.onMessage(Messages.get("Current connections"));
+            listConnections(connection, listener);
+
+            updateConnections(connection, connections, revert, listener);
+            updateIQN(connection, iqns, revert, listener);
+
+            listener.onMessage(Messages.get("Modified connections"));
+            listConnections(connection, listener);
+
+        } catch (SQLException se) {
+            Logger.error(se, "Error");
+            throw new ConnectionUpdateException(Messages.get("Could not connect to database"));
+        } catch (ClassNotFoundException ce) {
+            throw new ConnectionUpdateException(Messages.get("Could not find driver"));
+        } finally {
+            if (connection!=null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    listener.onError(e, Messages.get("Could not close database connection"));
+                }
+            }
+        }
     }
 
-    private static void listConnections(Connection dbConnection) throws SQLException{
+    private static void listConnections(Connection dbConnection, OperationListener listener) throws SQLException{
 
         String query = "SELECT connection, iqn FROM storage_server_connections WHERE iqn IS NOT NULL;";
         Statement statement = null;
@@ -155,7 +157,7 @@ public class DisasterRecoveryActions {
 
             ResultSet resultSet = statement.executeQuery(query);
             while (resultSet.next()) {
-                Logger.debug("iqn: %s -- connection: %s", resultSet.getString(2), resultSet.getString(1));
+                listener.onMessage(Messages.get("iqn: %s -- connection: %s", resultSet.getString(2), resultSet.getString(1)));
             }
 
         } catch (SQLException e) {
@@ -167,80 +169,80 @@ public class DisasterRecoveryActions {
         }
     }
 
-    private static void updateConnections(Connection dbConnection, List<DatabaseConnection> connections, boolean revert) throws SQLException {
+    private static void updateConnections(Connection dbConnection, List<DatabaseConnection> connections, boolean revert, OperationListener listener) throws SQLException {
 
-        for (DatabaseConnection connection : connections) {
-
-            PreparedStatement updateConnection = null;
-            String query = "UPDATE storage_server_connections SET connection = ? WHERE connection = ? AND iqn IS NOT NULL;";
-
-            try {
-                dbConnection.setAutoCommit(false);
-                updateConnection = dbConnection.prepareStatement(query);
-
-                if (revert) {
-                    updateConnection.setString(2, connection.destinationConnection);
-                    updateConnection.setString(1, connection.originConnection);
-                } else {
-                    updateConnection.setString(1, connection.destinationConnection);
-                    updateConnection.setString(2, connection.originConnection);
-                }
-
-                updateConnection.executeUpdate();
-                dbConnection.commit();
-            } catch (SQLException e) {
-                if (dbConnection!=null) {
-                    try {
-                        dbConnection.rollback();
-                    } catch (SQLException re) {
-                        Logger.error(re, "Could not rollback");
-                    }
-                }
-            } finally {
-                if (updateConnection!=null) {
-                    updateConnection.close();
-                }
-
-                dbConnection.setAutoCommit(true);
-            }
-        }
+//        for (DatabaseConnection connection : connections) {
+//
+//            PreparedStatement updateConnection = null;
+//            String query = "UPDATE storage_server_connections SET connection = ? WHERE connection = ? AND iqn IS NOT NULL;";
+//
+//            try {
+//                dbConnection.setAutoCommit(false);
+//                updateConnection = dbConnection.prepareStatement(query);
+//
+//                if (revert) {
+//                    updateConnection.setString(2, connection.destinationConnection);
+//                    updateConnection.setString(1, connection.originConnection);
+//                } else {
+//                    updateConnection.setString(1, connection.destinationConnection);
+//                    updateConnection.setString(2, connection.originConnection);
+//                }
+//
+//                updateConnection.executeUpdate();
+//                dbConnection.commit();
+//            } catch (SQLException e) {
+//                if (dbConnection!=null) {
+//                    try {
+//                        dbConnection.rollback();
+//                    } catch (SQLException re) {
+//                        listener.onError(re, Messages.get("Could not rollback"));
+//                    }
+//                }
+//            } finally {
+//                if (updateConnection!=null) {
+//                    updateConnection.close();
+//                }
+//
+//                dbConnection.setAutoCommit(true);
+//            }
+//        }
     }
 
-    private static void updateIQN(Connection dbConnection, List<DatabaseIQN> iqns, boolean revert) throws SQLException {
+    private static void updateIQN(Connection dbConnection, List<DatabaseIQN> iqns, boolean revert, OperationListener listener) throws SQLException {
 
-        for (DatabaseIQN iqn : iqns) {
-
-            PreparedStatement updateIQN = null;
-            String query = "UPDATE storage_server_connections SET iqn = ? WHERE iqn = ? AND iqn IS NOT NULL;";
-
-            try {
-                dbConnection.setAutoCommit(false);
-                updateIQN = dbConnection.prepareStatement(query);
-
-                if (revert) {
-                    updateIQN.setString(2, iqn.destinationIQN);
-                    updateIQN.setString(1, iqn.originIQN);
-                } else {
-                    updateIQN.setString(1, iqn.destinationIQN);
-                    updateIQN.setString(2, iqn.originIQN);
-                }
-                updateIQN.executeUpdate();
-                dbConnection.commit();
-            } catch (SQLException e) {
-                if (dbConnection!=null) {
-                    try {
-                        dbConnection.rollback();
-                    } catch (SQLException re) {
-                        Logger.error(re, "Could not rollback");
-                    }
-                }
-            } finally {
-                if (updateIQN!=null) {
-                    updateIQN.close();
-                }
-
-                dbConnection.setAutoCommit(true);
-            }
-        }
+//        for (DatabaseIQN iqn : iqns) {
+//
+//            PreparedStatement updateIQN = null;
+//            String query = "UPDATE storage_server_connections SET iqn = ? WHERE iqn = ? AND iqn IS NOT NULL;";
+//
+//            try {
+//                dbConnection.setAutoCommit(false);
+//                updateIQN = dbConnection.prepareStatement(query);
+//
+//                if (revert) {
+//                    updateIQN.setString(2, iqn.destinationIQN);
+//                    updateIQN.setString(1, iqn.originIQN);
+//                } else {
+//                    updateIQN.setString(1, iqn.destinationIQN);
+//                    updateIQN.setString(2, iqn.originIQN);
+//                }
+//                updateIQN.executeUpdate();
+//                dbConnection.commit();
+//            } catch (SQLException e) {
+//                if (dbConnection!=null) {
+//                    try {
+//                        dbConnection.rollback();
+//                    } catch (SQLException re) {
+//                        listener.onError(re, Messages.get("Could not rollback"));
+//                    }
+//                }
+//            } finally {
+//                if (updateIQN!=null) {
+//                    updateIQN.close();
+//                }
+//
+//                dbConnection.setAutoCommit(true);
+//            }
+//        }
     }
 }

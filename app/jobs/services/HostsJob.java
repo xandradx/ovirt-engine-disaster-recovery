@@ -4,6 +4,7 @@ import drp.OvirtApi;
 import dto.DtoHelper;
 import dto.objects.DataCenterDto;
 import dto.objects.HostDto;
+import dto.objects.StatusDto;
 import dto.response.ServiceResponse;
 import org.ovirt.engine.sdk.Api;
 import org.ovirt.engine.sdk.decorators.DataCenter;
@@ -26,21 +27,19 @@ public class HostsJob extends Job<ServiceResponse> {
 
         Api api = null;
         try {
-            api = OvirtApi.sharedInstance().getApi();
+            api = OvirtApi.getApi();
 
-            if (api!=null) {
+            StatusDto data = new StatusDto();
 
-                List<Host> hosts = api.getHosts().list();
-                List<HostDto> hostDtos = new ArrayList<HostDto>();
-                for (Host host : hosts) {
-                    hostDtos.add(DtoHelper.getHostDto(host));
-                }
-
-                serviceResponse = ServiceResponse.success(hostDtos);
-
-            } else {
-                serviceResponse = ServiceResponse.error(Messages.get("ws.api.error.connection"));
+            List<Host> hosts = api.getHosts().list();
+            List<HostDto> hostDtos = new ArrayList<HostDto>();
+            for (Host host : hosts) {
+                data.addToStatusCount(host.getStatus().getState());
+                hostDtos.add(DtoHelper.getHostDto(host));
             }
+
+            data.setList(hostDtos);
+            serviceResponse = ServiceResponse.success(data);
 
         } catch (Exception e) {
             serviceResponse = ServiceResponse.error(Messages.get("ws.error.exception"));

@@ -25,25 +25,18 @@ public class DataCentersJob extends Job<ServiceResponse> {
 
         Api api = null;
         try {
-            api = OvirtApi.sharedInstance().getApi();
+            api = OvirtApi.getApi();
+            StatusDto data = new StatusDto();
 
-            if (api!=null) {
-
-                StatusDto data = new StatusDto();
-
-                List<DataCenter> dataCenters = api.getDataCenters().list();
-                List<DataCenterDto> dataCenterDtos = new ArrayList<DataCenterDto>();
-                for (DataCenter dataCenter : dataCenters) {
-                    data.addToStatusCount(dataCenter.getStatus().getState());
-                    dataCenterDtos.add(DtoHelper.getDataCenterDto(dataCenter));
-                }
-
-                data.setList(dataCenterDtos);
-                serviceResponse = ServiceResponse.success(data);
-
-            } else {
-                serviceResponse = ServiceResponse.error(Messages.get("ws.api.error.connection"));
+            List<DataCenter> dataCenters = api.getDataCenters().list();
+            List<DataCenterDto> dataCenterDtos = new ArrayList<DataCenterDto>();
+            for (DataCenter dataCenter : dataCenters) {
+                data.addToStatusCount(dataCenter.getStatus().getState());
+                dataCenterDtos.add(DtoHelper.getDataCenterDto(dataCenter));
             }
+
+            data.setList(dataCenterDtos);
+            serviceResponse = ServiceResponse.success(data);
 
         } catch (Exception e) {
             serviceResponse = ServiceResponse.error(Messages.get("ws.error.exception"));

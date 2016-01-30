@@ -28,6 +28,8 @@ public class StatusDto {
 
         protected long up;
         protected long problematic;
+        protected long maintenance;
+        protected long nonResponsive;
         protected long total;
 
         public void addToStatusCount(String key) {
@@ -36,6 +38,10 @@ public class StatusDto {
                 up++;
             } else if ("problematic".equals(key)) {
                 problematic++;
+            } else if ("maintenance".equals(key)) {
+                maintenance++;
+            } else if ("non_responsive".equals(key)) {
+                nonResponsive++;
             }
 
             total ++;

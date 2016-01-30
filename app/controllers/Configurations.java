@@ -54,7 +54,7 @@ public class Configurations extends AuthenticatedController {
         ServiceResponse serviceResponse;
 
         try {
-            Api api = OvirtApi.sharedInstance().getApi();
+            Api api = OvirtApi.getApi();
             if (api!=null) {
 
                 List<RemoteHost> remoteHosts = RemoteHost.find("active = ?", true).fetch();

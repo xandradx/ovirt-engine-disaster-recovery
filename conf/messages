@@ -154,12 +154,17 @@ configuration.edit.title = Configuración general
 
 dashboard.title = Tablero
 
-dashboard.datacenters = Data centros
+dashboard.datacenters = Centros de datos
+dashboard.datacenters.chart = Estado de centros de datos
 dashboard.data_center.name = Nombre
 dashboard.data_center.status = Estado
 
-dashboard.datacenters.up = Data centros arriba
-dashboard.datacenters.problematic = Data centros problemáticos
+dashboard.hosts = Hosts
+dashboard.hosts.chart = Estado de hosts
+dashboard.host.name = Nombre
+dashboard.host.status = Estado
+
+
 
 ################################################
 #Hosts configuration

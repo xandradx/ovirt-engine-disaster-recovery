@@ -25,13 +25,17 @@ public class WSDisasterRecovery extends WebSocketController {
 
                 @Override
                 public void onFinished(String message) {
-                    outbound.send(message);
-                    disconnect();
+                    if (outbound.isOpen()) {
+                        outbound.send(message);
+                        disconnect();
+                    }
                 }
 
                 @Override
                 public void onError(Exception e, String error) {
-                    outbound.send(error);
+                    if (outbound.isOpen()) {
+                        outbound.send(error);
+                    }
                 }
             });
 

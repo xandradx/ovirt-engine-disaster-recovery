@@ -20,30 +20,12 @@ public class OvirtApi {
     public static String TRUSTSTORE_PATH = "/conf/server.truststore";
     public static String SESSION_ID = "test123123";
 
-    private static OvirtApi instance;
+    public static Api getApi() throws UnsecuredConnectionAttemptError, IOException, ServerException {
 
-    private Api api;
-
-    public static OvirtApi sharedInstance() {
-        if (instance == null) {
-            instance = new OvirtApi();
-        }
-
-        return instance;
-    }
-
-    public Api getApi() {
-
-        if (api == null) {
-            try {
-                Logger.debug("Connecting to API..");
-                File cert = Play.getFile(TRUSTSTORE_PATH);
-                api = new Api(API_URL, USER, PASSWORD, cert.getAbsolutePath());
-                api.setSessionid(SESSION_ID);
-            } catch (Exception e) {
-                Logger.error(e, "Could not connect to API");
-            }
-        }
+        Api api = null;
+        File cert = Play.getFile(TRUSTSTORE_PATH);
+        api = new Api(API_URL, USER, PASSWORD, cert.getAbsolutePath());
+        api.setSessionid(SESSION_ID);
 
         return api;
     }
