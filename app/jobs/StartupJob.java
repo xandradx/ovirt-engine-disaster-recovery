@@ -13,5 +13,7 @@ public class StartupJob extends Job {
 		if (UserRole.count() == 0) {
 			Fixtures.loadModels("initial-data.yml");
 		}
+
+
 	}
 }

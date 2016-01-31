@@ -14,13 +14,13 @@ import models.RemoteHost;
 import org.ovirt.engine.sdk.Api;
 import org.ovirt.engine.sdk.decorators.Host;
 import org.ovirt.engine.sdk.decorators.Hosts;
+import org.ovirt.engine.sdk.exceptions.ServerException;
 import play.Logger;
 import play.Play;
 import play.i18n.Messages;
-import play.jobs.Job;
 import play.libs.F;
 
-import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,12 +28,6 @@ import java.util.List;
  * Created by jandrad on 23/01/16.
  */
 public class DisasterRecovery {
-
-    private static String DB_HOST = "nrhevm.itmlabs.local";
-    private static String DB_PORT = "5432";
-    private static String DB_USER = "engine";
-    private static String DB_PASSWORD = "cIJ1QATeRXioSY9ZHXDeaf";
-    private static String DB_NAME = "engine";
 
     private RemoteHost.RecoveryType type;
     private OperationListener listener;
@@ -77,6 +71,7 @@ public class DisasterRecovery {
         } catch (Exception e) {
             reportError(e, e.getMessage());
             saveOperationWithStatus(DisasterRecoveryOperation.OperationStatus.FAILED);
+            Logger.error(e, "Error in operation");
 
         } finally {
             if (api!=null) {
@@ -130,7 +125,11 @@ public class DisasterRecovery {
                 DisasterRecoveryActions.activateHost(remoteHost);
             }
 
-            //TODO: Check status until host is UP or timeout
+            reportMessage(Messages.get("drp.waitingactivehost"));
+            for (Host remoteHost : definition.getRemoteHosts()) {
+                waitForStatus("up", remoteHost, 20*1000);
+            }
+
 
             for (Host localHost : powerManagementHosts) {
                 reportMessage(Messages.get("drp.enablingpm", localHost.getName()));
@@ -138,6 +137,26 @@ public class DisasterRecovery {
             }
         }
 
+    }
+
+    private void waitForStatus(String status, Host currentHost, long timeout) throws ServerException, IOException {
+        long time = 0;
+        long initialMillis = System.currentTimeMillis();
+
+        Host updatedHost;
+        boolean hasExpectedStatus = false;
+        do {
+            updatedHost = api.getHosts().get(currentHost.getName());
+            hasExpectedStatus = status.equals(updatedHost.getStatus().getState());
+            reportMessage(Messages.get("drp.hoststatus", updatedHost.getName(), Messages.get(updatedHost.getStatus().getState())));
+            time = System.currentTimeMillis() - initialMillis;
+        } while (!hasExpectedStatus && time < timeout);
+
+        if (!hasExpectedStatus) {
+            reportError(Messages.get("drp.status.invalid", currentHost.getName()));
+        } else {
+            reportMessage(Messages.get("drp.status.valid", currentHost.getName()));
+        }
     }
 
     private DisasterRecoveryDefinition getDefinition(List<Host> hostList, RemoteHost.RecoveryType type) throws HostsConditionsException {
@@ -201,8 +220,18 @@ public class DisasterRecovery {
         List<DatabaseConnection> connections = DatabaseConnection.find("active = ?", true).fetch();
         List<DatabaseIQN> iqns = DatabaseIQN.find("active = ?", true).fetch();
 
-        DatabaseManager manager = new DatabaseManager(DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASSWORD);
-        DisasterRecoveryActions.updateConnections(manager, connections, iqns, type==RemoteHost.RecoveryType.FAILBACK, listener);
+        String dbHost = Play.configuration.getProperty("ovirt.db.host");
+        String dbPort = Play.configuration.getProperty("ovirt.db.port");
+        String dbName = Play.configuration.getProperty("ovirt.db.name");
+        String dbUser = Play.configuration.getProperty("ovirt.db.user");
+        String dbPassword = Play.configuration.getProperty("ovirt.db.password");
+
+        if (dbHost==null || dbPort == null || dbName == null || dbUser == null || dbPassword == null) {
+            reportError(Messages.get("drp.nodbcredentials"));
+        } else {
+            DatabaseManager manager = new DatabaseManager(dbHost, dbPort, dbName, dbUser, dbPassword);
+            DisasterRecoveryActions.updateConnections(manager, connections, iqns, type==RemoteHost.RecoveryType.FAILBACK, listener);
+        }
     }
 
     private void reportMessage(String message) {

@@ -17,7 +17,7 @@ public class WSDisasterRecovery extends WebSocketController {
 
             //WebSocketEvent event = await(inbound.nextEvent());
 
-            DisasterRecovery disasterRecovery = new DisasterRecovery(RemoteHost.RecoveryType.FAILOVER, new OperationListener() {
+            DisasterRecovery disasterRecovery = new DisasterRecovery(RemoteHost.RecoveryType.FAILBACK, new OperationListener() {
                 @Override
                 public void onMessage(String message) {
                     outbound.send(message);

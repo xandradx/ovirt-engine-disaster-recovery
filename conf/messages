@@ -228,6 +228,19 @@ drp.db.couldnotconnect = No se pudo establecer la conexión con la base de datos
 drp.db.nodriver = No existe un controlador para la conexión
 drp.db.couldnotdisconnect = No se pudo desconectar de la base de datos
 drp.invalidconfiguration = Configuración inválida
+drp.waitingactivehost = Esperando activación de hosts
+drp.hoststatus = Host (%s) estado: %s
+
+drp.fencingexception = No fue posible cercar host %s
+drp.deactivateexceptioninvalidhost = Host inválido
+drp.deactivateexception = No fue posible desactivar host %s
+drp.activateexceptioninvalidhost = Host inválido
+drp.activateexception = No fue posible activar host %s
+drp.error.rollback = No fue posible revertir
+drp.nodbcredentials = No existe configuraciónd de base de datos definida
+
+drp.status.invalid = No fue posible cambiar el estado del host %s
+drp.status.valid = El estado del host %s fue cambiado exitosamente
 
 FAILOVER = Failover
 FAILBACK = Failback
