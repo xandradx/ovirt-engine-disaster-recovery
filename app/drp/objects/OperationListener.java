@@ -6,7 +6,7 @@ package drp.objects;
 public interface OperationListener {
 
     void onMessage(String message);
-    void onFinished(String message);
+    void onFinished(String message, boolean success);
     void onError(Exception e, String error);
 
 }

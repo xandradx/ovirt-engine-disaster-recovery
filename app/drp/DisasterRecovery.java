@@ -1,6 +1,7 @@
 package drp;
 
 import drp.exceptions.ConnectionUpdateException;
+import drp.exceptions.HostActivateException;
 import drp.exceptions.HostsConditionsException;
 import drp.objects.DatabaseManager;
 import drp.objects.DisasterRecoveryDefinition;
@@ -12,6 +13,7 @@ import models.DatabaseIQN;
 import models.DisasterRecoveryOperation;
 import models.RemoteHost;
 import org.ovirt.engine.sdk.Api;
+import org.ovirt.engine.sdk.decorators.DataCenter;
 import org.ovirt.engine.sdk.decorators.Host;
 import org.ovirt.engine.sdk.decorators.Hosts;
 import org.ovirt.engine.sdk.exceptions.ServerException;
@@ -43,7 +45,7 @@ public class DisasterRecovery {
 
         long pendingOperations = DisasterRecoveryOperation.count("status = ?", DisasterRecoveryOperation.OperationStatus.PROGRESS);
         if (pendingOperations > 0) {
-            finishOperation(Messages.get("drp.alreadystarted"));
+            finishOperation(Messages.get("drp.alreadystarted"), false);
             return;
         }
 
@@ -57,28 +59,24 @@ public class DisasterRecovery {
             Logger.error(e, "Could not get database operation");
         }
 
-
+        DisasterRecoveryOperation.OperationStatus status = DisasterRecoveryOperation.OperationStatus.PROGRESS;
         try {
             reportMessage(Messages.get("drp.starting",  Messages.get(type)));
-
             reportMessage(Messages.get("drp.connectingapi"));
             api = OvirtApi.getApi();
-
             performOperation();
-
-            saveOperationWithStatus(DisasterRecoveryOperation.OperationStatus.SUCCESS);
-
+            status = DisasterRecoveryOperation.OperationStatus.SUCCESS;
         } catch (Exception e) {
-            reportError(e, e.getMessage());
-            saveOperationWithStatus(DisasterRecoveryOperation.OperationStatus.FAILED);
             Logger.error(e, "Error in operation");
-
+            reportError(e, e.getMessage());
+            status = DisasterRecoveryOperation.OperationStatus.FAILED;
         } finally {
             if (api!=null) {
                 api.shutdown();
             }
 
-            finishOperation(Messages.get("drp.finished"));
+            saveOperationWithStatus(status);
+            finishOperation(Messages.get("drp.finished", Messages.get(status.toString())), status == DisasterRecoveryOperation.OperationStatus.SUCCESS);
         }
     }
 
@@ -126,10 +124,28 @@ public class DisasterRecovery {
             }
 
             reportMessage(Messages.get("drp.waitingactivehost"));
+
+            int upHosts = 0;
             for (Host remoteHost : definition.getRemoteHosts()) {
-                waitForStatus("up", remoteHost, 20*1000);
+                if (waitForStatus("up", remoteHost, 120*1000)) {
+                    upHosts++;
+                }
             }
 
+            if (upHosts!=definition.getRemoteHosts().size()) {
+                throw new HostActivateException(Messages.get("drp.activateexceptionhosts"));
+            }
+
+            int upDataCenters = 0;
+            for (DataCenter dataCenter : api.getDataCenters().list()) {
+                if (waitForStatus("up", dataCenter, 480*1000)) {
+                    upDataCenters++;
+                }
+            }
+
+            if (upHosts!=definition.getRemoteHosts().size()) {
+                throw new HostActivateException(Messages.get("drp.activateexceptiondatacenters"));
+            }
 
             for (Host localHost : powerManagementHosts) {
                 reportMessage(Messages.get("drp.enablingpm", localHost.getName()));
@@ -139,7 +155,7 @@ public class DisasterRecovery {
 
     }
 
-    private void waitForStatus(String status, Host currentHost, long timeout) throws ServerException, IOException {
+    private boolean waitForStatus(String status, Host currentHost, long timeout) throws ServerException, IOException {
         long time = 0;
         long initialMillis = System.currentTimeMillis();
 
@@ -153,10 +169,34 @@ public class DisasterRecovery {
         } while (!hasExpectedStatus && time < timeout);
 
         if (!hasExpectedStatus) {
-            reportError(Messages.get("drp.status.invalid", currentHost.getName()));
+            reportError(Messages.get("drp.status.host.invalid", currentHost.getName()));
         } else {
-            reportMessage(Messages.get("drp.status.valid", currentHost.getName()));
+            reportMessage(Messages.get("drp.status.host.valid", currentHost.getName()));
         }
+
+        return hasExpectedStatus;
+    }
+
+    private boolean waitForStatus(String status, DataCenter dataCenter, long timeout) throws ServerException, IOException {
+        long time = 0;
+        long initialMillis = System.currentTimeMillis();
+
+        DataCenter updatedDC;
+        boolean hasExpectedStatus = false;
+        do {
+            updatedDC = api.getDataCenters().get(dataCenter.getName());
+            hasExpectedStatus = status.equals(updatedDC.getStatus().getState());
+            reportMessage(Messages.get("drp.datacenterstatus", updatedDC.getName(), Messages.get(updatedDC.getStatus().getState())));
+            time = System.currentTimeMillis() - initialMillis;
+        } while (!hasExpectedStatus && time < timeout);
+
+        if (!hasExpectedStatus) {
+            reportError(Messages.get("drp.status.datacenter.invalid", updatedDC.getName()));
+        } else {
+            reportMessage(Messages.get("drp.status.datacenter.valid", updatedDC.getName()));
+        }
+
+        return hasExpectedStatus;
     }
 
     private DisasterRecoveryDefinition getDefinition(List<Host> hostList, RemoteHost.RecoveryType type) throws HostsConditionsException {
@@ -255,8 +295,8 @@ public class DisasterRecovery {
         reportError(null, message);
     }
 
-    private void finishOperation(String message) {
-        listener.onFinished(message);
+    private void finishOperation(String message, boolean success) {
+        listener.onFinished(message, success);
     }
 
     private void saveOperationWithStatus(DisasterRecoveryOperation.OperationStatus status) {

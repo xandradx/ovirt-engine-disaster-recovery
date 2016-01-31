@@ -29,7 +29,7 @@ public class Configurations extends AuthenticatedController {
     public static void editConfiguration() {
 
         Configuration configuration = Configuration.generalConfiguration();
-        ServiceResponse configurationDto = null;//getConfiguration();
+        ServiceResponse configurationDto = getConfiguration();
         render(configuration, configurationDto);
     }
 

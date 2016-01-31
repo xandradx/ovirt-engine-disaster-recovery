@@ -16,8 +16,8 @@
             <div class="panel-heading">
                 <h3 class="panel-title">&{'dashboard.datacenters'}</h3>
             </div>
-            <div class="panel-body" id="spinner_data_centers">
-                <div class="spinner spinner-md"></div>
+            <div class="panel-body" id="body_data_centers">
+                <div class="spinner spinner-md" id="spinner_data_centers"></div>
             </div>
             <table class="table " id="table_data_centers">
                 <thead>
@@ -48,8 +48,8 @@
             <div class="panel-heading">
                 <h3 class="panel-title">&{'dashboard.hosts'}</h3>
             </div>
-            <div class="panel-body" id="spinner_hosts">
-                <div class="spinner spinner-md"></div>
+            <div class="panel-body" id="body_hosts">
+                <div class="spinner spinner-md" id="spinner_hosts"></div>
             </div>
             <table class="table table-striped" id="table_hosts">
                 <thead>
@@ -78,16 +78,32 @@
 </div>
 
 
+*{
+<div class="row">
+    <div class="col-lg-12 col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="actions pull-right" id="actions_bar">
+
+                </div>
+                <h2 class="h3">&{'drp.title'}</h2>
+            </div>
+            <ul class="list-group" id="operation_list">
+            </ul>
+        </div>
+    </div>
+</div>
+}*
+
 <div class="row">
     <div class="col-sm-12 sidebar-pf sidebar-pf-right">
         <div class="sidebar-header sidebar-header-bleed-left sidebar-header-bleed-right">
             <div class="actions pull-right" id="actions_bar">
 
             </div>
-            <h2 class="h3">DRP</h2>
+            <h2 class="h3">&{'drp.title'}</h2>
         </div>
         <ul class="list-group" id="operation_list">
-
         </ul>
     </div>
 </div>
@@ -155,6 +171,7 @@
 
     function updateDataCenters() {
 
+        $("#body_data_centers").show();
         $("#spinner_data_centers").show();
         $("#table_data_centers").hide();
         $("#spinner_data_centers_chart").show();
@@ -166,7 +183,7 @@
 	    }).done(function( data ) {
 
 	        if (data.success) {
-	            $("#table_data_centers").show();
+
 	            var html = "";
 	            $.each(data.data.list, function(index, dataCenter) {
 	                html+= '<tr>';
@@ -178,8 +195,10 @@
 	            $("#table_data_centers tbody").html(html);
 	            setDataCentersData(data.data.statusCount);
 
+	            $("#body_data_centers").hide();
+	            $("#table_data_centers").show();
 	        } else {
-
+	            $("#table_data_centers").hide();
 	        }
 	    }).always(function() {
 	        $("#spinner_data_centers").hide();
@@ -189,6 +208,7 @@
 
     function updateHosts() {
 
+        $("#body_hosts").show();
         $("#spinner_hosts").show();
         $("#table_hosts").hide();
         $("#spinner_hosts_chart").show();
@@ -200,7 +220,6 @@
 	    }).done(function( data ) {
 
 	        if (data.success) {
-	            $("#table_hosts").show();
 	            var html = "";
 	            $.each(data.data.list, function(index, host) {
 	                html+= '<tr>';
@@ -212,8 +231,10 @@
 	            $("#table_hosts tbody").html(html);
 	            setHostsData(data.data.statusCount);
 
+	            $("#body_hosts").hide();
+	            $("#table_hosts").show();
 	        } else {
-
+	            $("#table_hosts").hide();
 	        }
 	    }).always(function() {
 	        $("#spinner_hosts").hide();
@@ -230,8 +251,11 @@
 
 <script>
     function setStartButton() {
-       var html = '<button onclick="startOperation()" class="btn btn-small btn-primary" id="button_start">Start</button>';
-       $("#actions_bar").html(html);
+        var html = '<div class="btn-group" role="group">';
+        html += '<button onclick="startOperation(\'FAILOVER\')" class="btn btn-small btn-primary" id="button_start">&{'start.failover'}</button>';
+        html += '<button onclick="startOperation(\'FAILBACK\')" class="btn btn-small btn-danger" id="button_start">&{'start.failback'}</button>';
+        html += '</div>';
+        $("#actions_bar").html(html);
     }
 
     function setLoading() {
@@ -243,7 +267,7 @@
        $("#actions_bar").html("");
     }
 
-    function startOperation() {
+    function startOperation(type) {
 
         if ("WebSocket" in window) {
             var operationList = $("#operation_list");
@@ -251,24 +275,37 @@
 
             setLoading();
 
-            var socket = new WebSocket("@@{WSDisasterRecovery.startOperation()}");
+            var socket = new WebSocket("@@{WSDisasterRecovery.startOperation()}?type="+type);
 
 	        socket.onmessage = function(msg){
-	            addMessage("Message", msg.data);
+
+	            var data = jQuery.parseJSON( msg.data );
+	            addMessage("Message", data.message, data.type);
+
+	            if (data.refresh) {
+	                updateDataCenters();
+                    updateHosts();
+	            }
 	        };
 
 	        socket.onclose = function() {
 	            setStartButton();
 	        };
         } else {
+
         }
 
     }
 
-    function addMessage(title, message) {
+    function addMessage(title, message, type) {
         var operationList = $("#operation_list");
         var cellHtml = "";
-        cellHtml += '<li class="list-group-item">';
+
+        if (type === "error") {
+            cellHtml += '<li class="list-group-item list-group-item-danger">';
+        } else {
+            cellHtml += '<li class="list-group-item list-group-item-info">';
+        }
         //cellHtml += '<h3 class="list-group-item-heading">'+title+'</h3>';
         cellHtml += '<span class="badge"></span>';
         cellHtml += '<p class="list-group-item-text">'+message+'</p>';

@@ -2,6 +2,8 @@
 # For example, for French create a messages.fr file
 #
 
+title = oVirt Dashboard
+
 ################################################
 #Data tables messages
 ################################################
@@ -188,6 +190,7 @@ non_operational = No operacional
 pending_approval = Pendiente de aprobación
 initializing = Inicializando
 problematic = Problemático
+contend = Conteniendo
 other = Otro
 
 none = Ninguno
@@ -200,6 +203,10 @@ ws.error.exception = Occurió un error inesperado, por favor intente de nuevo m�
 ################################################
 #DRP
 ################################################
+
+drp.title = Operación de recuperación de desastres
+start.failback = Failback
+start.failover = Failover
 
 drp.verifyinghosts = Verificando hosts
 drp.originhost = Host de origen (%s) estado: %s
@@ -219,7 +226,7 @@ drp.enablingpm = Habilitando manejo de encendido en host: %s
 drp.alreadystarted = Operación de recuperación de desastres ya se encuentra en proceso
 drp.starting = Iniciando proceso: %s
 drp.connectingapi = Conectandose a API...
-drp.finished = Operación finalizada
+drp.finished = Operación finalizada con estado: %s
 drp.db.connection = iqn: %s -- conexión: %s
 drp.db.noconnections = No existen conexiones configuradas
 drp.db.currentconnections = Conexiones actuales
@@ -238,9 +245,18 @@ drp.activateexceptioninvalidhost = Host inválido
 drp.activateexception = No fue posible activar host %s
 drp.error.rollback = No fue posible revertir
 drp.nodbcredentials = No existe configuraciónd de base de datos definida
+drp.activateexceptionhosts = No fue posible activar los hosts
 
-drp.status.invalid = No fue posible cambiar el estado del host %s
-drp.status.valid = El estado del host %s fue cambiado exitosamente
+drp.status.host.invalid = No fue posible cambiar el estado del host %s
+drp.status.host.valid = El estado del host %s fue cambiado exitosamente
+
+drp.datacenterstatus = Centro de datos (%s) estado: %s
+drp.status.datacenter.invalid = No fue posible cambiar el estado del host %s
+drp.status.datacenter.valid = El estado del host %s fue cambiado exitosamente
+drp.activateexceptiondatacenters = No fue posible activar los centros de datos
 
 FAILOVER = Failover
 FAILBACK = Failback
+
+SUCCESS = Exitoso
+FAILED = Error

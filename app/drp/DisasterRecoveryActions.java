@@ -60,21 +60,8 @@ public class DisasterRecoveryActions {
 
         PowerManagement powerManagement = host.getPowerManagement();
         if (powerManagement != null) {
-
-            Configuration configuration = Configuration.generalConfiguration();
-            Agent agent = new Agent();
-            agent.setOptions(new Options());
-            agent.setType("ilo3");
-            agent.setUsername(configuration.apiUser);
-            agent.setPassword(configuration.apiPassword);
-            agent.setAddress("192.168.13.50");
-            Agents agents = new Agents();
-            agents.getAgents().add(agent);
-
-            powerManagement.setAgents(agents);
             powerManagement.setEnabled(true);
             host.setPowerManagement(powerManagement);
-
             host.update();
         }
     }
