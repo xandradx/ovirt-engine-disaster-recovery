@@ -91,14 +91,18 @@ public class DisasterRecovery {
             reportError(Messages.get("drp.nohostsconfigured"));
         } else {
             List<Host> powerManagementHosts = new ArrayList<Host>();
-            for (Host localHost : definition.getLocalHosts()) {
 
-                if (DisasterRecoveryActions.hasPowerManagement(localHost)) {
-                    reportMessage(Messages.get("drp.disablingpm", localHost.getName()));
-                    DisasterRecoveryActions.disablePowerManagement(localHost);
-                    powerManagementHosts.add(localHost);
+            //Disabling power management
+            for (Host host : hosts.list()) {
+                if (DisasterRecoveryActions.hasPowerManagement(host)) {
+                    reportMessage(Messages.get("drp.disablingpm", host.getName()));
+                    DisasterRecoveryActions.disablePowerManagement(host);
+                    powerManagementHosts.add(host);
                 }
+            }
 
+            //Checking local hosts
+            for (Host localHost : definition.getLocalHosts()) {
                 String status = localHost.getStatus().getState();
                 if ("non_responsive".equals(status)) {
                     reportMessage(Messages.get("drp.fencinghost",localHost.getName()));
@@ -111,20 +115,15 @@ public class DisasterRecovery {
             reportMessage(Messages.get("drp.updatingdbconnections"));
             updateDatabase(type);
 
+            //Activating remote hosts
             for (Host remoteHost : definition.getRemoteHosts()) {
-
-                if (DisasterRecoveryActions.hasPowerManagement(remoteHost)) {
-                    reportMessage(Messages.get("drp.disablingpm", remoteHost.getName()));
-                    DisasterRecoveryActions.disablePowerManagement(remoteHost);
-                    powerManagementHosts.add(remoteHost);
-                }
-
                 reportMessage(Messages.get("drp.activatinghost", remoteHost.getName()));
                 DisasterRecoveryActions.activateHost(remoteHost);
             }
 
             reportMessage(Messages.get("drp.waitingactivehost"));
 
+            //Checking hosts status
             int upHosts = 0;
             for (Host remoteHost : definition.getRemoteHosts()) {
                 if (waitForStatus("up", remoteHost, 120*1000)) {
@@ -136,6 +135,8 @@ public class DisasterRecovery {
                 throw new HostActivateException(Messages.get("drp.activateexceptionhosts"));
             }
 
+            //Checking data centers status
+            reportMessage(Messages.get("drp.waitingactivedatacenters"));
             int upDataCenters = 0;
             for (DataCenter dataCenter : api.getDataCenters().list()) {
                 if (waitForStatus("up", dataCenter, 480*1000)) {
@@ -147,6 +148,7 @@ public class DisasterRecovery {
                 throw new HostActivateException(Messages.get("drp.activateexceptiondatacenters"));
             }
 
+            //Enabling power management
             for (Host localHost : powerManagementHosts) {
                 reportMessage(Messages.get("drp.enablingpm", localHost.getName()));
                 DisasterRecoveryActions.enablePowerManagement(localHost);

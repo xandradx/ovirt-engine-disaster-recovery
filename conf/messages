@@ -187,6 +187,7 @@ install_failed = Instalación fallida
 reboot = Reiniciando
 preparing_for_maintenance = Preparandose para mantenimiento
 non_operational = No operacional
+not_operational = No operacional
 pending_approval = Pendiente de aprobación
 initializing = Inicializando
 problematic = Problemático
@@ -250,6 +251,7 @@ drp.activateexceptionhosts = No fue posible activar los hosts
 drp.status.host.invalid = No fue posible cambiar el estado del host %s
 drp.status.host.valid = El estado del host %s fue cambiado exitosamente
 
+drp.waitingactivedatacenters = Esperando activación de centros de datos
 drp.datacenterstatus = Centro de datos (%s) estado: %s
 drp.status.datacenter.invalid = No fue posible cambiar el estado del host %s
 drp.status.datacenter.valid = El estado del host %s fue cambiado exitosamente
