@@ -28,6 +28,7 @@
         <link rel="apple-touch-icon-precomposed" sizes="57x57" href="@{'/public/components/patternfly/dist/img/apple-touch-icon-precomposed-57.png'}">
         <link rel="stylesheet" href="@{'/public/components/patternfly/dist/css/patternfly.min.css'}" >
         <link rel="stylesheet" href="@{'/public/components/patternfly/dist/css/patternfly-additions.min.css'}" >
+        <link href="@{'/public/stylesheets/custom.css'}" rel="stylesheet" media="screen, print">
         <script src="@{'/public/components/patternfly/components/jquery/dist/jquery.min.js'}"></script>
         <script src="@{'/public/components/patternfly/components/bootstrap/dist/js/bootstrap.min.js'}"></script>
         <script src="@{'/public/components/patternfly/components/datatables/media/js/jquery.dataTables.js'}"></script>
@@ -38,7 +39,7 @@
         #{get 'moreScriptsTop'/}
     </head>
 
-    <body>
+    <body class="#{get 'bodyClass'/}">
 
     #{doLayout/}
 

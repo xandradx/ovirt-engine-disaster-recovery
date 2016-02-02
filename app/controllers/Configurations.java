@@ -29,7 +29,7 @@ public class Configurations extends AuthenticatedController {
     public static void editConfiguration() {
 
         Configuration configuration = Configuration.generalConfiguration();
-        ServiceResponse configurationDto = getConfiguration();
+        ServiceResponse configurationDto = null;//getConfiguration();
         render(configuration, configurationDto);
     }
 
@@ -67,11 +67,20 @@ public class Configurations extends AuthenticatedController {
                     hostsDto.add(dto);
                 }
 
+                List<models.StorageConnection> dbConnections = models.StorageConnection.findActive();
                 StorageConnections connections = api.getStorageConnections();
                 List<ConnectionDto> connectionDtos = new ArrayList<ConnectionDto>();
                 for (StorageConnection connection : connections.list()) {
                     if (connection.getType().equalsIgnoreCase("iscsi")) {
-                        connectionDtos.add(DtoHelper.getConnectionDto(connection));
+                        ConnectionDto dto =  DtoHelper.getConnectionDto(connection);
+                        models.StorageConnection dbConnection = DtoHelper.getDestinationInformation(connection, dbConnections);
+                        if (dbConnection!=null) {
+                            dto.setDestinationAddress(dbConnection.destinationIp);
+                            dto.setDestinationIqn(dbConnection.originIqn);
+                        }
+
+                        connectionDtos.add(dto);
+
                     }
                 }
 

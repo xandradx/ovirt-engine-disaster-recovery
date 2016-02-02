@@ -24,8 +24,8 @@ public class OvirtApi {
             throw new InvalidConfigurationException(Messages.get("drp.invalidconfiguration"));
         }
 
-        File cert = configuration.trustStore.getFile();
-        Api api = new Api(configuration.apiURL, configuration.apiUser, configuration.apiPassword, cert.getAbsolutePath());
+        //File cert = configuration.trustStore.getFile();
+        Api api = new Api(configuration.apiURL, configuration.apiUser, configuration.apiPassword, true);
         return api;
     }
 }

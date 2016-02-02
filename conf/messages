@@ -176,6 +176,15 @@ host.ip = Dirección ip
 host.status = Estado
 host.configuration = Configuración
 
+connection.originIp = IP origen
+connection.originIqn = IQN origen
+connection.destinationIp = IP destino
+connection.destinationIqn = IQN destino
+
+configuration.apiURL = URL API
+configuration.apiPassword = Password API
+configuration.apiUser = Usuario API
+
 unassigned = No asignado
 down = Abajo
 maintenance = En mantenimiento
@@ -200,6 +209,13 @@ failback.remotehost = Destino en regreso
 
 ws.api.error.connection = No fue posible conectarse con el API
 ws.error.exception = Occurió un error inesperado, por favor intente de nuevo más tarde
+
+manager.unreachable.title = API no disponible
+manager.unreachable.message = El API no se encuentra disponible en este momento. Por favor enciéndalo ingresando a la <br>consola administrativa o presione el siguiente botón para encenderlo.
+manager.unreachable.turnon = Encender
+manager.unreachable.tryagain = Reintentar
+manager.unreachable.configuration = Ir a configuración
+
 
 ################################################
 #DRP

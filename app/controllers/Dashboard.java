@@ -54,4 +54,13 @@ public class Dashboard extends AuthenticatedController {
         renderJSON(serviceResponse);
     }
 
+    public static void turnOnApi() {
+
+        F.Promise<Boolean> apiReachable = new ReachableJob().now();
+        Boolean reachable = await(apiReachable);
+
+        ServiceResponse serviceResponse = ServiceResponse.success(reachable);
+        renderJSON(serviceResponse);
+    }
+
 }

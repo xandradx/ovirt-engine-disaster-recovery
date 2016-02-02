@@ -29,6 +29,16 @@ public class DtoHelper {
         return new DataCenterDto(dataCenter.getName(), Messages.get(dataCenter.getStatus().getState()));
     }
 
+    public static models.StorageConnection getDestinationInformation(StorageConnection connection, List<models.StorageConnection> dbConnections) {
+        for (models.StorageConnection dbConnection : dbConnections) {
+            if (connection.getAddress().equals(dbConnection.originIp) && connection.getTarget().equals(dbConnection.originIqn)) {
+                return dbConnection;
+            }
+        }
+
+        return null;
+    }
+
     public static RemoteHost.RecoveryType getRecoveryType(Host host, List<RemoteHost> remoteHosts) {
         for (RemoteHost remoteHost : remoteHosts) {
             if (remoteHost.hostName.equalsIgnoreCase(host.getName())) {

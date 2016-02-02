@@ -10,6 +10,44 @@
 <script src="@{'/public/components/patternfly/components/d3/d3.min.js'}"></script>
 #{/}
 
+#{set 'bodyClass'}
+cards-pf
+#{/}
+
+#{set 'containerClass'}
+container-cards-pf
+#{/}
+
+<div id="general-loading-div">
+    <div class="spinner spinner-lg"></div>
+</div>
+
+<div class="row" id="manager_unreachable_div">
+    <div class="col-lg-12 col-md-12">
+        <div class="blank-slate-pf">
+            <div class="blank-slate-pf-icon">
+                <i class="fa fa-exclamation-triangle"></i>
+            </div>
+            <h1>&{'manager.unreachable.title'}</h1>
+            <p>&{'manager.unreachable.message'}</p>
+            <div class="blank-slate-pf-main-action">
+                <button class="btn btn-primary btn-lg" onclick="turnOnApi()">
+                    &{'manager.unreachable.turnon'}
+                </button>
+            </div>
+            <div class="blank-slate-pf-secondary-action">
+                <button class="btn btn-default" onclick="checkManagerStatus()">
+                    &{'manager.unreachable.tryagain'}
+                </button>
+                <a class="btn btn-default" href="@{Configurations.editConfiguration()}">
+                    &{'manager.unreachable.configuration'}
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="main_actions_div">
 <div class="row">
     <div class="col-lg-3 col-md-6">
         <div class="panel panel-default">
@@ -77,37 +115,25 @@
     </div>
 </div>
 
-
-*{
-<div class="row">
-    <div class="col-lg-12 col-md-12">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <div class="actions pull-right" id="actions_bar">
+<div class="row row-cards-pf">
+    <div class="col-md-12">
+        <div class="card-pf">
+            <div class="card-pf-heading">
+                <div class="dropdown card-pf-time-frame-filter" id="actions_bar">
 
                 </div>
-                <h2 class="h3">&{'drp.title'}</h2>
+                <h2 class="card-pf-title">
+                    &{'drp.title'}
+                </h2>
             </div>
-            <ul class="list-group" id="operation_list">
-            </ul>
+            <div class="card-pf-body" id="operations_div" style="max-height:400px; overflow-y:scroll;">
+                <ul class="list-group" id="operation_list">
+                </ul>
+            </div>
         </div>
     </div>
 </div>
-}*
-
-<div class="row">
-    <div class="col-sm-12 sidebar-pf sidebar-pf-right">
-        <div class="sidebar-header sidebar-header-bleed-left sidebar-header-bleed-right">
-            <div class="actions pull-right" id="actions_bar">
-
-            </div>
-            <h2 class="h3">&{'drp.title'}</h2>
-        </div>
-        <ul class="list-group" id="operation_list">
-        </ul>
-    </div>
 </div>
-
 
 <script>
 
@@ -242,9 +268,71 @@
 	    });
     }
 
+    function checkManagerStatus() {
+        $("#manager_unreachable_div").hide();
+        $("#main_actions_div").hide();
+        $("#general-loading-div").show();
+
+        $.ajax({
+		    type: "POST",
+		    url: "@{Dashboard.checkManagerStatus()}"
+	    }).done(function( data ) {
+
+	        if (data.success) {
+	            if (data.data) {
+	                $("#manager_unreachable_div").hide();
+	                $("#main_actions_div").show();
+
+	                updateDataCenters();
+                    updateHosts();
+
+	            } else {
+	                $("#manager_unreachable_div").show();
+	                $("#main_actions_div").hide();
+	            }
+	        } else {
+	            $("#manager_unreachable_div").show();
+	            $("#main_actions_div").hide();
+	        }
+	    }).always(function() {
+            $("#general-loading-div").hide();
+	    });
+    }
+
+    function turnOnApi() {
+        $("#manager_unreachable_div").hide();
+        $("#main_actions_div").hide();
+        $("#general-loading-div").show();
+
+        $.ajax({
+		    type: "POST",
+		    url: "@{Dashboard.turnOnApi()}"
+	    }).done(function( data ) {
+
+	        if (data.success) {
+	            if (data.data) {
+	                $("#manager_unreachable_div").hide();
+	                $("#main_actions_div").show();
+
+	                updateDataCenters();
+                    updateHosts();
+
+	            } else {
+	                $("#manager_unreachable_div").show();
+	                $("#main_actions_div").hide();
+	            }
+	        } else {
+	            $("#manager_unreachable_div").show();
+	            $("#main_actions_div").hide();
+	        }
+	    }).always(function() {
+            $("#general-loading-div").hide();
+	    });
+    }
+
     $(document).ready(function() {
-        updateDataCenters();
-        updateHosts();
+        $("#general-loading-div").hide();
+        checkManagerStatus();
     });
 
 </script>
@@ -312,6 +400,8 @@
         cellHtml += '</li>';
 
         operationList.append(cellHtml);
+
+        $('#operations_div').scrollTop($('#operations_div')[0].scrollHeight);
     }
 
     setStartButton();
