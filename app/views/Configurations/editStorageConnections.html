@@ -1,0 +1,42 @@
+#{extends 'Configurations/baseConfiguration.html' /}
+#{set title:messages.get('storageConnections.edit.title') /}
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        #{form @Configurations.save(), method:"POST", id:"form", role:"form", enctype: "multipart/form-data", class:'form-horizontal'}
+
+            <table class="table table-striped table-bordered">
+                <thead>
+                <tr>
+                    <th>&{'connection.originIp'}</th>
+                    <th>&{'connection.originIqn'}</th>
+                    <th>&{'connection.destinationIp'}</th>
+                    <th>&{'connection.destinationIqn'}</th>
+                </tr>
+                </thead>
+                <tbody>
+                #{list configurationDto?.data?.connections, as: 'connection'}
+                <tr>
+                    <td>${connection.ipAddress}</td>
+                    <td>${connection.iqn}</td>
+                    <td>
+                        <input type="hidden" name="connection.originIp" value="${host.name}"/>
+                        <input type="text" name="connection.destinationIp" value="${connection.destinationIp}"/>
+                    </td>
+                    <td>
+                        <input type="hidden" name="connection.originIqn" value="${host.name}"/>
+                        <input type="text" name="destination.originIqn" value="${connection.destionationIqn}"/>
+                    </td>
+                </tr>
+                #{/list}
+                </tbody>
+            </table>
+
+            <button type="submit" class="btn btn-default pull-right">&{'form.save'}</button>
+
+        #{/form}
+        <!-- /.form -->
+    </div>
+    <!-- /.panel-body -->
+</div>
+<!-- /.panel -->

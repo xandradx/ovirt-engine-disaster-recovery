@@ -1,103 +1,39 @@
-#{extends 'main.html' /}
+#{extends 'Configurations/baseConfiguration.html' /}
 
-#{if configuration}
 #{set title:messages.get('configuration.edit.title') /}
-#{/if}
 
-<!-- /.row -->
-<div class="row">
-    <div class="col-lg-12">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                #{form (configuration?.id) ? @Configurations.save() : "", method:"POST", id:"form", role:"form", enctype: "multipart/form-data", class:'form-horizontal'}
+<div class="panel panel-default">
+    <div class="panel-body">
+        #{form (configuration?.id) ? @Configurations.save() : "", method:"POST", id:"form", role:"form", enctype: "multipart/form-data", class:'form-horizontal'}
 
-                <div class="row">
-                    <div class="col-md-6">
-                        #{form-input fieldName:'configuration.apiURL'/}
-                    </div>
-                    <div class="col-md-6">
-                        #{form-input fieldName:'configuration.apiUser'/}
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-6">
-                        #{form-input fieldName:'configuration.apiPassword'/}
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-lg-6 col-md-12">
-                        <table class="table table-striped table-bordered">
-                            <thead>
-                            <tr>
-                                <th>&{'host.name'}</th>
-                                <th>&{'host.ip'}</th>
-                                <th>&{'host.status'}</th>
-                                <th>&{'host.configuration'}</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            #{list configurationDto?.data?.hosts, as: 'host'}
-                            <tr>
-                                <td>${host.name}</td>
-                                <td>${host.ip}</td>
-                                <td>${messages.get(host.status)}</td>
-                                <td>
-                                    <input type="hidden" name="host.name" value="${host.name}"/>
-                                    <select name="host.type">
-                                        <option value="${models.RemoteHost.RecoveryType.NONE}" ${(host.type == models.RemoteHost.RecoveryType.NONE) ? 'selected' : '' }>&{'none'}</option>
-                                        <option value="${models.RemoteHost.RecoveryType.FAILOVER}" ${(host.type == models.RemoteHost.RecoveryType.FAILOVER) ? 'selected' : '' }>&{'failover.remotehost'}</option>
-                                        <option value="${models.RemoteHost.RecoveryType.FAILBACK}" ${(host.type == models.RemoteHost.RecoveryType.FAILBACK) ? 'selected' : '' }>&{'failback.remotehost'}</option>
-                                    </select>
-                                </td>
-                            </tr>
-                            #{/list}
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="col-lg-6 col-md-12">
-                        <table class="table table-striped table-bordered">
-                            <thead>
-                            <tr>
-                                <th>&{'connection.originIp'}</th>
-                                <th>&{'connection.originIqn'}</th>
-                                <th>&{'connection.destinationIp'}</th>
-                                <th>&{'connection.destinationIqn'}</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            #{list configurationDto?.data?.connections, as: 'connection'}
-                            <tr>
-                                <td>${connection.ipAddress}</td>
-                                <td>${connection.iqn}</td>
-                                <td>
-                                    <input type="hidden" name="connection.originIp" value="${host.name}"/>
-                                    <input type="text" name="connection.destinationIp" value="${connection.destinationIp}"/>
-                                </td>
-                                <td>
-                                    <input type="hidden" name="connection.originIqn" value="${host.name}"/>
-                                    <input type="text" name="destination.originIqn" value="${connection.destionationIqn}"/>
-                                </td>
-                            </tr>
-                            #{/list}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-
-
-                <button type="submit" class="btn btn-default pull-right">&{'form.save'}</button>
-
-                #{/form}
-                <!-- /.form -->
+        <div class="row">
+            <div class="col-md-6">
+                #{form-input fieldName:'configuration.apiURL'/}
             </div>
-            <!-- /.panel-body -->
+            <div class="col-md-6">
+                #{form-input fieldName:'configuration.apiUser'/}
+            </div>
         </div>
-        <!-- /.panel -->
+
+        <div class="row">
+            <div class="col-md-6">
+                #{form-input fieldName:'configuration.apiPassword'/}
+            </div>
+            <div class="col-md-6">
+                #{form-input-plain
+                type:"file",
+                class:" ",
+                name:"configuration.trustStore",
+                error: errors.forKey("configuration.trustStore")
+                /}
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-default pull-right">&{'form.save'}</button>
+
+        #{/form}
+        <!-- /.form -->
     </div>
-    <!-- /.col-lg-12 -->
+    <!-- /.panel-body -->
 </div>
-<!-- /.row -->
+<!-- /.panel -->

@@ -1,0 +1,42 @@
+#{extends 'Configurations/baseConfiguration.html' /}
+#{set title:messages.get('hosts.edit.title') /}
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        #{form @Configurations.save(), method:"POST", id:"form", role:"form", enctype: "multipart/form-data", class:'form-horizontal'}
+            <table class="table table-striped table-bordered">
+                <thead>
+                <tr>
+                    <th>&{'host.name'}</th>
+                    <th>&{'host.ip'}</th>
+                    <th>&{'host.status'}</th>
+                    <th>&{'host.configuration'}</th>
+                </tr>
+                </thead>
+                <tbody>
+                #{list configurationDto?.data?.hosts, as: 'host'}
+                <tr>
+                    <td>${host.name}</td>
+                    <td>${host.ip}</td>
+                    <td>${messages.get(host.status)}</td>
+                    <td>
+                        <input type="hidden" name="host.name" value="${host.name}"/>
+                        <select name="host.type">
+                            <option value="${models.RemoteHost.RecoveryType.NONE}" ${(host.type == models.RemoteHost.RecoveryType.NONE) ? 'selected' : '' }>&{'none'}</option>
+                            <option value="${models.RemoteHost.RecoveryType.FAILOVER}" ${(host.type == models.RemoteHost.RecoveryType.FAILOVER) ? 'selected' : '' }>&{'failover.remotehost'}</option>
+                            <option value="${models.RemoteHost.RecoveryType.FAILBACK}" ${(host.type == models.RemoteHost.RecoveryType.FAILBACK) ? 'selected' : '' }>&{'failback.remotehost'}</option>
+                        </select>
+                    </td>
+                </tr>
+                #{/list}
+                </tbody>
+            </table>
+
+        <button type="submit" class="btn btn-default pull-right">&{'form.save'}</button>
+
+        #{/form}
+        <!-- /.form -->
+    </div>
+    <!-- /.panel-body -->
+</div>
+<!-- /.panel -->

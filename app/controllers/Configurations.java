@@ -29,8 +29,7 @@ public class Configurations extends AuthenticatedController {
     public static void editConfiguration() {
 
         Configuration configuration = Configuration.generalConfiguration();
-        ServiceResponse configurationDto = null;//getConfiguration();
-        render(configuration, configurationDto);
+        render(configuration);
     }
 
     public static void save(@Valid Configuration configuration) {
@@ -50,6 +49,14 @@ public class Configurations extends AuthenticatedController {
         editConfiguration();
     }
 
+    public static void editHosts() {
+        render();
+    }
+
+    public static void editStorageConnections() {
+        render();
+    }
+
     private static ServiceResponse getConfiguration() {
         ServiceResponse serviceResponse;
 
@@ -67,7 +74,7 @@ public class Configurations extends AuthenticatedController {
                     hostsDto.add(dto);
                 }
 
-                List<models.StorageConnection> dbConnections = models.StorageConnection.findActive();
+                List<models.StorageConnection> dbConnections = models.StorageConnection.find("active = ?", true).fetch();
                 StorageConnections connections = api.getStorageConnections();
                 List<ConnectionDto> connectionDtos = new ArrayList<ConnectionDto>();
                 for (StorageConnection connection : connections.list()) {
@@ -91,6 +98,7 @@ public class Configurations extends AuthenticatedController {
                 serviceResponse = ServiceResponse.error(Messages.get("ws.api.error.connection"));
             }
         } catch (Exception e) {
+            Logger.error(e, "Error");
             serviceResponse = ServiceResponse.error(Messages.get("ws.error.exception"));
         }
 
