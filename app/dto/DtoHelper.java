@@ -7,7 +7,6 @@ import models.RemoteHost;
 import org.ovirt.engine.sdk.decorators.DataCenter;
 import org.ovirt.engine.sdk.decorators.Host;
 import org.ovirt.engine.sdk.decorators.StorageConnection;
-import play.Logger;
 import play.i18n.Messages;
 
 import java.util.List;
@@ -29,19 +28,9 @@ public class DtoHelper {
         return new DataCenterDto(dataCenter.getName(), Messages.get(dataCenter.getStatus().getState()));
     }
 
-    public static models.StorageConnection getDestinationInformation(StorageConnection connection, List<models.StorageConnection> dbConnections) {
-        for (models.StorageConnection dbConnection : dbConnections) {
-            if (connection.getAddress().equals(dbConnection.originIp) && connection.getTarget().equals(dbConnection.originIqn)) {
-                return dbConnection;
-            }
-        }
-
-        return null;
-    }
-
-    public static RemoteHost.RecoveryType getRecoveryType(Host host, List<RemoteHost> remoteHosts) {
+    public static RemoteHost.RecoveryType getRecoveryType(HostDto dto, List<RemoteHost> remoteHosts) {
         for (RemoteHost remoteHost : remoteHosts) {
-            if (remoteHost.hostName.equalsIgnoreCase(host.getName())) {
+            if (remoteHost.hostName.equalsIgnoreCase(dto.getName())) {
                 return remoteHost.type;
             }
         }

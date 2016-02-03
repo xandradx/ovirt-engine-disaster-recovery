@@ -192,6 +192,9 @@ connection.originIqn = IQN origen
 connection.destinationIp = IP destino
 connection.destinationIqn = IQN destino
 
+ip.new = Nueva IP
+iqn.new = Nueva IQN
+
 unassigned = No asignado
 down = Abajo
 maintenance = En mantenimiento

@@ -5,9 +5,15 @@ import dto.DtoHelper;
 import dto.objects.ConfigurationDto;
 import dto.objects.ConnectionDto;
 import dto.objects.HostDto;
+import dto.objects.StatusDto;
 import dto.response.ServiceResponse;
 import helpers.GlobalConstants;
+import jobs.services.HostsJob;
+import jobs.services.ReachableJob;
+import jobs.services.StorageConnectionsJob;
 import models.Configuration;
+import models.DatabaseConnection;
+import models.DatabaseIQN;
 import models.RemoteHost;
 import org.ovirt.engine.sdk.Api;
 import org.ovirt.engine.sdk.decorators.Host;
@@ -17,10 +23,14 @@ import org.ovirt.engine.sdk.decorators.StorageConnections;
 import play.Logger;
 import play.data.validation.Valid;
 import play.i18n.Messages;
+import play.libs.F;
 import play.mvc.With;
+import sun.rmi.runtime.Log;
 
+import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Future;
 
 @With(Secure.class)
 @Check(GlobalConstants.ROLE_ADMIN)
@@ -49,63 +59,74 @@ public class Configurations extends AuthenticatedController {
         editConfiguration();
     }
 
+    public static void editStorageConnections() {
+        List<DatabaseConnection> connections = DatabaseConnection.find("active = ?", true).fetch();
+        List<DatabaseIQN> iqns = DatabaseIQN.find("active = ?", true).fetch();
+        render(connections, iqns);
+    }
+
+    public static void saveConnections(@Valid List<DatabaseConnection> connections, @Valid List<DatabaseIQN> iqns) {
+
+        if (validation.hasErrors()) {
+            params.flash();
+            flash.error(Messages.get("form.error"));
+            validation.keep();
+        } else {
+
+
+            if (iqns.size() == connections.size() && !iqns.isEmpty()) {
+
+                DatabaseIQN.deleteAll();
+                for (DatabaseIQN iqn : iqns) {
+                    iqn.save();
+                }
+
+                DatabaseConnection.deleteAll();
+                for (DatabaseConnection connection : connections) {
+                    connection.save();
+                }
+
+                flash.success(Messages.get("form.success"));
+
+            } else {
+                params.flash();
+                flash.error(Messages.get("form.error"));
+                validation.keep();
+            }
+        }
+
+        editStorageConnections();
+    }
+
     public static void editHosts() {
         render();
     }
 
-    public static void editStorageConnections() {
-        render();
+    public static void getHosts() {
+        F.Promise<ServiceResponse> apiHosts = new HostsJob().now();
+        ServiceResponse connectionsService = await(apiHosts);
+        renderJSON(connectionsService);
     }
 
-    private static ServiceResponse getConfiguration() {
-        ServiceResponse serviceResponse;
+    public static void saveHosts(@Valid List<RemoteHost> hosts) {
 
-        try {
-            Api api = OvirtApi.getApi();
-            if (api!=null) {
+        if (validation.hasErrors()) {
+            params.flash();
+            flash.error(Messages.get("form.error"));
+            validation.keep();
+        } else {
 
-                List<RemoteHost> remoteHosts = RemoteHost.find("active = ?", true).fetch();
-
-                Hosts hosts = api.getHosts();
-                List<HostDto> hostsDto = new ArrayList<HostDto>();
-                for (Host host : hosts.list()) {
-                    HostDto dto = DtoHelper.getHostDto(host);
-                    dto.setType(DtoHelper.getRecoveryType(host, remoteHosts));
-                    hostsDto.add(dto);
+            RemoteHost.deleteAll();
+            for (RemoteHost host : hosts) {
+                if (host.type != RemoteHost.RecoveryType.NONE) {
+                    host.save();
                 }
-
-                List<models.StorageConnection> dbConnections = models.StorageConnection.find("active = ?", true).fetch();
-                StorageConnections connections = api.getStorageConnections();
-                List<ConnectionDto> connectionDtos = new ArrayList<ConnectionDto>();
-                for (StorageConnection connection : connections.list()) {
-                    if (connection.getType().equalsIgnoreCase("iscsi")) {
-                        ConnectionDto dto =  DtoHelper.getConnectionDto(connection);
-                        models.StorageConnection dbConnection = DtoHelper.getDestinationInformation(connection, dbConnections);
-                        if (dbConnection!=null) {
-                            dto.setDestinationAddress(dbConnection.destinationIp);
-                            dto.setDestinationIqn(dbConnection.originIqn);
-                        }
-
-                        connectionDtos.add(dto);
-
-                    }
-                }
-
-                ConfigurationDto configuration = new ConfigurationDto(hostsDto, connectionDtos);
-                serviceResponse = ServiceResponse.success(configuration);
-
-            } else {
-                serviceResponse = ServiceResponse.error(Messages.get("ws.api.error.connection"));
             }
-        } catch (Exception e) {
-            Logger.error(e, "Error");
-            serviceResponse = ServiceResponse.error(Messages.get("ws.error.exception"));
+
+            flash.success(Messages.get("form.success"));
+
         }
 
-        return serviceResponse;
-    }
-
-    public static void getHosts() {
-        renderJSON(getConfiguration());
+        editHosts();
     }
 }

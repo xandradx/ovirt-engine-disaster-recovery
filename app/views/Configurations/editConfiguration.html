@@ -29,7 +29,7 @@
             </div>
         </div>
 
-        <button type="submit" class="btn btn-default pull-right">&{'form.save'}</button>
+        <button type="submit" class="btn btn-primary pull-right">&{'form.save'}</button>
 
         #{/form}
         <!-- /.form -->
@@ -37,3 +37,39 @@
     <!-- /.panel-body -->
 </div>
 <!-- /.panel -->
+
+<script>
+
+    function checkManagerStatus() {
+        $("#manager_unreachable_div").hide();
+        $("#main_actions_div").hide();
+        $("#general-loading-div").show();
+
+        $.ajax({
+            type: "POST",
+            url: "@{Dashboard.checkManagerStatus()}"
+        }).done(function( data ) {
+
+            $("#general-loading-div").hide();
+
+            if (data.success) {
+                if (data.data) {
+                    $("#manager_unreachable_div").hide();
+                    $("#main_actions_div").show();
+
+                    update();
+
+                } else {
+                    $("#manager_unreachable_div").show();
+                    $("#main_actions_div").hide();
+                }
+            } else {
+                $("#manager_unreachable_div").show();
+                $("#main_actions_div").hide();
+            }
+        }).error(function() {
+            $("#general-loading-div").hide();
+        });
+    }
+
+</script>

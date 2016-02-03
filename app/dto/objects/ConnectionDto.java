@@ -8,9 +8,6 @@ public class ConnectionDto {
     protected String ipAddress;
     protected String iqn;
 
-    protected String destinationAddress;
-    protected String destinationIqn;
-
     public ConnectionDto(String ipAddress, String iqn) {
         this.ipAddress = ipAddress;
         this.iqn = iqn;
@@ -30,21 +27,5 @@ public class ConnectionDto {
 
     public void setIqn(String iqn) {
         this.iqn = iqn;
-    }
-
-    public String getDestinationAddress() {
-        return destinationAddress;
-    }
-
-    public void setDestinationAddress(String destinationAddress) {
-        this.destinationAddress = destinationAddress;
-    }
-
-    public String getDestinationIqn() {
-        return destinationIqn;
-    }
-
-    public void setDestinationIqn(String destinationIqn) {
-        this.destinationIqn = destinationIqn;
     }
 }

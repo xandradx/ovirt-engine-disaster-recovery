@@ -6,9 +6,7 @@ import dto.DtoHelper;
 import dto.objects.DataCenterDto;
 import dto.response.ServiceResponse;
 import helpers.GlobalConstants;
-import jobs.services.DataCentersJob;
-import jobs.services.HostsJob;
-import jobs.services.ReachableJob;
+import jobs.services.*;
 import models.Configuration;
 import org.ovirt.engine.sdk.Api;
 import org.ovirt.engine.sdk.decorators.DataCenter;
@@ -45,6 +43,12 @@ public class Dashboard extends AuthenticatedController {
         renderJSON(serviceResponse);
     }
 
+    public static void getStorageConnections() {
+        F.Promise<ServiceResponse> storageResponse = new StorageConnectionsJob().now();
+        ServiceResponse serviceResponse = await(storageResponse);
+        renderJSON(serviceResponse);
+    }
+
     public static void checkManagerStatus() {
 
         F.Promise<Boolean> apiReachable = new ReachableJob().now();
@@ -60,6 +64,15 @@ public class Dashboard extends AuthenticatedController {
         Boolean reachable = await(apiReachable);
 
         ServiceResponse serviceResponse = ServiceResponse.success(reachable);
+        renderJSON(serviceResponse);
+    }
+
+    public static void checkConnectionStatus() {
+
+        F.Promise<ConnectionStatusJob.ConnectionStatus> apiStatus = new ConnectionStatusJob().now();
+        ConnectionStatusJob.ConnectionStatus status = await(apiStatus);
+
+        ServiceResponse serviceResponse = ServiceResponse.success(status);
         renderJSON(serviceResponse);
     }
 

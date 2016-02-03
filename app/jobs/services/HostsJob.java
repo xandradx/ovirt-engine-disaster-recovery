@@ -6,6 +6,7 @@ import dto.objects.DataCenterDto;
 import dto.objects.HostDto;
 import dto.objects.StatusDto;
 import dto.response.ServiceResponse;
+import models.RemoteHost;
 import org.ovirt.engine.sdk.Api;
 import org.ovirt.engine.sdk.decorators.DataCenter;
 import org.ovirt.engine.sdk.decorators.Host;
@@ -31,11 +32,14 @@ public class HostsJob extends Job<ServiceResponse> {
 
             StatusDto data = new StatusDto();
 
+            List<RemoteHost> remoteHosts = RemoteHost.find("active = ?", true).fetch();
             List<Host> hosts = api.getHosts().list();
             List<HostDto> hostDtos = new ArrayList<HostDto>();
             for (Host host : hosts) {
                 data.addToStatusCount(host.getStatus().getState());
-                hostDtos.add(DtoHelper.getHostDto(host));
+                HostDto dto = DtoHelper.getHostDto(host);
+                dto.setType(DtoHelper.getRecoveryType(dto, remoteHosts));
+                hostDtos.add(dto);
             }
 
             data.setList(hostDtos);

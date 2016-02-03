@@ -1,10 +1,12 @@
 #{extends 'Configurations/baseConfiguration.html' /}
 #{set title:messages.get('hosts.edit.title') /}
 
-<div class="panel panel-default">
+#{api-loader/}
+
+<div class="panel panel-default" id="main_actions_div">
     <div class="panel-body">
-        #{form @Configurations.save(), method:"POST", id:"form", role:"form", enctype: "multipart/form-data", class:'form-horizontal'}
-            <table class="table table-striped table-bordered">
+        #{form @Configurations.saveHosts(), method:"POST", id:"form", role:"form", enctype: "multipart/form-data", class:'form-horizontal'}
+            <table class="table table-striped table-bordered" id="table_hosts">
                 <thead>
                 <tr>
                     <th>&{'host.name'}</th>
@@ -14,21 +16,6 @@
                 </tr>
                 </thead>
                 <tbody>
-                #{list configurationDto?.data?.hosts, as: 'host'}
-                <tr>
-                    <td>${host.name}</td>
-                    <td>${host.ip}</td>
-                    <td>${messages.get(host.status)}</td>
-                    <td>
-                        <input type="hidden" name="host.name" value="${host.name}"/>
-                        <select name="host.type">
-                            <option value="${models.RemoteHost.RecoveryType.NONE}" ${(host.type == models.RemoteHost.RecoveryType.NONE) ? 'selected' : '' }>&{'none'}</option>
-                            <option value="${models.RemoteHost.RecoveryType.FAILOVER}" ${(host.type == models.RemoteHost.RecoveryType.FAILOVER) ? 'selected' : '' }>&{'failover.remotehost'}</option>
-                            <option value="${models.RemoteHost.RecoveryType.FAILBACK}" ${(host.type == models.RemoteHost.RecoveryType.FAILBACK) ? 'selected' : '' }>&{'failback.remotehost'}</option>
-                        </select>
-                    </td>
-                </tr>
-                #{/list}
                 </tbody>
             </table>
 
@@ -40,3 +27,52 @@
     <!-- /.panel-body -->
 </div>
 <!-- /.panel -->
+
+<script>
+
+    function updateHosts() {
+
+        $("#general-loading-div").show();
+        $("#main_actions_div").hide();
+
+        $.ajax({
+		    type: "POST",
+		    url: "@{Configurations.getHosts()}"
+	    }).done(function( data ) {
+
+	        if (data.success) {
+	            var html = "";
+	            $.each(data.data.list, function(index, host) {
+	                html+= '<tr>';
+	                html+= '<td>' + host.name + '</td>';
+	                html+= '<td>' + host.ip + '</td>';
+	                html+= '<td>' + host.status + '</td>';
+	                html+= '<td>';
+	                html+= '<input type="hidden" name="hosts['+index+'].hostName" value="'+host.name+'"/>';
+	                html+= '<select name="hosts['+index+'].type">';
+	                html+= '<option value="${models.RemoteHost.RecoveryType.NONE}" '+ (host.type == "${models.RemoteHost.RecoveryType.NONE}" ? 'selected' : '') + '>&{'none'}</option>';
+	                html+= '<option value="${models.RemoteHost.RecoveryType.FAILOVER}" '+ (host.type == "${models.RemoteHost.RecoveryType.FAILOVER}" ? 'selected' : '') + '>&{'failover.remotehost'}</option>';
+	                html+= '<option value="${models.RemoteHost.RecoveryType.FAILBACK}" '+ (host.type == "${models.RemoteHost.RecoveryType.FAILBACK}" ? 'selected' : '') + '>&{'failback.remotehost'}</option>';
+	                html+= '</select>';
+	                html+= '</td>';
+	                html += '</tr>';
+	            });
+
+	            $("#table_hosts tbody").html(html);
+	            $("#main_actions_div").show();
+	        } else {
+	            $("#table_hosts").hide();
+	            $("#main_actions_div").hide();
+	        }
+	    }).always(function() {
+	        $("#general-loading-div").hide();
+	    });
+    }
+
+    function update() {
+        updateHosts();
+    }
+
+    #{api-loader-js/}
+
+</script>

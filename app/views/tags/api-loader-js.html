@@ -1,0 +1,68 @@
+function checkManagerStatus() {
+	$("#manager_unreachable_div").hide();
+	$("#main_actions_div").hide();
+	$("#general-loading-div").show();
+
+	$.ajax({
+		type: "POST",
+		url: "@{Dashboard.checkManagerStatus()}"
+	}).done(function( data ) {
+
+        $("#general-loading-div").hide();
+
+		if (data.success) {
+			if (data.data) {
+				$("#manager_unreachable_div").hide();
+				$("#main_actions_div").show();
+
+				update();
+
+			} else {
+				$("#manager_unreachable_div").show();
+				$("#main_actions_div").hide();
+			}
+		} else {
+			$("#manager_unreachable_div").show();
+			$("#main_actions_div").hide();
+		}
+	}).error(function() {
+		$("#general-loading-div").hide();
+	});
+}
+
+function turnOnApi() {
+	$("#manager_unreachable_div").hide();
+	$("#main_actions_div").hide();
+	$("#general-loading-div").show();
+
+	$.ajax({
+		type: "POST",
+		url: "@{Dashboard.turnOnApi()}"
+	}).done(function( data ) {
+
+        $("#general-loading-div").hide();
+
+		if (data.success) {
+			if (data.data) {
+				$("#manager_unreachable_div").hide();
+				$("#main_actions_div").show();
+
+				update();
+
+			} else {
+				$("#manager_unreachable_div").show();
+				$("#main_actions_div").hide();
+			}
+		} else {
+			$("#manager_unreachable_div").show();
+			$("#main_actions_div").hide();
+		}
+	}).error(function() {
+		$("#general-loading-div").hide();
+	});
+}
+
+$(document).ready(function() {
+	$("#general-loading-div").hide();
+	checkManagerStatus();
+});
