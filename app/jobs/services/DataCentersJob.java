@@ -37,7 +37,7 @@ public class DataCentersJob extends Job<ServiceResponse> {
 
             data.setList(dataCenterDtos);
             serviceResponse = ServiceResponse.success(data);
-
+            api.close();
         } catch (Exception e) {
             serviceResponse = ServiceResponse.error(Messages.get("ws.error.exception"));
 

@@ -127,13 +127,13 @@ public class DisasterRecoveryActions {
             String databaseURL = "jdbc:postgresql://" + manager.getDbHost() + ":" + manager.getDbPort() + "/" + manager.getDbName() + "";
             connection = DriverManager.getConnection(databaseURL, manager.getDbUser(), manager.getDbPassword());
 
-            listener.onMessage(Messages.get("drp.db.currentconnections"));
+            listener.onMessage(null, Messages.get("drp.db.currentconnections"), OperationListener.MessageType.INFO);
             listConnections(connection, listener);
 
             updateConnections(connection, connections, revert, listener);
             updateIQN(connection, iqns, revert, listener);
 
-            listener.onMessage(Messages.get("drp.db.modifiedconnections"));
+            listener.onMessage(null, Messages.get("drp.db.modifiedconnections"), OperationListener.MessageType.INFO);
             listConnections(connection, listener);
 
         } catch (SQLException se) {
@@ -146,7 +146,7 @@ public class DisasterRecoveryActions {
                 try {
                     connection.close();
                 } catch (SQLException e) {
-                    listener.onError(e, Messages.get("drp.db.couldnotdisconnect"));
+                    listener.onMessage(e, Messages.get("drp.db.couldnotdisconnect"), OperationListener.MessageType.ERROR);
                 }
             }
         }
@@ -162,7 +162,7 @@ public class DisasterRecoveryActions {
 
             ResultSet resultSet = statement.executeQuery(query);
             while (resultSet.next()) {
-                listener.onMessage(Messages.get("drp.db.connection", resultSet.getString(2), resultSet.getString(1)));
+                listener.onMessage(null, Messages.get("drp.db.connection", resultSet.getString(2), resultSet.getString(1)), OperationListener.MessageType.INFO);
             }
 
         } catch (SQLException e) {
@@ -200,7 +200,7 @@ public class DisasterRecoveryActions {
                     try {
                         dbConnection.rollback();
                     } catch (SQLException re) {
-                        listener.onError(re, Messages.get("drp.error.rollback"));
+                        listener.onMessage(re, Messages.get("drp.error.rollback"), OperationListener.MessageType.ERROR);
                     }
                 }
             } finally {
@@ -238,7 +238,7 @@ public class DisasterRecoveryActions {
                     try {
                         dbConnection.rollback();
                     } catch (SQLException re) {
-                        listener.onError(re, Messages.get("drp.error.rollback"));
+                        listener.onMessage(re, Messages.get("drp.error.rollback"), OperationListener.MessageType.ERROR);
                     }
                 }
             } finally {

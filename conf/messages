@@ -221,11 +221,16 @@ ws.api.error.connection = No fue posible conectarse con el API
 ws.error.exception = Occurió un error inesperado, por favor intente de nuevo más tarde
 
 manager.unreachable.title = API no disponible
-manager.unreachable.message = El API no se encuentra disponible en este momento. Por favor enciéndalo ingresando a la <br>consola administrativa o presione el siguiente botón para encenderlo.w
+manager.unreachable.message = El API no se encuentra disponible en este momento. Por favor enciéndalo ingresando a la <br>consola administrativa o presione el siguiente botón para encenderlo.
 manager.unreachable.turnon = Encender
 manager.unreachable.tryagain = Reintentar
 manager.unreachable.configuration = Ir a configuración
 
+
+dashboard.productionhosts = Hosts de producción
+dashboard.productionhosts.chart = Estado de hosts de producción
+dashboard.contingencyhosts = Hosts de contingencia
+dashboard.contingencyhosts.chart = Estado de hosts de contingencia
 
 ################################################
 #DRP
@@ -243,16 +248,23 @@ drp.hostsnotready = Hosts remotos no se encuentran listos para la operación
 drp.hostsready = Hosts listos para el proceso controlado
 drp.nohosts = No existen hosts disponibles
 drp.fetchinghosts = Obteniendo hosts...
+drp.fetchinghostssuccess = Hosts obtenidos exitosamente
 drp.nohostsconfigured = No existen hosts configurados
 drp.disablingpm = Deshabilitando manejo de encendido en host: %s
+drp.disablingpmsuccess = Manejo de encendido deshabilitado: %s
 drp.fencinghost = Cercando host: %s
+drp.fencinghostsuccess = Host cercado: %s
 drp.deactivatinghost = Desactivando host: %s
+drp.deactivatinghostsuccess = Host desactivado: %s
 drp.updatingdbconnections = Actualizando conexiones de base de datos
 drp.activatinghost = Activando host: %s
+drp.activatinghostsuccess = Host activado: %s
 drp.enablingpm = Habilitando manejo de encendido en host: %s
+drp.enablepmsuccess = Manejo de encendido habilitado: %s
 drp.alreadystarted = Operación de recuperación de desastres ya se encuentra en proceso
 drp.starting = Iniciando proceso: %s
 drp.connectingapi = Conectandose a API...
+drp.connectingapisuccess = Conexión exitosa
 drp.finished = Operación finalizada con estado: %s
 drp.db.connection = iqn: %s -- conexión: %s
 drp.db.noconnections = No existen conexiones configuradas

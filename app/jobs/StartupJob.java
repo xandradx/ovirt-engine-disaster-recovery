@@ -1,9 +1,13 @@
 package jobs;
 
+import drp.DisasterRecovery;
+import models.DisasterRecoveryOperation;
 import models.UserRole;
 import play.jobs.Job;
 import play.jobs.OnApplicationStart;
 import play.test.Fixtures;
+
+import java.util.List;
 
 @OnApplicationStart
 public class StartupJob extends Job {
@@ -14,6 +18,12 @@ public class StartupJob extends Job {
 			Fixtures.loadModels("initial-data.yml");
 		}
 
+
+        List<DisasterRecoveryOperation> operations = DisasterRecoveryOperation.find("active = ? AND status = ?", true, DisasterRecoveryOperation.OperationStatus.PROGRESS).fetch();
+        for (DisasterRecoveryOperation operation : operations) {
+            operation.status = DisasterRecoveryOperation.OperationStatus.FAILED;
+            operation.save();
+        }
 
 	}
 }

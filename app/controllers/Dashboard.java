@@ -43,6 +43,12 @@ public class Dashboard extends AuthenticatedController {
         renderJSON(serviceResponse);
     }
 
+    public static void getSegmentedHosts() {
+        F.Promise<ServiceResponse> dataCentersResponse = new SegmentedHostsJob().now();
+        ServiceResponse serviceResponse = await(dataCentersResponse);
+        renderJSON(serviceResponse);
+    }
+
     public static void getStorageConnections() {
         F.Promise<ServiceResponse> storageResponse = new StorageConnectionsJob().now();
         ServiceResponse serviceResponse = await(storageResponse);
@@ -60,7 +66,7 @@ public class Dashboard extends AuthenticatedController {
 
     public static void turnOnApi() {
 
-        F.Promise<Boolean> apiReachable = new ReachableJob().now();
+        F.Promise<Boolean> apiReachable = new ManagerJob().now();
         Boolean reachable = await(apiReachable);
 
         ServiceResponse serviceResponse = ServiceResponse.success(reachable);

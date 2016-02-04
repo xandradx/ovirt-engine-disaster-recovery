@@ -23,94 +23,165 @@ container-cards-pf
 #{api-loader/}
 
 <div id="main_actions_div">
-<div class="row">
-    <div class="col-lg-3 col-md-6">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">&{'dashboard.datacenters'}</h3>
-            </div>
-            <div class="panel-body" id="body_data_centers">
-                <div class="spinner spinner-md" id="spinner_data_centers"></div>
-            </div>
-            <table class="table " id="table_data_centers">
-                <thead>
-                <tr>
-                    <th>&{'dashboard.data_center.name'}</th>
-                    <th>&{'dashboard.data_center.status'}</th>
-                </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <div class="col-lg-3 col-md-6">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">&{'dashboard.datacenters.chart'}</h3>
-            </div>
-            <div class="panel-body">
-                <div class="spinner spinner-md" id="spinner_data_centers_chart"></div>
-                <div id="donut-data-centers"></div>
-            </div>
 
-        </div>
-    </div>
-    <div class="col-lg-3 col-md-6">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">&{'dashboard.hosts'}</h3>
-            </div>
-            <div class="panel-body" id="body_hosts">
-                <div class="spinner spinner-md" id="spinner_hosts"></div>
-            </div>
-            <table class="table table-striped" id="table_hosts">
-                <thead>
-                <tr>
-                    <th>&{'dashboard.host.name'}</th>
-                    <th>&{'dashboard.host.status'}</th>
-                </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <div class="col-lg-3 col-md-6">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">&{'dashboard.hosts.chart'}</h3>
-            </div>
-            <div class="panel-body">
-                <div class="spinner spinner-md" id="spinner_hosts_chart"></div>
-                <div id="donut-hosts"></div>
-            </div>
-
-        </div>
-    </div>
-</div>
-
-<div class="row row-cards-pf">
-    <div class="col-md-12">
-        <div class="card-pf">
-            <div class="card-pf-heading">
-                <div class="dropdown card-pf-time-frame-filter" id="actions_bar">
-
+    <div class="row">
+        <div class="col-lg-3 col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">&{'dashboard.datacenters'}</h3>
                 </div>
-                <h2 class="card-pf-title">
-                    &{'drp.title'}
-                </h2>
+                <div class="panel-body" id="body_data_centers">
+                    <div class="spinner spinner-md" id="spinner_data_centers"></div>
+                </div>
+                <table class="table " id="table_data_centers">
+                    <thead>
+                    <tr>
+                        <th>&{'dashboard.data_center.name'}</th>
+                        <th>&{'dashboard.data_center.status'}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
             </div>
-            <div class="card-pf-body" id="operations_div" style="max-height:400px; overflow-y:scroll;">
-                <ul class="list-group" id="operation_list">
-                </ul>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">&{'dashboard.datacenters.chart'}</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="spinner spinner-md" id="spinner_data_centers_chart"></div>
+                    <div id="donut-data-centers"></div>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">&{'dashboard.hosts'}</h3>
+                </div>
+                <div class="panel-body" id="body_hosts">
+                    <div class="spinner spinner-md" id="spinner_hosts"></div>
+                </div>
+                <table class="table table-striped" id="table_hosts">
+                    <thead>
+                    <tr>
+                        <th>&{'dashboard.host.name'}</th>
+                        <th>&{'dashboard.host.status'}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">&{'dashboard.hosts.chart'}</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="spinner spinner-md" id="spinner_hosts_chart"></div>
+                    <div id="donut-hosts"></div>
+                </div>
+
             </div>
         </div>
     </div>
-</div>
+
+    <div class="row">
+        <div class="col-lg-3 col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">&{'dashboard.productionhosts'}</h3>
+                </div>
+                <div class="panel-body" id="body_production_hosts">
+                    <div class="spinner spinner-md" id="spinner_production_hosts"></div>
+                </div>
+                <table class="table " id="table_production_hosts">
+                    <thead>
+                    <tr>
+                        <th>&{'dashboard.host.name'}</th>
+                        <th>&{'dashboard.host.status'}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">&{'dashboard.productionhosts.chart'}</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="spinner spinner-md" id="spinner_production_hosts_chart"></div>
+                    <div id="donut_production_hosts"></div>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">&{'dashboard.contingencyhosts'}</h3>
+                </div>
+                <div class="panel-body" id="body_contingency_hosts">
+                    <div class="spinner spinner-md" id="spinner_contingency_hosts"></div>
+                </div>
+                <table class="table table-striped" id="table_contingency_hosts">
+                    <thead>
+                    <tr>
+                        <th>&{'dashboard.host.name'}</th>
+                        <th>&{'dashboard.host.status'}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">&{'dashboard.contingencyhosts.chart'}</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="spinner spinner-md" id="spinner_contingency_hosts_chart"></div>
+                    <div id="donut_contingency_hosts"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row row-cards-pf">
+        <div class="col-md-12">
+            <div class="card-pf">
+                <div class="card-pf-heading">
+                    <div class="dropdown card-pf-time-frame-filter" id="actions_bar">
+
+                    </div>
+                    <h2 class="card-pf-title">
+                        &{'drp.title'}
+                    </h2>
+                </div>
+                <div class="card-pf-body" id="operations_div" style="max-height:400px; overflow-y:scroll;">
+                    <ul class="list-group" id="operation_list">
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
+
+    var color = {
+        pattern: ["#3f9c35", "#0088ce" ,"#cc0000","#ec7a08"]
+    };
 
     function setDataCentersData(data) {
         var donutChartConfig1 = jQuery().c3ChartDefaults().getDefaultDonutConfig('A');
@@ -121,11 +192,11 @@ container-cards-pf
                 ["&{'up'}", data.up],
                 ["&{'maintenance'}", data.maintenance],
                 ["&{'non_responsive'}", data.nonResponsive],
-                ["&{'problematic'}", data.problematic],
-                ["&{'other'}", data.total - data.up - data.maintenance - data.problematic - data.nonResponsive]
+                ["&{'other'}", data.other]
             ]
         };
 
+        donutChartConfig1.color = color;
         donutChartConfig1.tooltip = {
             contents: function (d) {
                 return '<span class="donut-tooltip-pf" style="white-space: nowrap;">' +
@@ -141,19 +212,20 @@ container-cards-pf
         donutChartTitle.insert('tspan').text("% arriba").classed('donut-title-small-pf', true).attr('dy', 20).attr('x', 0);
     }
 
-    function setHostsData(data) {
+    function setHostsData(data, divId) {
         var donutChartConfig = jQuery().c3ChartDefaults().getDefaultDonutConfig('A');
-        donutChartConfig.bindto = '#donut-hosts';
+        donutChartConfig.bindto = "#"+divId;
         donutChartConfig.data = {
             type: "donut",
             columns: [
                 ["&{'up'}", data.up],
                 ["&{'maintenance'}", data.maintenance],
                 ["&{'non_responsive'}", data.nonResponsive],
-                ["&{'problematic'}", data.problematic],
-                ["&{'other'}", data.total - data.up - data.maintenance - data.problematic - data.nonResponsive]
+                ["&{'other'}", data.other]
             ]
         };
+
+        donutChartConfig.color = color;
 
         donutChartConfig.tooltip = {
             contents: function (d) {
@@ -164,7 +236,7 @@ container-cards-pf
         };
 
         var donut = c3.generate(donutChartConfig);
-        var donutChartTitle = d3.select("#donut-hosts").select('text.c3-chart-arcs-title');
+        var donutChartTitle = d3.select("#"+divId).select('text.c3-chart-arcs-title');
         donutChartTitle.text("");
         donutChartTitle.insert('tspan').text( (data.up/data.total * 100).toFixed(2)).classed('donut-title-big-pf', true).attr('dy', 0).attr('x', 0);
         donutChartTitle.insert('tspan').text("% arriba").classed('donut-title-small-pf', true).attr('dy', 20).attr('x', 0);
@@ -209,6 +281,70 @@ container-cards-pf
 
     function updateHosts() {
 
+        $("#body_contingency_hosts").show();
+        $("#spinner_contingency_hosts").show();
+        $("#table_contingency_hosts").hide();
+        $("#spinner_contingency_hosts_chart").show();
+        $("#donut_contingency_hosts").html("");
+
+        $("#body_production_hosts").show();
+        $("#spinner_production_hosts").show();
+        $("#table_production_hosts").hide();
+        $("#spinner_production_hosts_chart").show();
+        $("#donut_production_hosts").html("");
+
+
+        $.ajax({
+		    type: "POST",
+		    url: "@{Dashboard.getSegmentedHosts()}"
+	    }).done(function( data ) {
+
+	        if (data.success) {
+	            var html = "";
+	            $.each(data.data.production.list, function(index, host) {
+	                html+= '<tr>';
+	                html+= '<td>' + host.name + '</td>';
+	                html+= '<td>' + host.status + '</td>';
+	                html += '</tr>';
+	            });
+
+	            $("#table_production_hosts tbody").html(html);
+	            setHostsData(data.data.production.statusCount, "donut_production_hosts");
+
+	            $("#body_production_hosts").hide();
+	            $("#table_production_hosts").show();
+
+                html = "";
+	            $.each(data.data.contingency.list, function(index, host) {
+	                html+= '<tr>';
+	                html+= '<td>' + host.name + '</td>';
+	                html+= '<td>' + host.status + '</td>';
+	                html += '</tr>';
+	            });
+
+	            $("#table_contingency_hosts tbody").html(html);
+	            setHostsData(data.data.contingency.statusCount, "donut_contingency_hosts");
+
+	            $("#body_contingency_hosts").hide();
+	            $("#table_contingency_hosts").show();
+
+
+	        } else {
+	            $("#table_production_hosts").hide();
+	            $("#table_contingency_hosts").hide();
+	        }
+	    }).always(function() {
+	        $("#spinner_production_hosts").hide();
+	        $("#spinner_production_hosts_chart").hide();
+	        $("#spinner_contingency_hosts").hide();
+	        $("#spinner_contingency_hosts_chart").hide();
+	    });
+    }
+
+    function updateAllHosts() {
+
+        updateHosts();
+
         $("#body_hosts").show();
         $("#spinner_hosts").show();
         $("#table_hosts").hide();
@@ -230,7 +366,7 @@ container-cards-pf
 	            });
 
 	            $("#table_hosts tbody").html(html);
-	            setHostsData(data.data.statusCount);
+	            setHostsData(data.data.statusCount, "donut-hosts");
 
 	            $("#body_hosts").hide();
 	            $("#table_hosts").show();
@@ -245,7 +381,7 @@ container-cards-pf
 
     function update() {
         updateDataCenters();
-        updateHosts();
+        updateAllHosts();
 
         checkConnectionStatus();
     }
@@ -321,12 +457,12 @@ container-cards-pf
 
 	            if (data.refresh) {
 	                updateDataCenters();
-                    updateHosts();
+                    updateAllHosts();
 	            }
 	        };
 
 	        socket.onclose = function() {
-	            setStartButton();
+	            checkConnectionStatus();
 	        };
         } else {
 
@@ -337,15 +473,24 @@ container-cards-pf
     function addMessage(title, message, type) {
         var operationList = $("#operation_list");
         var cellHtml = "";
+        var icon = "";
 
-        if (type === "error") {
-            cellHtml += '<li class="list-group-item list-group-item-danger">';
+        if (type === "ERROR") {
+            cellHtml += '<li class="list-group-item list-group-item-danger clearfix">';
+            icon = "fa fa-times";
+        } else if (type === "SUCCESS") {
+            cellHtml += '<li class="list-group-item list-group-item-success clearfix">';
+            icon = "fa fa-check";
         } else {
-            cellHtml += '<li class="list-group-item list-group-item-info">';
+            cellHtml += '<li class="list-group-item list-group-item-info clearfix">';
+            icon = "fa fa-circle-o";
         }
         //cellHtml += '<h3 class="list-group-item-heading">'+title+'</h3>';
-        cellHtml += '<span class="badge"></span>';
-        cellHtml += '<p class="list-group-item-text">'+message+'</p>';
+        cellHtml += message;
+        cellHtml += '<span class="pull-right">';
+        cellHtml += '<span class="'+icon+' fa-2x"></span>';
+        cellHtml += '</span>';
+        //cellHtml += '<p class="list-group-item-text">'+message+'</p>';
         cellHtml += '</li>';
 
         operationList.append(cellHtml);

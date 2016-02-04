@@ -39,7 +39,7 @@ public class StorageConnectionsJob extends Job<ServiceResponse> {
             }
 
             serviceResponse = ServiceResponse.success(connectionDtos);
-
+            api.close();
         } catch (Exception e) {
             serviceResponse = ServiceResponse.error(Messages.get("ws.error.exception"));
 

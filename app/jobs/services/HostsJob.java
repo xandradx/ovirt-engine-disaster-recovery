@@ -44,7 +44,7 @@ public class HostsJob extends Job<ServiceResponse> {
 
             data.setList(hostDtos);
             serviceResponse = ServiceResponse.success(data);
-
+            api.close();
         } catch (Exception e) {
             serviceResponse = ServiceResponse.error(Messages.get("ws.error.exception"));
 

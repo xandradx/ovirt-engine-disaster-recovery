@@ -61,9 +61,10 @@ public class DisasterRecovery {
 
         DisasterRecoveryOperation.OperationStatus status = DisasterRecoveryOperation.OperationStatus.PROGRESS;
         try {
-            reportMessage(Messages.get("drp.starting",  Messages.get(type)));
-            reportMessage(Messages.get("drp.connectingapi"));
+            reportInfo(Messages.get("drp.starting", Messages.get(type)));
+            reportInfo(Messages.get("drp.connectingapi"));
             api = OvirtApi.getApi();
+            reportSuccess(Messages.get("drp.connectingapisuccess"));
             performOperation();
             status = DisasterRecoveryOperation.OperationStatus.SUCCESS;
         } catch (Exception e) {
@@ -82,8 +83,9 @@ public class DisasterRecovery {
 
     private void performOperation() throws Exception {
 
-        reportMessage(Messages.get("drp.fetchinghosts"));
+        reportInfo(Messages.get("drp.fetchinghosts"));
         Hosts hosts = api.getHosts();
+        reportSuccess(Messages.get("drp.fetchinghostssuccess"));
 
         DisasterRecoveryDefinition definition = getDefinition(hosts.list(), type);
 
@@ -95,8 +97,9 @@ public class DisasterRecovery {
             //Disabling power management
             for (Host host : hosts.list()) {
                 if (DisasterRecoveryActions.hasPowerManagement(host)) {
-                    reportMessage(Messages.get("drp.disablingpm", host.getName()));
+                    reportInfo(Messages.get("drp.disablingpm", host.getName()));
                     DisasterRecoveryActions.disablePowerManagement(host);
+                    reportInfo(Messages.get("drp.disablingpmsuccess", host.getName()));
                     powerManagementHosts.add(host);
                 }
             }
@@ -105,23 +108,27 @@ public class DisasterRecovery {
             for (Host localHost : definition.getLocalHosts()) {
                 String status = localHost.getStatus().getState();
                 if ("non_responsive".equals(status)) {
-                    reportMessage(Messages.get("drp.fencinghost",localHost.getName()));
+                    reportInfo(Messages.get("drp.fencinghost",localHost.getName()));
                     DisasterRecoveryActions.fenceHost(localHost);
-                    reportMessage(Messages.get("drp.deactivatinghost", localHost.getName()));
+                    reportSuccess(Messages.get("drp.fencinghostsuccess", localHost.getName()));
+
+                    reportInfo(Messages.get("drp.deactivatinghost", localHost.getName()));
                     DisasterRecoveryActions.deactivateHost(localHost);
+                    reportSuccess(Messages.get("drp.deactivatinghostsuccess", localHost.getName()));
                 }
             }
 
-            reportMessage(Messages.get("drp.updatingdbconnections"));
+            reportInfo(Messages.get("drp.updatingdbconnections"));
             updateDatabase(type);
 
             //Activating remote hosts
             for (Host remoteHost : definition.getRemoteHosts()) {
-                reportMessage(Messages.get("drp.activatinghost", remoteHost.getName()));
+                reportInfo(Messages.get("drp.activatinghost", remoteHost.getName()));
                 DisasterRecoveryActions.activateHost(remoteHost);
+                reportSuccess(Messages.get("drp.activatinghostsuccess", remoteHost.getName()));
             }
 
-            reportMessage(Messages.get("drp.waitingactivehost"));
+            reportInfo(Messages.get("drp.waitingactivehost"));
 
             //Checking hosts status
             int upHosts = 0;
@@ -136,7 +143,7 @@ public class DisasterRecovery {
             }
 
             //Checking data centers status
-            reportMessage(Messages.get("drp.waitingactivedatacenters"));
+            reportInfo(Messages.get("drp.waitingactivedatacenters"));
             int upDataCenters = 0;
             for (DataCenter dataCenter : api.getDataCenters().list()) {
                 if (waitForStatus("up", dataCenter, 480*1000)) {
@@ -150,8 +157,9 @@ public class DisasterRecovery {
 
             //Enabling power management
             for (Host localHost : powerManagementHosts) {
-                reportMessage(Messages.get("drp.enablingpm", localHost.getName()));
+                reportInfo(Messages.get("drp.enablingpm", localHost.getName()));
                 DisasterRecoveryActions.enablePowerManagement(localHost);
+                reportSuccess(Messages.get("drp.enablepmsuccess", localHost.getName()));
             }
         }
 
@@ -166,14 +174,14 @@ public class DisasterRecovery {
         do {
             updatedHost = api.getHosts().get(currentHost.getName());
             hasExpectedStatus = status.equals(updatedHost.getStatus().getState());
-            reportMessage(Messages.get("drp.hoststatus", updatedHost.getName(), Messages.get(updatedHost.getStatus().getState())));
+            reportInfo(Messages.get("drp.hoststatus", updatedHost.getName(), Messages.get(updatedHost.getStatus().getState())));
             time = System.currentTimeMillis() - initialMillis;
         } while (!hasExpectedStatus && time < timeout);
 
         if (!hasExpectedStatus) {
             reportError(Messages.get("drp.status.host.invalid", currentHost.getName()));
         } else {
-            reportMessage(Messages.get("drp.status.host.valid", currentHost.getName()));
+            reportSuccess(Messages.get("drp.status.host.valid", currentHost.getName()));
         }
 
         return hasExpectedStatus;
@@ -188,14 +196,14 @@ public class DisasterRecovery {
         do {
             updatedDC = api.getDataCenters().get(dataCenter.getName());
             hasExpectedStatus = status.equals(updatedDC.getStatus().getState());
-            reportMessage(Messages.get("drp.datacenterstatus", updatedDC.getName(), Messages.get(updatedDC.getStatus().getState())));
+            reportInfo(Messages.get("drp.datacenterstatus", updatedDC.getName(), Messages.get(updatedDC.getStatus().getState())));
             time = System.currentTimeMillis() - initialMillis;
         } while (!hasExpectedStatus && time < timeout);
 
         if (!hasExpectedStatus) {
             reportError(Messages.get("drp.status.datacenter.invalid", updatedDC.getName()));
         } else {
-            reportMessage(Messages.get("drp.status.datacenter.valid", updatedDC.getName()));
+            reportSuccess(Messages.get("drp.status.datacenter.valid", updatedDC.getName()));
         }
 
         return hasExpectedStatus;
@@ -203,7 +211,7 @@ public class DisasterRecovery {
 
     private DisasterRecoveryDefinition getDefinition(List<Host> hostList, RemoteHost.RecoveryType type) throws HostsConditionsException {
 
-        reportMessage(Messages.get("drp.verifyinghosts"));
+        reportInfo(Messages.get("drp.verifyinghosts"));
         DisasterRecoveryDefinition definition = new DisasterRecoveryDefinition();
 
         List<String> remoteHosts = RemoteHost.find("SELECT h.hostName FROM RemoteHost h WHERE h.type = ? AND h.active = ?", type, true).fetch();
@@ -222,7 +230,7 @@ public class DisasterRecovery {
 
             for (Host host : definition.getLocalHosts()) {
                 String state = host.getStatus().getState();
-                reportMessage(Messages.get("drp.originhost", host.getName(), Messages.get(state)));
+                reportInfo(Messages.get("drp.originhost", host.getName(), Messages.get(state)));
                 if (!"up".equalsIgnoreCase(state)) {
                     originNotUp++;
                 } else {
@@ -232,7 +240,7 @@ public class DisasterRecovery {
 
             for (Host host : definition.getRemoteHosts()) {
                 String state = host.getStatus().getState();
-                reportMessage(Messages.get("drp.destinationhost", host.getName(), Messages.get(state)));
+                reportInfo(Messages.get("drp.destinationhost", host.getName(), Messages.get(state)));
                 if ("maintenance".equalsIgnoreCase(state)) {
                     destinationMaintenance++;
                 }
@@ -248,7 +256,7 @@ public class DisasterRecovery {
                 }
             }
 
-            reportMessage(Messages.get("drp.hostsready"));
+            reportSuccess(Messages.get("drp.hostsready"));
 
         } else {
             throw new HostsConditionsException(Messages.get("drp.nohosts"));
@@ -276,12 +284,19 @@ public class DisasterRecovery {
         }
     }
 
-    private void reportMessage(String message) {
+    private void reportInfo(String message) {
 
         if (dbOperation!=null) {
             dbOperation.addMessageLog(message);
         }
-        listener.onMessage(message);
+        listener.onMessage(null, message, OperationListener.MessageType.INFO);
+    }
+
+    private void reportSuccess(String message) {
+        if (dbOperation!=null) {
+            dbOperation.addMessageLog(message);
+        }
+        listener.onMessage(null, message, OperationListener.MessageType.SUCCESS);
     }
 
     private void reportError(Exception e, String message) {
@@ -290,7 +305,7 @@ public class DisasterRecovery {
             dbOperation.addErrorLog(message);
         }
 
-        listener.onError(e, message);
+        listener.onMessage(e, message, OperationListener.MessageType.ERROR);
     }
 
     private void reportError(String message) {

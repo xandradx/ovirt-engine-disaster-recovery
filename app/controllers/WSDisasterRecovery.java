@@ -23,24 +23,21 @@ public class WSDisasterRecovery extends WebSocketController {
 
             DisasterRecovery disasterRecovery = new DisasterRecovery(type, new OperationListener() {
                 @Override
-                public void onMessage(String message) {
+                public void onMessage(Exception e, String message, MessageType type) {
                     if (outbound.isOpen()) {
-                        outbound.send(getMessage(false, message, false));
+                        outbound.send(getMessage(type, message, false));
                     }
                 }
 
                 @Override
                 public void onFinished(String message, boolean success) {
                     if (outbound.isOpen()) {
-                        outbound.send(getMessage(!success, message, true));
+                        if (success) {
+                            outbound.send(getMessage(MessageType.SUCCESS, message, true));
+                        } else {
+                            outbound.send(getMessage(MessageType.ERROR, message, true));
+                        }
                         disconnect();
-                    }
-                }
-
-                @Override
-                public void onError(Exception e, String error) {
-                    if (outbound.isOpen()) {
-                        outbound.send(getMessage(true, error, false));
                     }
                 }
             });
@@ -50,9 +47,9 @@ public class WSDisasterRecovery extends WebSocketController {
 
     }
 
-    private static String getMessage(boolean error, String message, boolean refresh) {
+    private static String getMessage(OperationListener.MessageType type, String message, boolean refresh) {
         Map<String, Object> messageMap = new HashMap<String, Object>();
-        messageMap.put("type", error ? "error" : "message");
+        messageMap.put("type", type);
         messageMap.put("message", message);
         messageMap.put("refresh", refresh);
         return new Gson().toJson(messageMap);

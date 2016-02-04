@@ -27,21 +27,21 @@ public class StatusDto {
     public static class StatusCount {
 
         protected long up;
-        protected long problematic;
         protected long maintenance;
         protected long nonResponsive;
         protected long total;
+        protected long other;
 
         public void addToStatusCount(String key) {
 
             if ("up".equals(key)) {
                 up++;
-            } else if ("problematic".equals(key)) {
-                problematic++;
             } else if ("maintenance".equals(key)) {
                 maintenance++;
             } else if ("non_responsive".equals(key)) {
                 nonResponsive++;
+            } else {
+                other++;
             }
 
             total ++;

@@ -73,26 +73,17 @@ public class Configurations extends AuthenticatedController {
             validation.keep();
         } else {
 
-
-            if (iqns.size() == connections.size() && !iqns.isEmpty()) {
-
-                DatabaseIQN.deleteAll();
-                for (DatabaseIQN iqn : iqns) {
-                    iqn.save();
-                }
-
-                DatabaseConnection.deleteAll();
-                for (DatabaseConnection connection : connections) {
-                    connection.save();
-                }
-
-                flash.success(Messages.get("form.success"));
-
-            } else {
-                params.flash();
-                flash.error(Messages.get("form.error"));
-                validation.keep();
+            DatabaseIQN.deleteAll();
+            for (DatabaseIQN iqn : iqns) {
+                iqn.save();
             }
+
+            DatabaseConnection.deleteAll();
+            for (DatabaseConnection connection : connections) {
+                connection.save();
+            }
+
+            flash.success(Messages.get("form.success"));
         }
 
         editStorageConnections();
