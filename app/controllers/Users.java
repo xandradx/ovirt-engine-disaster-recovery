@@ -49,6 +49,7 @@ public class Users extends AuthenticatedController {
     	} else {
     		flash.success(Messages.get("form.success"));
     		user.password = user.username;
+            user.needsPasswordReset = true;
     		user.save();
     		index();
     	}
