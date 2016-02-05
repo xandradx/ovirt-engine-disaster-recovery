@@ -25,6 +25,14 @@ container-cards-pf
 <div id="main_actions_div">
 
     <div class="row">
+        <div class="col-lg-12">
+            <p class="pull-right">
+                <button class="btn btn-lg btn-primary pull-right" onclick="refresh()"><span class="fa fa-refresh"></span></button>
+            </p>
+        </div>
+    </div>
+
+    <div class="row">
         <div class="col-lg-3 col-md-6">
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -379,9 +387,13 @@ container-cards-pf
 	    });
     }
 
-    function update() {
+    function refresh() {
         updateDataCenters();
         updateAllHosts();
+    }
+
+    function update() {
+        refresh();
 
         checkConnectionStatus();
     }

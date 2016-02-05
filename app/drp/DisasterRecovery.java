@@ -166,16 +166,23 @@ public class DisasterRecovery {
     }
 
     private boolean waitForStatus(String status, Host currentHost, long timeout) throws ServerException, IOException, InterruptedException {
-        long time = 0;
+        long time;
         long initialMillis = System.currentTimeMillis();
 
+        String currentStatus = null;
         Host updatedHost;
-        boolean hasExpectedStatus = false;
+        boolean hasExpectedStatus ;
         do {
             updatedHost = api.getHosts().get(currentHost.getName());
-            hasExpectedStatus = status.equals(updatedHost.getStatus().getState());
-            reportInfo(Messages.get("drp.hoststatus", updatedHost.getName(), Messages.get(updatedHost.getStatus().getState())));
-            Thread.sleep(1000);
+
+            String state = updatedHost.getStatus().getState();
+            if (!status.equals(currentStatus)) {
+                reportInfo(Messages.get("drp.hoststatus", updatedHost.getName(), Messages.get(updatedHost.getStatus().getState())));
+            }
+
+            currentStatus = state;
+            hasExpectedStatus = status.equals(state);
+            Thread.sleep(5000);
             time = System.currentTimeMillis() - initialMillis;
         } while (!hasExpectedStatus && time < timeout);
 
@@ -189,16 +196,22 @@ public class DisasterRecovery {
     }
 
     private boolean waitForStatus(String status, DataCenter dataCenter, long timeout) throws ServerException, IOException, InterruptedException {
-        long time = 0;
+        long time;
         long initialMillis = System.currentTimeMillis();
 
+        String currentStatus = null;
         DataCenter updatedDC;
-        boolean hasExpectedStatus = false;
+        boolean hasExpectedStatus;
         do {
             updatedDC = api.getDataCenters().get(dataCenter.getName());
-            hasExpectedStatus = status.equals(updatedDC.getStatus().getState());
-            reportInfo(Messages.get("drp.datacenterstatus", updatedDC.getName(), Messages.get(updatedDC.getStatus().getState())));
-            Thread.sleep(1000);
+            String state = updatedDC.getStatus().getState();
+            if (!status.equals(currentStatus)) {
+                reportInfo(Messages.get("drp.datacenterstatus", updatedDC.getName(), Messages.get(updatedDC.getStatus().getState())));
+            }
+
+            currentStatus = state;
+            hasExpectedStatus = status.equals(state);
+            Thread.sleep(5000);
             time = System.currentTimeMillis() - initialMillis;
         } while (!hasExpectedStatus && time < timeout);
 

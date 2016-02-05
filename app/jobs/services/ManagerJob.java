@@ -37,8 +37,9 @@ public class ManagerJob extends Job {
                 String ip = configuration.managerIp;
                 String bin = configuration.managerBinLocation;
 
-                String command = "ssh -i "+keyLocation+" "+user+"@"+ip+" "+bin+" start";
+                String command = "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "+keyLocation+" "+user+"@"+ip+" "+bin+" start";
                 int result = ShellHelper.executeCommand(command);
+                Logger.debug("Result: %s", result);
 
                 if (result == 0) {
 
