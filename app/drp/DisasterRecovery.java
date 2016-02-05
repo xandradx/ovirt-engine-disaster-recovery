@@ -165,7 +165,7 @@ public class DisasterRecovery {
 
     }
 
-    private boolean waitForStatus(String status, Host currentHost, long timeout) throws ServerException, IOException {
+    private boolean waitForStatus(String status, Host currentHost, long timeout) throws ServerException, IOException, InterruptedException {
         long time = 0;
         long initialMillis = System.currentTimeMillis();
 
@@ -175,6 +175,7 @@ public class DisasterRecovery {
             updatedHost = api.getHosts().get(currentHost.getName());
             hasExpectedStatus = status.equals(updatedHost.getStatus().getState());
             reportInfo(Messages.get("drp.hoststatus", updatedHost.getName(), Messages.get(updatedHost.getStatus().getState())));
+            Thread.sleep(1000);
             time = System.currentTimeMillis() - initialMillis;
         } while (!hasExpectedStatus && time < timeout);
 
@@ -187,7 +188,7 @@ public class DisasterRecovery {
         return hasExpectedStatus;
     }
 
-    private boolean waitForStatus(String status, DataCenter dataCenter, long timeout) throws ServerException, IOException {
+    private boolean waitForStatus(String status, DataCenter dataCenter, long timeout) throws ServerException, IOException, InterruptedException {
         long time = 0;
         long initialMillis = System.currentTimeMillis();
 
@@ -197,6 +198,7 @@ public class DisasterRecovery {
             updatedDC = api.getDataCenters().get(dataCenter.getName());
             hasExpectedStatus = status.equals(updatedDC.getStatus().getState());
             reportInfo(Messages.get("drp.datacenterstatus", updatedDC.getName(), Messages.get(updatedDC.getStatus().getState())));
+            Thread.sleep(1000);
             time = System.currentTimeMillis() - initialMillis;
         } while (!hasExpectedStatus && time < timeout);
 
