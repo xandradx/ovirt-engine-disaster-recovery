@@ -467,9 +467,12 @@ container-cards-pf
 	            var data = jQuery.parseJSON( msg.data );
 	            addMessage("Message", data.message, data.type);
 
-	            if (data.refresh) {
-	                updateDataCenters();
+	            if (data.refresh === "all") {
+	                refresh();
+	            } else if (data.refresh === "hosts") {
                     updateAllHosts();
+	            } else if (data.refresh === "datacenters") {
+	                updateDataCenters();
 	            }
 	        };
 

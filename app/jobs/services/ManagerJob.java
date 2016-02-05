@@ -47,7 +47,7 @@ public class ManagerJob extends Job {
                     Api api = null;
                     do {
 
-                        Thread.sleep(1000);
+                        Thread.sleep(10000);
 
                         try {
                             api = OvirtApi.getApi();

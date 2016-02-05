@@ -13,4 +13,6 @@ public interface OperationListener {
 
     void onMessage(Exception e, String message, MessageType type);
     void onFinished(String message, boolean success);
+    void onRefreshHosts();
+    void onRefreshDatacenters();
 }

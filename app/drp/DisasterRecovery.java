@@ -142,6 +142,8 @@ public class DisasterRecovery {
                 throw new HostActivateException(Messages.get("drp.activateexceptionhosts"));
             }
 
+            listener.onRefreshDatacenters();
+
             //Checking data centers status
             reportInfo(Messages.get("drp.waitingactivedatacenters"));
             int upDataCenters = 0;
@@ -154,6 +156,8 @@ public class DisasterRecovery {
             if (upHosts!=definition.getRemoteHosts().size()) {
                 throw new HostActivateException(Messages.get("drp.activateexceptiondatacenters"));
             }
+
+            listener.onRefreshDatacenters();
 
             //Enabling power management
             for (Host localHost : powerManagementHosts) {
@@ -176,8 +180,8 @@ public class DisasterRecovery {
             updatedHost = api.getHosts().get(currentHost.getName());
 
             String state = updatedHost.getStatus().getState();
-            if (!status.equals(currentStatus)) {
-                reportInfo(Messages.get("drp.hoststatus", updatedHost.getName(), Messages.get(updatedHost.getStatus().getState())));
+            if (!state.equalsIgnoreCase(currentStatus)) {
+                reportInfo(Messages.get("drp.hoststatus", updatedHost.getName(), Messages.get(state)));
             }
 
             currentStatus = state;
@@ -205,8 +209,8 @@ public class DisasterRecovery {
         do {
             updatedDC = api.getDataCenters().get(dataCenter.getName());
             String state = updatedDC.getStatus().getState();
-            if (!status.equals(currentStatus)) {
-                reportInfo(Messages.get("drp.datacenterstatus", updatedDC.getName(), Messages.get(updatedDC.getStatus().getState())));
+            if (!state.equalsIgnoreCase(currentStatus)) {
+                reportInfo(Messages.get("drp.datacenterstatus", updatedDC.getName(), Messages.get(state)));
             }
 
             currentStatus = state;
