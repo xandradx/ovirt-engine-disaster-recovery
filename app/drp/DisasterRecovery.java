@@ -99,7 +99,7 @@ public class DisasterRecovery {
                 if (DisasterRecoveryActions.hasPowerManagement(host)) {
                     reportInfo(Messages.get("drp.disablingpm", host.getName()));
                     DisasterRecoveryActions.disablePowerManagement(host);
-                    reportInfo(Messages.get("drp.disablingpmsuccess", host.getName()));
+                    reportSuccess(Messages.get("drp.disablingpmsuccess", host.getName()));
                     powerManagementHosts.add(host);
                 }
             }
@@ -142,7 +142,7 @@ public class DisasterRecovery {
                 throw new HostActivateException(Messages.get("drp.activateexceptionhosts"));
             }
 
-            listener.onRefreshDatacenters();
+            listener.onRefreshHosts();
 
             //Checking data centers status
             reportInfo(Messages.get("drp.waitingactivedatacenters"));

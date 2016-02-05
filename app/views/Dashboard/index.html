@@ -176,7 +176,7 @@ container-cards-pf
                         &{'drp.title'}
                     </h2>
                 </div>
-                <div class="card-pf-body" id="operations_div" style="max-height:400px; overflow-y:scroll;">
+                <div class="card-pf-body" id="operations_div" style="max-height:600px; overflow-y:scroll;">
                     <ul class="list-group" id="operation_list">
                     </ul>
                 </div>
@@ -498,7 +498,7 @@ container-cards-pf
             icon = "fa fa-check";
         } else {
             cellHtml += '<li class="list-group-item list-group-item-info clearfix">';
-            icon = "fa fa-circle-o";
+            icon = "fa fa-tasks";
         }
         //cellHtml += '<h3 class="list-group-item-heading">'+title+'</h3>';
         cellHtml += message;
@@ -511,6 +511,7 @@ container-cards-pf
         operationList.append(cellHtml);
 
         $('#operations_div').scrollTop($('#operations_div')[0].scrollHeight);
+        $('html, body').scrollTop( $(document).height() );
     }
 
 </script>

@@ -50,14 +50,14 @@ public class WSDisasterRecovery extends WebSocketController {
                 @Override
                 public void onRefreshHosts() {
                     if (outbound.isOpen()) {
-                        outbound.send(getMessage(MessageType.INFO, Messages.get("Actualizando tablero"), HOSTS));
+                        outbound.send(getMessage(MessageType.INFO, Messages.get("Actualizando hosts"), HOSTS));
                     }
                 }
 
                 @Override
                 public void onRefreshDatacenters() {
                     if (outbound.isOpen()) {
-                        outbound.send(getMessage(MessageType.INFO, Messages.get("Actualizando tablero"), DATACENTERS));
+                        outbound.send(getMessage(MessageType.INFO, Messages.get("Actualizando centros de datos"), DATACENTERS));
                     }
                 }
             });

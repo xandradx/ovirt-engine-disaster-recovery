@@ -133,7 +133,7 @@ public class DisasterRecoveryActions {
             updateConnections(connection, connections, revert, listener);
             updateIQN(connection, iqns, revert, listener);
 
-            listener.onMessage(null, Messages.get("drp.db.modifiedconnections"), OperationListener.MessageType.INFO);
+            listener.onMessage(null, Messages.get("drp.db.modifiedconnections"), OperationListener.MessageType.SUCCESS);
             listConnections(connection, listener);
 
         } catch (SQLException se) {
