@@ -1,11 +1,13 @@
 package helpers;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import play.Logger;
 
 public class ShellHelper {
 
 	public static int executeCommand(String command) {
+
+        Logger.debug("Executing command: %s", command);
+
 		StringBuffer output = new StringBuffer();
 		 
 		Process p;

@@ -32,10 +32,13 @@ public class ManagerJob extends Job {
                     hostName = hostName.substring(0, index);
                 }
 
-                String command = "ssh -i ~/.ssh/id_rsa drpadmin@192.168.13.215 bin/manager start";
-                int result = ShellHelper.executeCommand(command);
+                String keyLocation = configuration.managerKeyLocation;
+                String user = configuration.managerUser;
+                String ip = configuration.managerIp;
+                String bin = configuration.managerBinLocation;
 
-                Logger.debug("Command result: %d", result);
+                String command = "ssh -i "+keyLocation+" "+user+"@"+ip+" "+bin+" start";
+                int result = ShellHelper.executeCommand(command);
 
                 if (result == 0) {
 

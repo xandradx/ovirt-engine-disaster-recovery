@@ -49,11 +49,17 @@ public class Configurations extends AuthenticatedController {
             flash.error(Messages.get("form.error"));
             validation.keep();
         } else {
-            flash.success(Messages.get("form.success"));
 
-            Configuration generalConfiguration = Configuration.generalConfiguration();
-            generalConfiguration.applyConfiguration(configuration);
-            generalConfiguration.save();
+            if (configuration.validateCertificate && !configuration.trustStore.exists()) {
+                params.flash();
+                flash.error(Messages.get("form.notrusstore"));
+                validation.keep();
+            } else {
+                flash.success(Messages.get("form.success"));
+                Configuration generalConfiguration = Configuration.generalConfiguration();
+                generalConfiguration.applyConfiguration(configuration);
+                generalConfiguration.save();
+            }
         }
 
         editConfiguration();

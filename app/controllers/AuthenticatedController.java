@@ -1,6 +1,7 @@
 package controllers;
 
 import models.User;
+import models.UserRole;
 import play.mvc.Before;
 import play.mvc.Controller;
 import play.mvc.With;
@@ -27,6 +28,11 @@ public class AuthenticatedController extends Controller {
 	}
 	
 	protected static void setUser(User user) {
+        boolean isAdmin = (user.role!=null && user.role.code == UserRole.RoleCode.ADMINISTRATOR);
+        boolean isTecnico = (user.role!=null && user.role.code == UserRole.RoleCode.TECNICO);
+
+        renderArgs.put("isAdmin", isAdmin);
+        renderArgs.put("isTecnico", isTecnico);
 		renderArgs.put("connectedUser", user);
 	}
 	

@@ -8,6 +8,24 @@
 
         <div class="row">
             <div class="col-md-6">
+                #{form-input fieldName:'configuration.managerIp'/}
+            </div>
+            <div class="col-md-6">
+                #{form-input fieldName:'configuration.managerUser'/}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                #{form-input fieldName:'configuration.managerKeyLocation'/}
+            </div>
+            <div class="col-md-6">
+                #{form-input fieldName:'configuration.managerBinLocation'/}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
                 #{form-input fieldName:'configuration.apiURL'/}
             </div>
             <div class="col-md-6">
@@ -19,6 +37,12 @@
             <div class="col-md-6">
                 #{form-input fieldName:'configuration.apiPassword', type:"password"/}
             </div>
+            <div class="col-md-6">
+                #{form-checkbox fieldName:'configuration.validateCertificate', value:configuration.validateCertificate/}
+            </div>
+        </div>
+
+        <div class="row">
             <div class="col-md-6">
                 #{form-input-plain
                 type:"file",

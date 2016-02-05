@@ -1,10 +1,5 @@
 #{extends 'base.html'/}
 
-%{
-	isAdmin = (connectedUser.role.code.equals(models.UserRole.RoleCode.ADMINISTRATOR))
-	isTecnico = (connectedUser.role.code.equals(models.UserRole.RoleCode.TECNICO))
-}%
-
 <nav class="navbar navbar-default navbar-pf" role="navigation">
 
     #{navigationheader/}

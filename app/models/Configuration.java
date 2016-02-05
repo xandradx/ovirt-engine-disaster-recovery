@@ -20,17 +20,42 @@ public class Configuration extends Model {
 
     @Required
     @MaxSize(200)
+    @Column(length = 200)
     public String apiURL;
 
     @Required
     @MaxSize(100)
+    @Column(length = 100)
     public String apiUser;
 
     @Required
     @MaxSize(100)
+    @Column(length = 100)
     public String apiPassword;
 
+    public boolean validateCertificate;
+
     public Blob trustStore;
+
+    @Required
+    @MaxSize(50)
+    @Column(length = 50)
+    public String managerIp;
+
+    @Required
+    @MaxSize(100)
+    @Column(length = 100)
+    public String managerUser;
+
+    @Required
+    @MaxSize(100)
+    @Column(length = 100)
+    public String managerKeyLocation;
+
+    @Required
+    @MaxSize(100)
+    @Column(length = 100)
+    public String managerBinLocation;
 
     private Configuration() {
 
@@ -51,6 +76,12 @@ public class Configuration extends Model {
         apiURL = configuration.apiURL;
         apiUser = configuration.apiUser;
         apiPassword = configuration.apiPassword;
+        validateCertificate = configuration.validateCertificate;
+        managerIp = configuration.managerIp;
+        managerUser = configuration.managerUser;
+        managerKeyLocation = configuration.managerKeyLocation;
+        managerBinLocation = configuration.managerBinLocation;
+
 
         if (configuration.trustStore!=null && configuration.trustStore.exists()) {
             Logger.debug("tr: %s", trustStore);

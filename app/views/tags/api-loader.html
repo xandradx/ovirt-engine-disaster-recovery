@@ -19,9 +19,11 @@
                 <button class="btn btn-default" onclick="checkManagerStatus()">
                     &{'manager.unreachable.tryagain'}
                 </button>
+                #{if _isAdmin}
                 <a class="btn btn-default" href="@{Configurations.editConfiguration()}">
                     &{'manager.unreachable.configuration'}
                 </a>
+                #{/if}
             </div>
         </div>
     </div>
