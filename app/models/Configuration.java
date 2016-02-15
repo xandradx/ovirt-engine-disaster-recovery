@@ -57,6 +57,11 @@ public class Configuration extends Model {
     @Column(length = 100)
     public String managerBinLocation;
 
+    @Required
+    @MaxSize(100)
+    @Column(length = 100)
+    public String managerCommand;
+
     private Configuration() {
 
     }
@@ -81,10 +86,10 @@ public class Configuration extends Model {
         managerUser = configuration.managerUser;
         managerKeyLocation = configuration.managerKeyLocation;
         managerBinLocation = configuration.managerBinLocation;
+        managerCommand = configuration.managerCommand;
 
 
         if (configuration.trustStore!=null && configuration.trustStore.exists()) {
-            Logger.debug("tr: %s", trustStore);
             if (trustStore!=null && trustStore.exists()) {
                 trustStore.getFile().delete();
             }

@@ -58,8 +58,6 @@ public class ConnectionStatusJob extends Job<ConnectionStatusJob.ConnectionStatu
 
             for (ConnectionDto dto : (List<ConnectionDto>)serviceResponse.getData()) {
 
-                Logger.debug("Connection: %s - %s", dto.getIpAddress(), dto.getIqn());
-
                 if (originIqns.contains(dto.getIqn()) && originIPs.contains(dto.getIpAddress())) {
                     production++;
                 } else if (destinationIqns.contains(dto.getIqn()) && destinationIPs.contains(dto.getIpAddress())) {
@@ -68,10 +66,6 @@ public class ConnectionStatusJob extends Job<ConnectionStatusJob.ConnectionStatu
                     unknown++;
                 }
             }
-
-            Logger.debug("Production: %d", production);
-            Logger.debug("Contingency: %d", contingency);
-            Logger.debug("Unknown: %d", unknown);
 
             if (contingency > 0 && production==0 && unknown == 0) {
                 return ConnectionStatus.CONTINGENCY;

@@ -125,6 +125,7 @@ users.table.reset = Reiniciar contraseña
 
 users.create.title = Crear usuario
 users.edit.title = Editar usuario
+user.reset.confirm = ¿Está seguro que desea reiniciar la contraseña del usuario?
 
 user.username = Usuario
 user.role = Rol
@@ -160,6 +161,7 @@ configuration.managerIp = Dirección IP de manager
 configuration.managerUser = Usuario de manager
 configuration.managerKeyLocation = Ubicación llave publica
 configuration.managerBinLocation = Ubicación bin de manager
+configuration.managerCommand = Commando
 
 configuration.apiURL = URL API
 configuration.apiPassword = Password API

@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import drp.DisasterRecovery;
 import drp.objects.OperationListener;
 import models.RemoteHost;
+import play.Logger;
 import play.i18n.Messages;
 import play.mvc.WebSocketController;
 
@@ -22,7 +23,6 @@ public class WSDisasterRecovery extends WebSocketController {
 
     public static void startOperation(RemoteHost.RecoveryType type) {
 
-
         if (inbound.isOpen()) {
 
             //WebSocketEvent event = await(inbound.nextEvent());
@@ -30,6 +30,9 @@ public class WSDisasterRecovery extends WebSocketController {
             DisasterRecovery disasterRecovery = new DisasterRecovery(type, new OperationListener() {
                 @Override
                 public void onMessage(Exception e, String message, MessageType type) {
+
+                    Logger.info("%s: %s", type, message);
+
                     if (outbound.isOpen()) {
                         outbound.send(getMessage(type, message, NONE));
                     }
@@ -37,6 +40,13 @@ public class WSDisasterRecovery extends WebSocketController {
 
                 @Override
                 public void onFinished(String message, boolean success) {
+
+                    if (success) {
+                        Logger.info("ERROR: %s", message);
+                    } else {
+                        Logger.info("SUCCESS: %s", message);
+                    }
+
                     if (outbound.isOpen()) {
                         if (success) {
                             outbound.send(getMessage(MessageType.SUCCESS, message, NONE));

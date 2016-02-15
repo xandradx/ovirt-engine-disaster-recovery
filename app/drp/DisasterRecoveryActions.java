@@ -137,7 +137,7 @@ public class DisasterRecoveryActions {
             listConnections(connection, listener);
 
         } catch (SQLException se) {
-            Logger.error(se, "Error");
+            Logger.error(se, "Error updating connections");
             throw new ConnectionUpdateException(Messages.get("drp.db.couldnotconnect"));
         } catch (ClassNotFoundException ce) {
             throw new ConnectionUpdateException(Messages.get("drp.db.nodriver"));

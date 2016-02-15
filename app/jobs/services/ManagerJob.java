@@ -36,10 +36,10 @@ public class ManagerJob extends Job {
                 String user = configuration.managerUser;
                 String ip = configuration.managerIp;
                 String bin = configuration.managerBinLocation;
+                String operation = configuration.managerCommand;
 
-                String command = "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "+keyLocation+" "+user+"@"+ip+" "+bin+" start";
+                String command = "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i " + keyLocation + " " + user + "@" + ip + " " + bin + " " + operation;
                 int result = ShellHelper.executeCommand(command);
-                Logger.debug("Result: %s", result);
 
                 if (result == 0) {
 
@@ -55,12 +55,7 @@ public class ManagerJob extends Job {
                             Logger.debug("Api not ready yet");
                         }
 
-                        Logger.debug("Api: %s", api);
-                        Logger.debug("Elapsed time: %d", System.currentTimeMillis() - startTime);
-
                     } while (api == null && (System.currentTimeMillis() - startTime) < 120000);
-
-                    Logger.debug("Api: %s", api);
 
                     api.close();
                     return api != null;

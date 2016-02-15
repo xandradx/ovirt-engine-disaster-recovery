@@ -191,6 +191,10 @@ container-cards-pf
         pattern: ["#3f9c35", "#0088ce" ,"#cc0000","#ec7a08"]
     };
 
+    var dataCentersUpdateOperation;
+    var hostsUpdateOperation;
+    var allHostsUpdateOperation;
+
     function setDataCentersData(data) {
         var donutChartConfig1 = jQuery().c3ChartDefaults().getDefaultDonutConfig('A');
         donutChartConfig1.bindto = '#donut-data-centers';
@@ -252,13 +256,17 @@ container-cards-pf
 
     function updateDataCenters() {
 
+        if (dataCentersUpdateOperation != null) {
+            dataCentersUpdateOperation.abort();
+        }
+
         $("#body_data_centers").show();
         $("#spinner_data_centers").show();
         $("#table_data_centers").hide();
         $("#spinner_data_centers_chart").show();
         $("#donut-data-centers").html("");
 
-        $.ajax({
+        dataCentersUpdateOperation = $.ajax({
 		    type: "POST",
 		    url: "@{Dashboard.getDataCenters}"
 	    }).done(function( data ) {
@@ -284,10 +292,15 @@ container-cards-pf
 	    }).always(function() {
 	        $("#spinner_data_centers").hide();
 	        $("#spinner_data_centers_chart").hide();
+	        dataCentersUpdateOperation = null;
 	    });
     }
 
     function updateHosts() {
+
+        if (hostsUpdateOperation != null) {
+            hostsUpdateOperation.abort();
+        }
 
         $("#body_contingency_hosts").show();
         $("#spinner_contingency_hosts").show();
@@ -302,7 +315,7 @@ container-cards-pf
         $("#donut_production_hosts").html("");
 
 
-        $.ajax({
+        hostsUpdateOperation = $.ajax({
 		    type: "POST",
 		    url: "@{Dashboard.getSegmentedHosts()}"
 	    }).done(function( data ) {
@@ -346,6 +359,7 @@ container-cards-pf
 	        $("#spinner_production_hosts_chart").hide();
 	        $("#spinner_contingency_hosts").hide();
 	        $("#spinner_contingency_hosts_chart").hide();
+	        hostsUpdateOperation = null;
 	    });
     }
 
@@ -353,13 +367,17 @@ container-cards-pf
 
         updateHosts();
 
+        if (allHostsUpdateOperation != null) {
+            allHostsUpdateOperation.abort();
+        }
+
         $("#body_hosts").show();
         $("#spinner_hosts").show();
         $("#table_hosts").hide();
         $("#spinner_hosts_chart").show();
         $("#donut-hosts").html("");
 
-        $.ajax({
+        allHostsUpdateOperation = $.ajax({
 		    type: "POST",
 		    url: "@{Dashboard.getHosts()}"
 	    }).done(function( data ) {
@@ -384,6 +402,7 @@ container-cards-pf
 	    }).always(function() {
 	        $("#spinner_hosts").hide();
 	        $("#spinner_hosts_chart").hide();
+	        allHostsUpdateOperation = null;
 	    });
     }
 

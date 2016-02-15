@@ -42,8 +42,7 @@
                     <span class="label label-danger">&{'state.inactive'}</span>
                     #{/else}
                 </td>
-                <td class="text-center">
-
+                <td>
                     <div class="btn-group">
                         <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                             &{'table.actions'}
@@ -54,7 +53,7 @@
                                 <a href="@{Users.edit(user.id)}"><i class="fa fa-edit"></i> &{'users.table.edit'}</a>
                             </li>
                             <li>
-                                <a href="@{Users.resetPassword(user.id)}"><i class="fa fa-key"></i> &{'users.table.reset'}</a>
+                                <a href="@{Users.resetPassword(user.id)}" onclick="return confirm('&{'user.reset.confirm'}')"><i class="fa fa-key"></i> &{'users.table.reset'}</a>
                             </li>
                         </ul>
                     </div>
@@ -71,7 +70,7 @@
 <script>
     $(document).ready(function() {
         $('#dataTables-list').DataTable({
-                responsive: true,
+
                 columnDefs: [
                 	{ "targets": 5, "orderable": false },
                 	{ "targets": 6, "orderable": false }
