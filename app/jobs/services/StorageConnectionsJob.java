@@ -9,6 +9,7 @@ import dto.response.ServiceResponse;
 import org.ovirt.engine.sdk.Api;
 import org.ovirt.engine.sdk.decorators.Host;
 import org.ovirt.engine.sdk.decorators.StorageConnection;
+import play.Logger;
 import play.i18n.Messages;
 import play.jobs.Job;
 
@@ -41,6 +42,7 @@ public class StorageConnectionsJob extends Job<ServiceResponse> {
             serviceResponse = ServiceResponse.success(connectionDtos);
             api.close();
         } catch (Exception e) {
+            Logger.error(e, "Error getting storage connections");
             serviceResponse = ServiceResponse.error(Messages.get("ws.error.exception"));
 
         }

@@ -7,6 +7,7 @@ import dto.objects.StatusDto;
 import dto.response.ServiceResponse;
 import org.ovirt.engine.sdk.Api;
 import org.ovirt.engine.sdk.decorators.DataCenter;
+import play.Logger;
 import play.i18n.Messages;
 import play.jobs.Job;
 
@@ -39,6 +40,7 @@ public class DataCentersJob extends Job<ServiceResponse> {
             serviceResponse = ServiceResponse.success(data);
             api.close();
         } catch (Exception e) {
+            Logger.error(e, "Error getting datacenters");
             serviceResponse = ServiceResponse.error(Messages.get("ws.error.exception"));
 
         }

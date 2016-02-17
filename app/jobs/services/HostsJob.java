@@ -10,6 +10,7 @@ import models.RemoteHost;
 import org.ovirt.engine.sdk.Api;
 import org.ovirt.engine.sdk.decorators.DataCenter;
 import org.ovirt.engine.sdk.decorators.Host;
+import play.Logger;
 import play.i18n.Messages;
 import play.jobs.Job;
 
@@ -46,6 +47,7 @@ public class HostsJob extends Job<ServiceResponse> {
             serviceResponse = ServiceResponse.success(data);
             api.close();
         } catch (Exception e) {
+            Logger.error(e, "Error getting hosts");
             serviceResponse = ServiceResponse.error(Messages.get("ws.error.exception"));
 
         }

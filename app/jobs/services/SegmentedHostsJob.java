@@ -8,6 +8,7 @@ import dto.response.ServiceResponse;
 import models.RemoteHost;
 import org.ovirt.engine.sdk.Api;
 import org.ovirt.engine.sdk.decorators.Host;
+import play.Logger;
 import play.i18n.Messages;
 import play.jobs.Job;
 
@@ -62,6 +63,7 @@ public class SegmentedHostsJob extends Job<ServiceResponse> {
             serviceResponse = ServiceResponse.success(responseMap);
             api.close();
         } catch (Exception e) {
+            Logger.error(e, "Error getting hosts");
             serviceResponse = ServiceResponse.error(Messages.get("ws.error.exception"));
 
         }
