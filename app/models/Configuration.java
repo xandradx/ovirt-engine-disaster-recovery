@@ -37,6 +37,10 @@ public class Configuration extends Model {
 
     public Blob trustStore;
 
+    @MaxSize(200)
+    @Column(length = 20)
+    public String trustStorePassword;
+
     @Required
     @MaxSize(50)
     @Column(length = 50)
@@ -87,6 +91,7 @@ public class Configuration extends Model {
         managerKeyLocation = configuration.managerKeyLocation;
         managerBinLocation = configuration.managerBinLocation;
         managerCommand = configuration.managerCommand;
+        trustStorePassword = configuration.trustStorePassword;
 
 
         if (configuration.trustStore!=null && configuration.trustStore.exists()) {

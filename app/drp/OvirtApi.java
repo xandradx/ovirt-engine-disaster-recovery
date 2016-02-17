@@ -28,7 +28,12 @@ public class OvirtApi {
         if (configuration.validateCertificate) {
             if (configuration.trustStore!=null && configuration.trustStore.exists()) {
                 File cert = configuration.trustStore.getFile();
-                api = new Api(configuration.apiURL, configuration.apiUser, configuration.apiPassword, cert.getAbsolutePath());
+
+                if (configuration.trustStorePassword!=null && !configuration.trustStorePassword.isEmpty()) {
+                    api = new Api(configuration.apiURL, configuration.apiUser, configuration.apiPassword, cert.getAbsolutePath(), configuration.trustStorePassword, false);
+                } else {
+                    api = new Api(configuration.apiURL, configuration.apiUser, configuration.apiPassword, cert.getAbsolutePath());
+                }
             } else {
                 throw new InvalidConfigurationException(Messages.get("drp.invalidconfiguration"));
             }

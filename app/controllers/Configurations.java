@@ -50,7 +50,7 @@ public class Configurations extends AuthenticatedController {
             validation.keep();
         } else {
 
-            if (configuration.validateCertificate && !configuration.trustStore.exists()) {
+            if (configuration.validateCertificate && (configuration.trustStore == null || !configuration.trustStore.exists())) {
                 params.flash();
                 flash.error(Messages.get("form.notrusstore"));
                 validation.keep();
