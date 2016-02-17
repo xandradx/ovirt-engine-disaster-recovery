@@ -3,7 +3,7 @@
 require:
     - play
     - play -> html5validation 1.2.2
-    - org.ovirt.engine.sdk -> ovirt-engine-sdk-java 3.4.0.1-1
+    - org.ovirt.engine.sdk -> ovirt-engine-sdk-java 3.6.3.0
     - postgresql -> postgresql 9.1-901-1.jdbc4
 
 repositories:
