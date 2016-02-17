@@ -3,6 +3,7 @@ package drp;
 import drp.exceptions.InvalidConfigurationException;
 import models.Configuration;
 import org.ovirt.engine.sdk.Api;
+import org.ovirt.engine.sdk.ApiBuilder;
 import org.ovirt.engine.sdk.exceptions.ServerException;
 import org.ovirt.engine.sdk.exceptions.UnsecuredConnectionAttemptError;
 import play.Logger;
@@ -24,23 +25,24 @@ public class OvirtApi {
             throw new InvalidConfigurationException(Messages.get("drp.invalidconfiguration"));
         }
 
-        Api api;
+        ApiBuilder builder = new ApiBuilder().url(configuration.apiURL).password(configuration.apiPassword).user(configuration.apiUser);
+
         if (configuration.validateCertificate) {
             if (configuration.trustStore!=null && configuration.trustStore.exists()) {
                 File cert = configuration.trustStore.getFile();
+                builder = builder.keyStorePath(cert.getAbsolutePath());
 
                 if (configuration.trustStorePassword!=null && !configuration.trustStorePassword.isEmpty()) {
-                    api = new Api(configuration.apiURL, configuration.apiUser, configuration.apiPassword, cert.getAbsolutePath(), configuration.trustStorePassword, false);
-                } else {
-                    api = new Api(configuration.apiURL, configuration.apiUser, configuration.apiPassword, cert.getAbsolutePath());
+                    builder = builder.keyStorePassword(configuration.trustStorePassword);
                 }
             } else {
                 throw new InvalidConfigurationException(Messages.get("drp.invalidconfiguration"));
             }
         } else {
-            api = new Api(configuration.apiURL, configuration.apiUser, configuration.apiPassword, true);
+
+            builder = builder.noHostVerification(true);
         }
 
-        return api;
+        return builder.build();
     }
 }
