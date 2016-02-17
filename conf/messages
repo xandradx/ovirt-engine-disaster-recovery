@@ -168,6 +168,7 @@ configuration.apiPassword = Password API
 configuration.apiUser = Usuario API
 configuration.trustStore = Truststore
 configuration.validateCertificate = Validar certificado
+configuration.trustStorePassword = Contraseña truststore
 
 form.notrusstore = Debe especificar un trust store para validar la conexión al API.
 
