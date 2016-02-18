@@ -1,8 +1,6 @@
 package drp;
 
-import drp.exceptions.ConnectionUpdateException;
-import drp.exceptions.HostActivateException;
-import drp.exceptions.HostsConditionsException;
+import drp.exceptions.*;
 import drp.objects.DatabaseManager;
 import drp.objects.DisasterRecoveryDefinition;
 import drp.objects.OperationListener;
@@ -62,11 +60,21 @@ public class DisasterRecovery {
         DisasterRecoveryOperation.OperationStatus status = DisasterRecoveryOperation.OperationStatus.PROGRESS;
         try {
             reportInfo(Messages.get("drp.starting", Messages.get(type)));
+
+            //Test database connection
+            reportInfo(Messages.get("drp.testingdb"));
+            testDatabaseConnection();
+            reportSuccess(Messages.get("drp.testingdb.success"));
+
             reportInfo(Messages.get("drp.connectingapi"));
             api = OvirtApi.getApi();
             reportSuccess(Messages.get("drp.connectingapisuccess"));
             performOperation();
             status = DisasterRecoveryOperation.OperationStatus.SUCCESS;
+        } catch (DBConfigurationException dbe) {
+            Logger.error(dbe, "Error in operation");
+            reportError(dbe, Messages.get("drp.dbconfiguration.error"));
+            status = DisasterRecoveryOperation.OperationStatus.FAILED;
         } catch (Exception e) {
             Logger.error(e, "Error in operation");
             reportError(e, e.getMessage());
@@ -92,6 +100,7 @@ public class DisasterRecovery {
         if (definition.getLocalHosts().isEmpty() || definition.getRemoteHosts().isEmpty()) {
             reportError(Messages.get("drp.nohostsconfigured"));
         } else {
+
             List<Host> powerManagementHosts = new ArrayList<Host>();
 
             //Disabling power management
@@ -288,21 +297,46 @@ public class DisasterRecovery {
         return definition;
     }
 
-    private void updateDatabase(RemoteHost.RecoveryType type) throws ConnectionUpdateException{
-
-        List<DatabaseConnection> connections = DatabaseConnection.find("active = ?", true).fetch();
-        List<DatabaseIQN> iqns = DatabaseIQN.find("active = ?", true).fetch();
-
+    private DatabaseManager getManager() {
         String dbHost = Play.configuration.getProperty("ovirt.db.host");
         String dbPort = Play.configuration.getProperty("ovirt.db.port");
         String dbName = Play.configuration.getProperty("ovirt.db.name");
         String dbUser = Play.configuration.getProperty("ovirt.db.user");
         String dbPassword = Play.configuration.getProperty("ovirt.db.password");
+        if (dbHost!=null && dbPort != null && dbName != null && dbUser != null && dbPassword != null) {
+            return new DatabaseManager(dbHost, dbPort, dbName, dbUser, dbPassword);
+        }
 
-        if (dbHost==null || dbPort == null || dbName == null || dbUser == null || dbPassword == null) {
-            reportError(Messages.get("drp.nodbcredentials"));
+        return null;
+    }
+
+    private void testDatabaseConnection() throws DBConfigurationException, InvalidConfigurationException {
+
+        List<DatabaseConnection> connections = DatabaseConnection.find("active = ?", true).fetch();
+        List<DatabaseIQN> iqns = DatabaseIQN.find("active = ?", true).fetch();
+
+        if (connections.isEmpty() || iqns.isEmpty()) {
+            throw new InvalidConfigurationException(Messages.get("drp.noconnections"));
+        }
+
+        DatabaseManager manager = getManager();
+        if (manager == null) {
+            throw new DBConfigurationException(Messages.get("drp.nodbcredentials"));
         } else {
-            DatabaseManager manager = new DatabaseManager(dbHost, dbPort, dbName, dbUser, dbPassword);
+            DisasterRecoveryActions.testConnection(manager);
+        }
+    }
+
+    private void updateDatabase(RemoteHost.RecoveryType type) throws ConnectionUpdateException, DBConfigurationException{
+
+        List<DatabaseConnection> connections = DatabaseConnection.find("active = ?", true).fetch();
+        List<DatabaseIQN> iqns = DatabaseIQN.find("active = ?", true).fetch();
+
+        DatabaseManager manager = getManager();
+
+        if (manager == null) {
+            throw new DBConfigurationException(Messages.get("drp.nodbcredentials"));
+        } else {
             DisasterRecoveryActions.updateConnections(manager, connections, iqns, type==RemoteHost.RecoveryType.FAILBACK, listener);
         }
     }
