@@ -49,17 +49,10 @@ public class Configurations extends AuthenticatedController {
             flash.error(Messages.get("form.error"));
             validation.keep();
         } else {
-
-            if (configuration.validateCertificate && (configuration.trustStore == null || !configuration.trustStore.exists())) {
-                params.flash();
-                flash.error(Messages.get("form.notrusstore"));
-                validation.keep();
-            } else {
-                flash.success(Messages.get("form.success"));
-                Configuration generalConfiguration = Configuration.generalConfiguration();
-                generalConfiguration.applyConfiguration(configuration);
-                generalConfiguration.save();
-            }
+            flash.success(Messages.get("form.success"));
+            Configuration generalConfiguration = Configuration.generalConfiguration();
+            generalConfiguration.applyConfiguration(configuration);
+            generalConfiguration.save();
         }
 
         editConfiguration();
@@ -125,5 +118,21 @@ public class Configurations extends AuthenticatedController {
         }
 
         editHosts();
+    }
+
+    public static void getStorageConnections() {
+        F.Promise<ServiceResponse> storageResponse = new StorageConnectionsJob().now();
+        ServiceResponse serviceResponse = await(storageResponse);
+        renderJSON(serviceResponse);
+    }
+
+    public static void downloadTrustStore() {
+        Configuration configuration = Configuration.generalConfiguration();
+        if (configuration.trustStore!=null && configuration.trustStore.getFile().exists()) {
+            response.setContentTypeIfNotSet(configuration.trustStore.type());
+            renderBinary(configuration.trustStore.getFile());
+        }
+
+        notFound();
     }
 }

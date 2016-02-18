@@ -55,6 +55,9 @@
                             <li>
                                 <a href="@{Users.resetPassword(user.id)}" onclick="return confirm('&{'user.reset.confirm'}')"><i class="fa fa-key"></i> &{'users.table.reset'}</a>
                             </li>
+                            <li>
+                                <a href="@{Users.delete(user.id)}" onclick="return confirm('&{'user.delete.confirm'}')"><i class="fa fa-trash"></i> &{'users.table.delete'}</a>
+                            </li>
                         </ul>
                     </div>
                 </td>

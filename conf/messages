@@ -122,10 +122,12 @@ users.table.lastAccess = Último acceso
 users.table.active = Estado
 users.table.edit = Editar
 users.table.reset = Reiniciar contraseña
+users.table.delete = Eliminar
 
 users.create.title = Crear usuario
 users.edit.title = Editar usuario
 user.reset.confirm = ¿Está seguro que desea reiniciar la contraseña del usuario?
+user.delete.confirm = ¿Está seguro que desea eliminar el usuario?
 
 user.username = Usuario
 user.role = Rol
@@ -169,6 +171,10 @@ configuration.apiUser = Usuario API
 configuration.trustStore = Truststore
 configuration.validateCertificate = Validar certificado
 configuration.trustStorePassword = Contraseña truststore
+
+configuration.currentConnections = Conexiones actuales
+connection.ip = IP
+connection.iqn = IQN
 
 form.notrusstore = Debe especificar un trust store para validar la conexión al API.
 

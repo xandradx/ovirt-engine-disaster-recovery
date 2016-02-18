@@ -60,7 +60,8 @@
                 type:"file",
                 class:" ",
                 name:"configuration.trustStore",
-                error: errors.forKey("configuration.trustStore")
+                error: errors.forKey("configuration.trustStore"),
+                downloadLink: configuration?.trustStore?.exists() ? @Configurations.downloadTrustStore() : null
                 /}
             </div>
         </div>

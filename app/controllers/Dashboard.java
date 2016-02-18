@@ -49,12 +49,6 @@ public class Dashboard extends AuthenticatedController {
         renderJSON(serviceResponse);
     }
 
-    public static void getStorageConnections() {
-        F.Promise<ServiceResponse> storageResponse = new StorageConnectionsJob().now();
-        ServiceResponse serviceResponse = await(storageResponse);
-        renderJSON(serviceResponse);
-    }
-
     public static void checkManagerStatus() {
 
         F.Promise<Boolean> apiReachable = new ReachableJob().now();

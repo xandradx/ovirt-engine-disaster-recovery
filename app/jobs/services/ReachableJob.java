@@ -1,7 +1,9 @@
 package jobs.services;
 
+import drp.OvirtApi;
 import dto.response.ServiceResponse;
 import models.Configuration;
+import org.ovirt.engine.sdk.Api;
 import play.Logger;
 import play.jobs.Job;
 
@@ -20,27 +22,32 @@ public class ReachableJob extends Job<Boolean> {
 
         ServiceResponse serviceResponse = null;
 
-        Configuration configuration = Configuration.generalConfiguration();
-        String host = configuration.apiURL;
-        if (host!=null && !host.isEmpty()) {
-            try {
-                String[] parts = host.split("/");
-                String hostName = parts[2];
-                int port = 80;
-                int index = hostName.indexOf(':');
-                if (index != -1) {
-                    port = Integer.valueOf(hostName.substring(index+1, hostName.length()));
-                    hostName = hostName.substring(0, index);
-                }
-
-                return isReachable(hostName, port, 1000);
-
-            } catch (Exception e) {
-                Logger.error(e, "Could not get manager status");
-            }
-        }
-
-        return false;
+        Api api = OvirtApi.getApi();
+        return api!=null;
+//
+//
+//
+//        Configuration configuration = Configuration.generalConfiguration();
+//        String host = configuration.apiURL;
+//        if (host!=null && !host.isEmpty()) {
+//            try {
+//                String[] parts = host.split("/");
+//                String hostName = parts[2];
+//                int port = 80;
+//                int index = hostName.indexOf(':');
+//                if (index != -1) {
+//                    port = Integer.valueOf(hostName.substring(index+1, hostName.length()));
+//                    hostName = hostName.substring(0, index);
+//                }
+//
+//                return isReachable(hostName, port, 1000);
+//
+//            } catch (Exception e) {
+//                Logger.error(e, "Could not get manager status");
+//            }
+//        }
+//
+//        return false;
     }
 
     private static boolean isReachable(String addr, int openPort, int timeOutMillis) {

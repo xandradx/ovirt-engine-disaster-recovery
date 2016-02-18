@@ -1,7 +1,7 @@
 #{extends 'Configurations/baseConfiguration.html' /}
 #{set title:messages.get('storageConnections.edit.title') /}
 
-<div class="panel panel-default" id="main_actions_div">
+<div class="panel panel-default">
     <div class="panel-body">
         #{form @Configurations.saveConnections(), method:"POST", id:"form", role:"form", enctype: "multipart/form-data", class:'form-horizontal'}
 
@@ -40,6 +40,21 @@
                         </td>
                     </tr>
                     #{/list}
+                    #{else}
+                    <tr>
+                        <td>
+                            <input type="text" name="connections[0].originConnection" maxlength="20" />
+                        </td>
+                        <td>
+                            <input type="text" name="connections[0].destinationConnection" maxlength="20"/>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-danger btn-xs" onclick="removeRow(this);">
+                                <i class="fa fa-trash"></i> &{'form.delete'}
+                            </button>
+                        </td>
+                    </tr>
+                    #{/else}
                     </tbody>
                 </table>
             </div>
@@ -79,6 +94,21 @@
                     </td>
                 </tr>
                 #{/list}
+                #{else}
+                <tr>
+                    <td>
+                        <input type="text" name="iqns[0].originIQN" maxlength="255" />
+                    </td>
+                    <td>
+                        <input type="text" name="iqns[0].destinationIQN" maxlength="255" />
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger btn-xs" onclick="removeRow(this);">
+                            <i class="fa fa-trash"></i> &{'form.delete'}
+                        </button>
+                    </td>
+                </tr>
+                #{/else}
                 </tbody>
             </table>
             </div>
@@ -89,6 +119,28 @@
         <!-- /.form -->
     </div>
     <!-- /.panel-body -->
+</div>
+<!-- /.panel -->
+
+#{api-loader isAdmin: isAdmin/}
+<div id="main_actions_div">
+    <h1>&{'configuration.currentConnections'}</h1>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered" id="table_hosts">
+                    <thead>
+                    <tr>
+                        <th>&{'connection.ip'}</th>
+                        <th>&{'connection.iqn'}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 <!-- /.panel -->
 
@@ -125,9 +177,42 @@
                 this.name = this.name.replace(/\[.*?\]/, "["+i+"]");
             });
         });
-
-
-
     }
+
+    function updateConnections() {
+
+        $("#general-loading-div").show();
+        $("#main_actions_div").hide();
+
+        $.ajax({
+		    type: "POST",
+		    url: "@{Configurations.getStorageConnections()}"
+	    }).done(function( data ) {
+
+	        if (data.success) {
+	            var html = "";
+	            $.each(data.data, function(index, host) {
+	                html+= '<tr>';
+	                html+= '<td>' + host.ipAddress + '</td>';
+	                html+= '<td>' + host.iqn + '</td>';
+	                html += '</tr>';
+	            });
+
+	            $("#table_hosts tbody").html(html);
+	            $("#main_actions_div").show();
+	        } else {
+	            $("#table_hosts").hide();
+	            $("#main_actions_div").hide();
+	        }
+	    }).always(function() {
+	        $("#general-loading-div").hide();
+	    });
+    }
+
+    function update() {
+        updateConnections();
+    }
+
+    #{api-loader-js/}
 
 </script>

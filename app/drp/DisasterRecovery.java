@@ -136,13 +136,15 @@ public class DisasterRecovery {
                 if (waitForStatus("up", remoteHost, 120*1000)) {
                     upHosts++;
                 }
+
+                if ("up".equals(remoteHost.getStatus().getState())) {
+                    listener.onRefreshHosts();
+                }
             }
 
             if (upHosts!=definition.getRemoteHosts().size()) {
                 throw new HostActivateException(Messages.get("drp.activateexceptionhosts"));
             }
-
-            listener.onRefreshHosts();
 
             //Checking data centers status
             reportInfo(Messages.get("drp.waitingactivedatacenters"));
@@ -151,13 +153,15 @@ public class DisasterRecovery {
                 if (waitForStatus("up", dataCenter, 480*1000)) {
                     upDataCenters++;
                 }
+
+                if ("up".equals(dataCenter.getStatus().getState())) {
+                    listener.onRefreshDatacenters();
+                }
             }
 
             if (upHosts!=definition.getRemoteHosts().size()) {
                 throw new HostActivateException(Messages.get("drp.activateexceptiondatacenters"));
             }
-
-            listener.onRefreshDatacenters();
 
             //Enabling power management
             for (Host localHost : powerManagementHosts) {

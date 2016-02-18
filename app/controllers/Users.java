@@ -4,6 +4,7 @@ import helpers.GlobalConstants;
 
 import java.util.List;
 
+import models.Configuration;
 import models.User;
 import models.UserRole;
 import play.data.validation.Required;
@@ -77,6 +78,18 @@ public class Users extends AuthenticatedController {
                 user.password = user.username;
                 user.needsPasswordReset = true;
                 user.save();
+                flash.success(Messages.get("form.success"));
+            }
+        }
+
+        index();
+    }
+
+    public static void delete(Long id) {
+        if (id!=null) {
+            User user = User.findById(id);
+            if (user!=null) {
+                user.delete();
                 flash.success(Messages.get("form.success"));
             }
         }
