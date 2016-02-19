@@ -1,6 +1,6 @@
 
 .login-pf body {
-	background: #080808 !important;
+	background: #080808 url(../images/bg-login.jpg) 50% 0 repeat-x  !important;
 }
 
 .card-pf-body .list-group .list-group-item {
