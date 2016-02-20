@@ -479,10 +479,10 @@ container-cards-pf
             setLoading();
 
             var l = document.location;
-    	    var siteLocation = ((l.protocol === "https:") ? "wss://" : "ws://") + l.hostname + (((l.port != 80) && (l.port != 443)) ? ":" + l.port : "")
+    	    var siteLocation = ((l.protocol === "https:") ? "wss://" : "ws://") + l.hostname + ( ((l.port != 80) && (l.port != 443)) ? (":" + l.port) : "" )
+    	    alert(siteLocation);
 
             var socket = new WebSocket(siteLocation + "@{WSDisasterRecovery.startOperation()}?type="+type);
-            var socket = new WebSocket("@@{WSDisasterRecovery.startOperation()}?type="+type);
 
 	        socket.onmessage = function(msg){
 
