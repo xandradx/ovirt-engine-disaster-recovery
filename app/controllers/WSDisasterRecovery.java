@@ -42,9 +42,9 @@ public class WSDisasterRecovery extends WebSocketController {
                 public void onFinished(String message, boolean success) {
 
                     if (success) {
-                        Logger.info("ERROR: %s", message);
-                    } else {
                         Logger.info("SUCCESS: %s", message);
+                    } else {
+                        Logger.info("ERROR: %s", message);
                     }
 
                     if (outbound.isOpen()) {
