@@ -482,7 +482,6 @@ container-cards-pf
     	    var siteLocation = ((l.protocol === "https:") ? "wss://" : "ws://") + l.hostname + (((l.port != 80) && (l.port != 443)) ? ":" + l.port : "")
 
             var socket = new WebSocket(siteLocation + "@{WSDisasterRecovery.startOperation()}?type="+type);
-            var socket = new WebSocket("@@{WSDisasterRecovery.startOperation()}?type="+type);
 
 	        socket.onmessage = function(msg){
 
