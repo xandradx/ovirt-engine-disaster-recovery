@@ -159,7 +159,7 @@ configuration.tab.configuration = Configuración general
 configuration.tab.hosts = Hosts
 configuration.tab.connections = Almacenamiento
 
-configuration.managerIp = Manager (contingencia)
+configuration.managerIp = Host VM Manager (contingencia)
 configuration.managerUser = Usuario - Host (contingencia)
 configuration.managerKeyLocation = Ubicación llave privada (SSH)
 configuration.managerBinLocation = Comando Inicio Manager (contingencia)
@@ -231,8 +231,8 @@ contend = Conteniendo
 other = Otro
 
 none = Ninguno
-failover.remotehost = Destino en recuperación
-failback.remotehost = Destino en regreso
+failover.remotehost = Destino en Failover
+failback.remotehost = Destino en Failback
 
 ws.api.error.connection = No fue posible conectarse con el API
 ws.error.exception = Occurió un error inesperado, por favor intente de nuevo más tarde
