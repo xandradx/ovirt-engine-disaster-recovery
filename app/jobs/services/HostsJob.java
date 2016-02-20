@@ -2,13 +2,11 @@ package jobs.services;
 
 import drp.OvirtApi;
 import dto.DtoHelper;
-import dto.objects.DataCenterDto;
 import dto.objects.HostDto;
 import dto.objects.StatusDto;
 import dto.response.ServiceResponse;
 import models.RemoteHost;
 import org.ovirt.engine.sdk.Api;
-import org.ovirt.engine.sdk.decorators.DataCenter;
 import org.ovirt.engine.sdk.decorators.Host;
 import play.Logger;
 import play.i18n.Messages;

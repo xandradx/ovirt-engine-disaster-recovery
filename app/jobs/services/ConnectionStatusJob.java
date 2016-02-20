@@ -4,9 +4,6 @@ import dto.objects.ConnectionDto;
 import dto.response.ServiceResponse;
 import models.DatabaseConnection;
 import models.DatabaseIQN;
-import org.h2.engine.Database;
-import org.omg.CORBA.UNKNOWN;
-import play.Logger;
 import play.jobs.Job;
 import play.libs.F;
 

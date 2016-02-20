@@ -1,16 +1,13 @@
 package controllers;
 
 import helpers.GlobalConstants;
-
-import java.util.List;
-
-import models.Configuration;
 import models.User;
 import models.UserRole;
-import play.data.validation.Required;
 import play.data.validation.Valid;
 import play.i18n.Messages;
 import play.mvc.With;
+
+import java.util.List;
 
 @With(Secure.class)
 @Check(GlobalConstants.ROLE_ADMIN)

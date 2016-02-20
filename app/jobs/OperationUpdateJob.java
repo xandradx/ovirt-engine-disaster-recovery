@@ -1,7 +1,6 @@
 package jobs;
 
 import models.DisasterRecoveryOperation;
-import models.RemoteHost;
 import play.jobs.Job;
 
 /**

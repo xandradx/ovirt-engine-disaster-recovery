@@ -1,6 +1,5 @@
 package jobs;
 
-import drp.DisasterRecovery;
 import models.DisasterRecoveryOperation;
 import models.UserRole;
 import play.jobs.Job;

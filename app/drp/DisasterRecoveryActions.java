@@ -2,15 +2,12 @@ package drp;
 
 import drp.exceptions.*;
 import drp.objects.DatabaseManager;
-import drp.objects.DisasterRecoveryDefinition;
 import drp.objects.OperationListener;
-import models.Configuration;
 import models.DatabaseConnection;
 import models.DatabaseIQN;
-import models.RemoteHost;
-import org.apache.http.client.ClientProtocolException;
 import org.ovirt.engine.sdk.decorators.Host;
-import org.ovirt.engine.sdk.entities.*;
+import org.ovirt.engine.sdk.entities.Action;
+import org.ovirt.engine.sdk.entities.PowerManagement;
 import org.ovirt.engine.sdk.exceptions.ServerException;
 import play.Logger;
 import play.i18n.Messages;
