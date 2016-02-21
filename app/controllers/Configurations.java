@@ -1,36 +1,19 @@
 package controllers;
 
-import drp.OvirtApi;
-import dto.DtoHelper;
-import dto.objects.ConfigurationDto;
-import dto.objects.ConnectionDto;
-import dto.objects.HostDto;
-import dto.objects.StatusDto;
 import dto.response.ServiceResponse;
 import helpers.GlobalConstants;
 import jobs.services.HostsJob;
-import jobs.services.ReachableJob;
 import jobs.services.StorageConnectionsJob;
 import models.Configuration;
 import models.DatabaseConnection;
 import models.DatabaseIQN;
 import models.RemoteHost;
-import org.ovirt.engine.sdk.Api;
-import org.ovirt.engine.sdk.decorators.Host;
-import org.ovirt.engine.sdk.decorators.Hosts;
-import org.ovirt.engine.sdk.decorators.StorageConnection;
-import org.ovirt.engine.sdk.decorators.StorageConnections;
-import play.Logger;
 import play.data.validation.Valid;
 import play.i18n.Messages;
 import play.libs.F;
 import play.mvc.With;
-import sun.rmi.runtime.Log;
 
-import javax.xml.crypto.Data;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Future;
 
 @With(Secure.class)
 @Check(GlobalConstants.ROLE_ADMIN)

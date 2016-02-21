@@ -7,7 +7,6 @@ import models.Configuration;
 import org.ovirt.engine.sdk.Api;
 import play.Logger;
 import play.jobs.Job;
-import sun.rmi.runtime.Log;
 
 /**
  * Created by jandrad on 31/01/16.

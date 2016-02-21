@@ -6,8 +6,6 @@ import org.ovirt.engine.sdk.Api;
 import org.ovirt.engine.sdk.ApiBuilder;
 import org.ovirt.engine.sdk.exceptions.ServerException;
 import org.ovirt.engine.sdk.exceptions.UnsecuredConnectionAttemptError;
-import play.Logger;
-import play.Play;
 import play.i18n.Messages;
 
 import java.io.File;
