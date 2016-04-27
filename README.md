@@ -21,7 +21,7 @@ This is a web application, that uses Java + Ovirt API + PostgreSQL, to perform t
 * Centos/RHEL 7.x -> latest version __(minimal installation)__
 * Java Oracle 1.7, *needs testing with OpenJDK*
 * MariaDB/MySQL 5.x
-* Play Framework 1.2, *we need some help freeing the app, from this framework, we needed to deliver the app fast for a customer, so we used this framework*
+* Play Framework 1.2, *we need some help freeing the app, from this framework, we needed to deliver the app fast for a customer, so we used this framework.* [Play Framework](https://www.playframework.com/download)
 
 ### Preparing OS 
 
