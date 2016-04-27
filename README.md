@@ -42,10 +42,19 @@ yum install java-1.7.0-oracle -y
 
 For Centos 7.x
 
-```
+Download from: [Java 1.7 Oracle](https://edelivery.oracle.com/akam/otn/java/jdk/7u80-b15/jre-7u80-linux-x64.rpm) __We must test this with a new Java version__
 
 ```
+yum localinstall jre-7u80-linux-x64.rpm -y
+```
 
+Verify Java version
+```
+[root@localhost ~]# java -version
+java version "1.7.0_80"
+Java(TM) SE Runtime Environment (build 1.7.0_80-b15)
+Java HotSpot(TM) 64-Bit Server VM (build 24.80-b11, mixed mode)
+```
 ## Who do I talk to? ##
 
 * Chocomango - José Eduardo Andrade Escobar <jandrad@chocomando.net>
