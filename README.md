@@ -17,5 +17,5 @@ This is a web application, that uses Java + Ovirt API + PostgreSQL, to perform t
 
 ### Who do I talk to? ###
 
-* Chocomango  (jandrad@chocomando.net)
-* ITM (jandrade@itm.gt)
+* Chocomango - José Eduardo Andrade Escobar <jandrad@chocomando.net>
+* ITM - Jorge Luis Andrade Escobar <jandrade@itm.gt>
