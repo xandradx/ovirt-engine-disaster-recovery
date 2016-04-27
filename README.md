@@ -17,7 +17,9 @@ This is a web application, that uses Java + Ovirt API + PostgreSQL, to perform t
 ## Installation Guide ##
 
 ### Requirements
-### 
+
+* Centos/RHEL 7.x -> latest version
+* Java Oracle 1.7, *needs testing with OpenJDK*
 
 ## Who do I talk to? ##
 
