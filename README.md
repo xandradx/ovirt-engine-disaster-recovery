@@ -1,6 +1,6 @@
 # README - Ovirt Dashboard for DR #
 
-This is a web application, that uses Overt API + PostgreSQL, to perform the task needed to recover from a Disaster Recovery. 
+This is a web application, that uses Java + Ovirt API + PostgreSQL, to perform the task needed to recover from a Disaster Recovery. 
 
 
 
