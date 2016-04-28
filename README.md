@@ -94,6 +94,10 @@ mysql -u root -p ovirtdashboarddr < /usr/share/doc/ovirt-dashboard-dr-${VERSION}
 
 * Create DB User
 ```
+mysql -u root -p
+
+MariaDB [(none)]> CREATE USER 'ovirtdr'@'localhost' IDENTIFIED BY 'YOURPASSWOR-HERE';
+MariaDB [(none)]> GRANT ALL PRIVILEGES ON ovirtdashboarddr.* TO 'ovirtdr'@'localhost';
 
 ```
 
@@ -107,7 +111,7 @@ Edit Configuration file: /opt/ovirt-dashboard-dr/ovirt-dashboard/conf/applicatio
 # Change Values on Line 91
 
 90 # To connect to a local MySQL5 database, use:
-91 db=mysql://USER:PASSWORD@IP_DB_SERVER:3306/ovirtdashboarddr
+91 db=mysql://ovirtdr:YOURPASSWOR-HERE@localhost:3306/ovirtdashboarddr
 
 ```
 
