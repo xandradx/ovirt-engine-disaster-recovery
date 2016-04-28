@@ -42,7 +42,7 @@ yum install java-1.8.0-oracle -y
 
 For Centos 7.x
 
-Download from: [Java 1.8 Oracle]http://www.oracle.com/technetwork/java/javase/downloads/index.html) 
+Download from: [Java 1.8 Oracle](http://www.oracle.com/technetwork/java/javase/downloads/index.html) 
 
 ```
 yum localinstall jre-8u91-linux-x64.rpm -y
