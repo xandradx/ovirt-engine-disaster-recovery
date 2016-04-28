@@ -76,6 +76,10 @@ systemctl enable mariadb
 systemctl start mariadb
 ```
 
+* MariaDB Secure Instalation
+```
+mysql_secure_installation
+```
 * Create DB
 
 ```
@@ -87,6 +91,26 @@ mysqladmin create ovirtdashboarddr
 ```
 mysql -u root -p ovirtdashboarddr < /usr/share/doc/ovirt-dashboard-dr-${VERSION}-${RELEASE}/ovirt-dashboard-dr.sql
 ```
+
+* Create DB User
+```
+
+```
+
+## Application Configuration
+
+* Configure Database Parameters
+
+Edit Configuration file: /opt/ovirt-dashboard-dr/ovirt-dashboard/conf/application.conf
+
+```
+# Change Values on Line 91
+
+90 # To connect to a local MySQL5 database, use:
+91 db=mysql://USER:PASSWORD@IP_DB_SERVER:3306/ovirtdashboarddr
+
+```
+
 ## Who do I talk to? ##
 
 * Chocomango - José Eduardo Andrade Escobar <jandrad@chocomando.net>
