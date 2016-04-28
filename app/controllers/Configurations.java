@@ -42,8 +42,8 @@ public class Configurations extends AuthenticatedController {
     }
 
     public static void editStorageConnections() {
-        List<DatabaseConnection> connections = DatabaseConnection.find("active = ?", true).fetch();
-        List<DatabaseIQN> iqns = DatabaseIQN.find("active = ?", true).fetch();
+        List<DatabaseConnection> connections = DatabaseConnection.find("active = :a").bind("a", true).fetch();
+        List<DatabaseIQN> iqns = DatabaseIQN.find("active = :a").bind("a", true).fetch();
         render(connections, iqns);
     }
 

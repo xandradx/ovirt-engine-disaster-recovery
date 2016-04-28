@@ -18,7 +18,7 @@ public class StartupJob extends Job {
 		}
 
 
-        List<DisasterRecoveryOperation> operations = DisasterRecoveryOperation.find("active = ? AND status = ?", true, DisasterRecoveryOperation.OperationStatus.PROGRESS).fetch();
+        List<DisasterRecoveryOperation> operations = DisasterRecoveryOperation.find("active = :a AND status = :s").bind("a", true).bind("s", DisasterRecoveryOperation.OperationStatus.PROGRESS).fetch();
         for (DisasterRecoveryOperation operation : operations) {
             operation.status = DisasterRecoveryOperation.OperationStatus.FAILED;
             operation.save();

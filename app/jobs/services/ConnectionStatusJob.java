@@ -35,7 +35,7 @@ public class ConnectionStatusJob extends Job<ConnectionStatusJob.ConnectionStatu
             int unknown = 0;
 
             //Get connections
-            List<DatabaseConnection> connections = DatabaseConnection.find("active = ?", true).fetch();
+            List<DatabaseConnection> connections = DatabaseConnection.find("active = :a").bind("a", true).fetch();
             List<String> originIPs = new ArrayList<String>();
             List<String> destinationIPs = new ArrayList<String>();
             for (DatabaseConnection connection : connections) {
@@ -44,7 +44,7 @@ public class ConnectionStatusJob extends Job<ConnectionStatusJob.ConnectionStatu
             }
 
             //Get iqns
-            List<DatabaseIQN> iqns = DatabaseIQN.find("active = ?", true).fetch();
+            List<DatabaseIQN> iqns = DatabaseIQN.find("active = :a").bind("a", true).fetch();
             List<String> originIqns = new ArrayList<String>();
             List<String> destinationIqns = new ArrayList<String>();
             for (DatabaseIQN iqn : iqns) {

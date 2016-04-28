@@ -51,6 +51,6 @@ public class BaseModel extends Model {
 	}
 
     public static<T extends BaseModel> List<T> findActive() {
-        return T.find("active = ?", true).fetch();
+        return T.find("active = :a").bind("a", true).fetch();
     }
 }
