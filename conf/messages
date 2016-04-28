@@ -92,7 +92,7 @@ table.actions = Actions
 ################################################
 menu.dashboard = Dashboard
 menu.users = Users
-menu.configuration = Configuration
+menu.configuration = Settings
 menu.user.profile = Profile
 menu.user.logout = Logout
 
