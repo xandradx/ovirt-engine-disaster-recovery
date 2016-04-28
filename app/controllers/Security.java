@@ -9,7 +9,7 @@ public class Security extends Secure.Security {
 
 	static String authenticate(String username, String password) {
 		
-        User user = User.find("username = ?", username).first();
+        User user = User.find("username = :u").bind("u", username).first();
 
         if (user == null || !user.password.equals(password)) {
         	return Messages.get("secure.invaliduser");

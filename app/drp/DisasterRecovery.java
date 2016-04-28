@@ -246,7 +246,7 @@ public class DisasterRecovery {
         reportInfo(Messages.get("drp.verifyinghosts"));
         DisasterRecoveryDefinition definition = new DisasterRecoveryDefinition();
 
-        List<String> remoteHosts = RemoteHost.find("SELECT h.hostName FROM RemoteHost h WHERE h.type = ? AND h.active = ?", type, true).fetch();
+        List<String> remoteHosts = RemoteHost.find("SELECT h.hostName FROM RemoteHost h WHERE h.type = :t AND h.active = :a").bind("t", type).bind("a", true).fetch();
         if (!hostList.isEmpty()) {
             for (Host host : hostList) {
                 if (remoteHosts.contains(host.getName())) {
@@ -312,8 +312,8 @@ public class DisasterRecovery {
 
     private void testDatabaseConnection() throws DBConfigurationException, InvalidConfigurationException {
 
-        List<DatabaseConnection> connections = DatabaseConnection.find("active = ?", true).fetch();
-        List<DatabaseIQN> iqns = DatabaseIQN.find("active = ?", true).fetch();
+        List<DatabaseConnection> connections = DatabaseConnection.find("active = :a").bind("a",true).fetch();
+        List<DatabaseIQN> iqns = DatabaseIQN.find("active = :a").bind("a", true).fetch();
 
         if (connections.isEmpty() || iqns.isEmpty()) {
             throw new InvalidConfigurationException(Messages.get("drp.noconnections"));
@@ -329,8 +329,8 @@ public class DisasterRecovery {
 
     private void updateDatabase(RemoteHost.RecoveryType type) throws ConnectionUpdateException, DBConfigurationException{
 
-        List<DatabaseConnection> connections = DatabaseConnection.find("active = ?", true).fetch();
-        List<DatabaseIQN> iqns = DatabaseIQN.find("active = ?", true).fetch();
+        List<DatabaseConnection> connections = DatabaseConnection.find("active = :a").bind("a", true).fetch();
+        List<DatabaseIQN> iqns = DatabaseIQN.find("active = :a").bind("a", true).fetch();
 
         DatabaseManager manager = getManager();
 

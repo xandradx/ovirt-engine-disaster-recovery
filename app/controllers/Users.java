@@ -15,7 +15,7 @@ public class Users extends AuthenticatedController {
 
     public static void index() {
     	User connectedUser = getUser();
-    	List<User> users = User.find("id != ?", connectedUser.id).fetch();
+    	List<User> users = User.find("id != :i").bind("i",connectedUser.id).fetch();
         render(users);
     }
     

@@ -14,7 +14,7 @@ public class AuthenticatedController extends Controller {
 	@Before()
 	public static void getUserInfo() {
 	
-		User user = User.find("username = ?", Security.connected()).first();
+		User user = User.find("username = :u").bind("u",  Security.connected()).first();
 		if (user!=null) {
 
             user.lastActivity = new Date();

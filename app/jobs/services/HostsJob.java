@@ -31,7 +31,7 @@ public class HostsJob extends Job<ServiceResponse> {
 
             StatusDto data = new StatusDto();
 
-            List<RemoteHost> remoteHosts = RemoteHost.find("active = ?", true).fetch();
+            List<RemoteHost> remoteHosts = RemoteHost.find("active = :a").bind("a", true).fetch();
             List<Host> hosts = api.getHosts().list();
             List<HostDto> hostDtos = new ArrayList<HostDto>();
             for (Host host : hosts) {
