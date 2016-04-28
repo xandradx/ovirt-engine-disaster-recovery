@@ -9,14 +9,14 @@ title = oVirt Dashboard
 ################################################
 datatables.sSearch =
 datatables.sLengthMenu = Show _MENU_
-datatables.sProcessing = Processing…
+datatables.sProcessing = Processing...
 datatables.sZeroRecords = No results found
 datatables.sEmptyTable = Table empty
 datatables.sInfo = Showing records from _START_ to _END_ of _TOTAL_
 datatables.sInfoEmpty = Showing records from 0 to 0 of 0
 datatables.sInfoFiltered = (filtrado de un total de _MAX_ registros)
 datatables.sInfoThousands = ,
-datatables.sLoadingRecords = Loading…
+datatables.sLoadingRecords = Loading...
 datatables.sFirst = First
 datatables.sLast = Last
 datatables.sNext = Next
@@ -146,7 +146,7 @@ lastName = Last Name
 password = Password
 passwordConfirm = Confirm password
 
-validation.equals.password = Password does’t match
+validation.equals.password = Password doesn't match
 
 ################################################
 #Configuration messages
@@ -239,7 +239,7 @@ ws.error.exception = Unexpected error, please try latter
 
 manager.unreachable.title = API unavailable
 manager.unreachable.message = API unavailable. Please power up the Contingency VM for RHEV-M o click this button if this environment support, powering up the VM.
-manager.unreachable.turnon = Powerup
+manager.unreachable.turnon = Power Up
 manager.unreachable.tryagain = Retry
 manager.unreachable.configuration = Settings
 
@@ -291,7 +291,7 @@ drp.db.currentconnections = Current connections
 drp.db.modifiedconnections = Modified connections
 drp.db.couldnotconnect = Database connection failed
 drp.db.nodriver = No database driver
-drp.db.couldnotdisconnect = Could’t disconnect from DB
+drp.db.couldnotdisconnect = Couldn't disconnect from DB
 drp.noconnections = No storage connections configured.
 drp.dbconfiguration.error = Error with configuration please get support.
 drp.invalidconfiguration = Invalid configuration
