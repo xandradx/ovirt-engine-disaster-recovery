@@ -51,9 +51,9 @@ yum localinstall jre-8u91-linux-x64.rpm -y
 Verify Java version
 ```
 [root@localhost ~]# java -version
-java version "1.8.0_91"
-Java(TM) SE Runtime Environment (build 1.8.0_91-b14)
-Java HotSpot(TM) 64-Bit Server VM (build 25.91-b14, mixed mode)
+java version "1.8.0_XX"
+Java(TM) SE Runtime Environment (build 1.8.0_XX)
+Java HotSpot(TM) 64-Bit Server VM (build XX, mixed mode)
 ```
 ## Who do I talk to? ##
 
