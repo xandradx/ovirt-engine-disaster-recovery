@@ -19,13 +19,13 @@ This is a web application, that uses Java + Ovirt API + PostgreSQL, to perform t
 ### Requirements
 
 * Centos/RHEL 7.x -> latest version __(minimal installation)__
-* Java Oracle 1.7, *needs testing with OpenJDK*
+* Java Oracle 8, *needs testing with OpenJDK*
 * MariaDB/MySQL 5.x
-* Play Framework 1.2, *we need some help freeing the app, from this framework, we needed to deliver the app fast for a customer, so we used this framework.* [Play Framework](https://www.playframework.com/download)
+* Play Framework 1.4, *we need some help freeing the app, from this framework, we needed to deliver the app fast for a customer, so we used this framework.* [Play Framework](https://www.playframework.com/download)
 
 ### Preparing OS 
 
-* Always update your OS packages, then install required packages. 
+* Always update your OS packages, then install required. 
 
 ```
 yum update -y ; \ 
@@ -37,23 +37,23 @@ For RHEL 7.x
 
 ```
 subscription-manager repos --enable rhel-7-server-thirdparty-oracle-java-rpms ; \
-yum install java-1.7.0-oracle -y
+yum install java-1.8.0-oracle -y
 ```
 
 For Centos 7.x
 
-Download from: [Java 1.7 Oracle](https://edelivery.oracle.com/akam/otn/java/jdk/7u80-b15/jre-7u80-linux-x64.rpm) __We must test this with a new Java version__
+Download from: [Java 1.8 Oracle]http://www.oracle.com/technetwork/java/javase/downloads/index.html) 
 
 ```
-yum localinstall jre-7u80-linux-x64.rpm -y
+yum localinstall jre-8u91-linux-x64.rpm -y
 ```
 
 Verify Java version
 ```
 [root@localhost ~]# java -version
-java version "1.7.0_80"
-Java(TM) SE Runtime Environment (build 1.7.0_80-b15)
-Java HotSpot(TM) 64-Bit Server VM (build 24.80-b11, mixed mode)
+java version "1.8.0_91"
+Java(TM) SE Runtime Environment (build 1.8.0_91-b14)
+Java HotSpot(TM) 64-Bit Server VM (build 25.91-b14, mixed mode)
 ```
 ## Who do I talk to? ##
 
