@@ -76,7 +76,7 @@ systemctl enable mariadb
 systemctl start mariadb
 ```
 
-* MariaDB Secure Instalation
+* MariaDB Secure Installation
 ```
 mysql_secure_installation
 ```
