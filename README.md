@@ -31,7 +31,7 @@ This is a web application, that uses Java + Ovirt API + PostgreSQL, to perform t
 yum update -y ; \ 
 yum install httpd mariadb-server mariadb bash-completion -y
 ```
-* Installing Java Oracle 1.7 
+* Installing Java Oracle 1.8 
 
 For RHEL 7.x
 
@@ -55,6 +55,16 @@ java version "1.8.0_XX"
 Java(TM) SE Runtime Environment (build 1.8.0_XX)
 Java HotSpot(TM) 64-Bit Server VM (build XX, mixed mode)
 ```
+
+### Installing Overt Dashboard for DR from RPM
+
+* Download YUM REPO
+
+* Install RPMs
+```
+yum install ovirt-dashboard-dr ovirt-dashboard-dr-play
+```  
+
 ## Who do I talk to? ##
 
 * Chocomango - José Eduardo Andrade Escobar <jandrad@chocomando.net>
