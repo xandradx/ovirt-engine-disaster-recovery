@@ -59,12 +59,34 @@ Java HotSpot(TM) 64-Bit Server VM (build XX, mixed mode)
 ### Installing Overt Dashboard for DR from RPM
 
 * Download YUM REPO
+```
+```
 
 * Install RPMs
 ```
 yum install ovirt-dashboard-dr ovirt-dashboard-dr-play
 ```  
 
+### Configure Database
+
+* Start/Enable MariaDB
+
+```
+systemctl enable mariadb
+systemctl start mariadb
+```
+
+* Create DB
+
+```
+mysqladmin create ovirtdrpdashboarddr
+```
+
+* Import Initial DB
+
+```
+mysql -u root -p ovirtdrpdashboarddr < /usr/share/doc/ovirt-dashboard-dr-${VERSION}-${RELEASE}/ovirt-dashboard-dr.sql
+```
 ## Who do I talk to? ##
 
 * Chocomango - José Eduardo Andrade Escobar <jandrad@chocomando.net>
