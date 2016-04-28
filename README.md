@@ -79,13 +79,13 @@ systemctl start mariadb
 * Create DB
 
 ```
-mysqladmin create ovirtdrpdashboarddr
+mysqladmin create ovirtdashboarddr
 ```
 
 * Import Initial DB
 
 ```
-mysql -u root -p ovirtdrpdashboarddr < /usr/share/doc/ovirt-dashboard-dr-${VERSION}-${RELEASE}/ovirt-dashboard-dr.sql
+mysql -u root -p ovirtdashboarddr < /usr/share/doc/ovirt-dashboard-dr-${VERSION}-${RELEASE}/ovirt-dashboard-dr.sql
 ```
 ## Who do I talk to? ##
 
