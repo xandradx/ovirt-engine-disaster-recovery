@@ -102,7 +102,7 @@ menu.user.logout = Logout
 secure.invaliduser = Invalid user/password combination
 secure.inactiveuser = Disabled user
 secure.title=Login
-secure.username=Usuario
+secure.username=User Name
 secure.password=Password
 secure.remember=Remenver
 secure.signin=Send
@@ -114,7 +114,7 @@ secure.logout=Session closed
 ################################################
 users.title = Users
 users.new = New user
-users.table.username = User
+users.table.username = User Name
 users.table.firstName = First Name
 users.table.lastName = Last Name
 users.table.role = Rol
@@ -160,14 +160,14 @@ configuration.tab.hosts = Hosts
 configuration.tab.connections = Storage
 
 configuration.managerIp = Host VM Manager (contingency)
-configuration.managerUser = Username - Host (contingency)
+configuration.managerUser = User Name - Host (contingency)
 configuration.managerKeyLocation = Private key location (SSH)
 configuration.managerBinLocation = Command to start VM - manager (contingency)
 configuration.managerCommand = Arguments (contingency)
 
 configuration.apiURL = API URL
 configuration.apiPassword = API Password
-configuration.apiUser = API Username
+configuration.apiUser = API User Name
 configuration.trustStore = Truststore
 configuration.validateCertificate = Validate certificate
 configuration.trustStorePassword = Truststore password
