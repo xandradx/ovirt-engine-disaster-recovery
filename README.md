@@ -49,6 +49,7 @@ yum localinstall jre-8u91-linux-x64.rpm -y
 ```
 
 Verify Java version
+
 ```
 [root@localhost ~]# java -version
 java version "1.8.0_XX"
@@ -59,10 +60,12 @@ Java HotSpot(TM) 64-Bit Server VM (build XX, mixed mode)
 ### Installing Overt Dashboard for DR from RPM
 
 * Download YUM REPO
+
 ```
 ```
 
 * Install RPMs
+
 ```
 yum install ovirt-dashboard-dr ovirt-dashboard-dr-play
 ```  
@@ -77,6 +80,7 @@ systemctl start mariadb
 ```
 
 * MariaDB Secure Installation
+
 ```
 mysql_secure_installation
 ```
@@ -93,6 +97,7 @@ mysql -u root -p ovirtdashboarddr < /usr/share/doc/ovirt-dashboard-dr-${VERSION}
 ```
 
 * Create DB User
+
 ```
 mysql -u root -p
 
@@ -105,13 +110,21 @@ MariaDB [(none)]> GRANT ALL PRIVILEGES ON ovirtdashboarddr.* TO 'ovirtdr'@'local
 
 * Configure Database Parameters
 
-Edit Configuration file: /opt/ovirt-dashboard-dr/ovirt-dashboard/conf/application.conf
+Edit configuration file: __/etc/ovirt-dashboard-dr/ovirt-dashboard-dr.conf__
 
 ```
-# Change Values on Line 91
+# Change Values on Line 91 for MariaDB
 
 90 # To connect to a local MySQL5 database, use:
 91 db=mysql://ovirtdr:YOURPASSWOR-HERE@localhost:3306/ovirtdashboarddr
+
+# Change Value on Line 215 for PostgreSQL
+
+215 ovirt.db.host = YOUR-RHEV-M-HOSTNAME-HERE # Example: rhevm.internal.itm.gt
+216 ovirt.db.port = 5432
+217 ovirt.db.user = engine
+218 ovirt.db.password = YOUR-PGSQL-ENGINE-PASSWORD-HERE
+219 ovirt.db.name = engine
 
 ```
 
