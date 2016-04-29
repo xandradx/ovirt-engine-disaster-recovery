@@ -67,7 +67,7 @@ Java HotSpot(TM) 64-Bit Server VM (build XX, mixed mode)
 * Install RPMs
 
 ```
-yum install ovirt-dashboard-dr ovirt-dashboard-dr-play
+yum install -y ovirt-dashboard-dr-app
 ```  
 
 ### Configure Database
