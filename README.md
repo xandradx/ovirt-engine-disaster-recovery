@@ -87,7 +87,7 @@ mysql_secure_installation
 * Create DB
 
 ```
-mysqladmin create ovirtdashboarddr
+mysqladmin create ovirtdashboarddr -p
 ```
 
 * Import Initial DB
@@ -127,6 +127,43 @@ Edit configuration file: __/etc/ovirt-dashboard-dr/ovirt-dashboard-dr.conf__
 219 ovirt.db.name = engine
 
 ```
+
+# Service Administration
+
+## Systemctl Administration
+
+* Start
+
+```
+systemctl start ovirt-dashboard-dr
+
+```
+
+* Status
+
+```
+systemctl start ovirt-dashboard-dr
+
+```
+
+* Stop
+
+```
+systemctl start ovirt-dashboard-dr
+
+```
+
+
+## LOG FILE
+```
+/var/log/ovirt-dasshboard-dr/application.log
+```
+
+You should monitor this file, for JAVA Exceptions, or SQL Errors.
+
+One common error is MariaDB wrong credentials.
+
+
 
 ## Who do I talk to? ##
 
