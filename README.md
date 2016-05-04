@@ -142,14 +142,14 @@ systemctl start ovirt-dashboard-dr
 * Status
 
 ```
-systemctl start ovirt-dashboard-dr
+systemctl status ovirt-dashboard-dr
 
 ```
 
 * Stop
 
 ```
-systemctl start ovirt-dashboard-dr
+systemctl stop ovirt-dashboard-dr
 
 ```
 
@@ -163,6 +163,9 @@ You should monitor this file, for JAVA Exceptions, or SQL Errors.
 
 One common error is MariaDB wrong credentials.
 
+## Next Step
+
+* User manual
 
 
 ## Who do I talk to? ##
