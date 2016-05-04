@@ -221,7 +221,7 @@ container-cards-pf
         var donutChartTitle = d3.select("#donut-data-centers").select('text.c3-chart-arcs-title');
         donutChartTitle.text("");
         donutChartTitle.insert('tspan').text( (data.up/data.total * 100).toFixed(2)).classed('donut-title-big-pf', true).attr('dy', 0).attr('x', 0);
-        donutChartTitle.insert('tspan').text("% arriba").classed('donut-title-small-pf', true).attr('dy', 20).attr('x', 0);
+        donutChartTitle.insert('tspan').text("% &{'up'}").classed('donut-title-small-pf', true).attr('dy', 20).attr('x', 0);
     }
 
     function setHostsData(data, divId) {
@@ -251,7 +251,7 @@ container-cards-pf
         var donutChartTitle = d3.select("#"+divId).select('text.c3-chart-arcs-title');
         donutChartTitle.text("");
         donutChartTitle.insert('tspan').text( (data.up/data.total * 100).toFixed(2)).classed('donut-title-big-pf', true).attr('dy', 0).attr('x', 0);
-        donutChartTitle.insert('tspan').text("% arriba").classed('donut-title-small-pf', true).attr('dy', 20).attr('x', 0);
+        donutChartTitle.insert('tspan').text("% &{'up'}").classed('donut-title-small-pf', true).attr('dy', 20).attr('x', 0);
     }
 
     function updateDataCenters() {
