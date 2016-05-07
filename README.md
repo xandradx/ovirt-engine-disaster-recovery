@@ -67,6 +67,7 @@ cd /etc/yum.repos.d/
 curl -O http://supp01.i-t-m.com/ovirt-dashboard-dr.repo
 
 ```
+This is a temporal repository and can/will be changed in the future !
 
 * Install RPMs
 
