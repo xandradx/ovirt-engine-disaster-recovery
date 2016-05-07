@@ -6,7 +6,7 @@ This is a web application, that uses Java + Ovirt API + PostgreSQL, to perform t
 
 ## Assumptions ##
 
-* All the master Storage Domains for each Datacenter, has been replicated from site A to site B
+* Every master Storage Domains for each Datacenter, has been replicated from site A to site B
 * There is an exact copy of the RHEV-M/Engine running on site B.
 * Please refer to next section. 
  
