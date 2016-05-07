@@ -58,6 +58,14 @@ Java(TM) SE Runtime Environment (build 1.8.0_XX)
 Java HotSpot(TM) 64-Bit Server VM (build XX, mixed mode)
 ```
 
+Open port TCP 9000
+
+```
+firewall-cmd --add-port=9000/tcp --permanent
+systemctl restart firewalld
+
+```
+
 ### Installing Overt Dashboard for DR from RPM
 
 * Download YUM REPO
