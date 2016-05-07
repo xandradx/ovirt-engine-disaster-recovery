@@ -7,12 +7,14 @@ This is a web application, that uses Java + Ovirt API + PostgreSQL, to perform t
 ## Assumptions ##
 
 * All the master Storage Domains for each Datacenter, has been replicated from site A to site B
-* There is an exact copy of the RHEV-M/Engine running on site B. 
+* There is an exact copy of the RHEV-M/Engine running on site B.
+* Please refer to next section. 
  
 
 ## How does this work ? ##
 
-* TBD
+* This project try to implement Approach #2, presented on this slides DevConf.cz - 2014 [Disaster Recovery Strategies Using oVirt's new Storage Connection Management Features](http://www.slideshare.net/AllonMureinik/dev-conf-ovirt-dr)
+* The was to use 100% the API, but we needed to interact directrly with the database due to current pending feature to edit - Storage Connection, without setting the Storage Domains, in maintenence mode. - Reference [Updating a Storage Connection](https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Virtualization/3.5/html/Technical_Guide/sect-Methods6.html)
 
 ## Installation Guide ##
 
@@ -165,10 +167,11 @@ One common error is MariaDB wrong credentials.
 
 ## Next Step
 
-* User manual
+* [Administration Guide](https://bitbucket.org/chocomango/ovirt-dashboard/downloads/AdministrationGuideOvirtDashboardforDR-draft-v1.pdf)
 
 
 ## Who do I talk to? ##
 
-* Chocomango - José Eduardo Andrade Escobar <jandrad@chocomando.net>
-* ITM - Jorge Luis Andrade Escobar <jandrade@itm.gt>
+* [Chocomango](http://chocomango.net) - José Eduardo Andrade Escobar <jandrad@chocomando.net> 
+* [ITM](http://itm.gt) - Jorge Luis Andrade Escobar <jandrade@itm.gt> (yes, we are brothers) 
+
