@@ -168,10 +168,10 @@ One common error is MariaDB wrong credentials.
 ## Next Step
 
 * [Administration Guide](https://bitbucket.org/chocomango/ovirt-dashboard/downloads/AdministrationGuideOvirtDashboardforDR-draft-v1.pdf)
-
+* [Spanish Videos](https://www.youtube.com/watch?v=ef_ZmgixzJM&list=PLgtS4_6D5_KUQGnLpaTVZkHJScKcLUZoX&index=2)
+* [English Videos](coming soon)
 
 ## Who do I talk to? ##
 
 * [Chocomango](http://chocomango.net) - José Eduardo Andrade Escobar <jandrad@chocomando.net> 
-* [ITM](http://itm.gt) - Jorge Luis Andrade Escobar <jandrade@itm.gt> (yes, we are brothers) 
-
+* [ITM](http://itm.gt) - Jorge Luis Andrade Escobar <jandrade@itm.gt> (yes, we are brothers)
