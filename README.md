@@ -30,8 +30,7 @@ This is a web application, that uses Java + Ovirt API + PostgreSQL, to perform t
 * Always update your OS packages, then install required. 
 
 ```
-yum update -y ; \ 
-yum install httpd mariadb-server mariadb bash-completion -y
+yum update -y 
 ```
 * Installing Java Oracle 1.8 
 
@@ -64,6 +63,9 @@ Java HotSpot(TM) 64-Bit Server VM (build XX, mixed mode)
 * Download YUM REPO
 
 ```
+cd /etc/yum.repos.d/
+curl -O http://supp01.i-t-m.com/ovirt-dashboard-dr.repo
+
 ```
 
 * Install RPMs
