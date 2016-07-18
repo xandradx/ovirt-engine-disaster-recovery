@@ -45,6 +45,8 @@ For Centos 7.x
 
 Download from: [Java 1.8 Oracle](http://www.oracle.com/technetwork/java/javase/downloads/index.html) 
 
+For RHEL 7.x
+
 ```
 yum localinstall jre-8u91-linux-x64.rpm -y
 ```
@@ -66,13 +68,13 @@ systemctl restart firewalld
 
 ```
 
-### Installing Overt Dashboard for DR from RPM
+### Installing oVirt Engine Disaster Recovery from RPM
 
 * Download YUM REPO
 
 ```
 cd /etc/yum.repos.d/
-curl -O http://supp01.i-t-m.com/ovirt-dashboard-dr.repo
+curl -O http://supp01.i-t-m.com/.repo
 
 ```
 This is a temporal repository and can/will be changed in the future !
@@ -80,7 +82,7 @@ This is a temporal repository and can/will be changed in the future !
 * Install RPMs
 
 ```
-yum install -y ovirt-dashboard-dr-app
+yum install -y ovirt-engine-disaster-recovery-app
 ```  
 
 ### Configure Database
@@ -100,13 +102,13 @@ mysql_secure_installation
 * Create DB
 
 ```
-mysqladmin create ovirtdashboarddr -p
+mysqladmin create ovirtenginedr -p
 ```
 
 * Import Initial DB
 
 ```
-mysql -u root -p ovirtdashboarddr < /usr/share/doc/ovirt-dashboard-dr-${VERSION}-${RELEASE}/ovirt-dashboard-dr.sql
+mysql -u root -p ovirtenginedr < /usr/share/doc/ovirt-engine-disaster-recovery-${VERSION}-${RELEASE}/ovirt-engine-disaster-recovery.sql
 ```
 
 * Create DB User
@@ -115,7 +117,7 @@ mysql -u root -p ovirtdashboarddr < /usr/share/doc/ovirt-dashboard-dr-${VERSION}
 mysql -u root -p
 
 MariaDB [(none)]> CREATE USER 'ovirtdr'@'localhost' IDENTIFIED BY 'YOURPASSWOR-HERE';
-MariaDB [(none)]> GRANT ALL PRIVILEGES ON ovirtdashboarddr.* TO 'ovirtdr'@'localhost';
+MariaDB [(none)]> GRANT ALL PRIVILEGES ON ovirtenginedr.* TO 'ovirtdr'@'localhost';
 
 ```
 
@@ -123,13 +125,13 @@ MariaDB [(none)]> GRANT ALL PRIVILEGES ON ovirtdashboarddr.* TO 'ovirtdr'@'local
 
 * Configure Database Parameters
 
-Edit configuration file: __/etc/ovirt-dashboard-dr/ovirt-dashboard-dr.conf__
+Edit configuration file: __/etc/ovirt-engine-disaster-recovery/ovirt-engine-disaster-recovery.conf__
 
 ```
 # Change Values on Line 91 for MariaDB
 
 90 # To connect to a local MySQL5 database, use:
-91 db=mysql://ovirtdr:YOURPASSWOR-HERE@localhost:3306/ovirtdashboarddr
+91 db=mysql://ovirtdr:YOURPASSWOR-HERE@localhost:3306/ovirtenginedr
 
 # Change Value on Line 215 for PostgreSQL
 
@@ -148,28 +150,28 @@ Edit configuration file: __/etc/ovirt-dashboard-dr/ovirt-dashboard-dr.conf__
 * Start
 
 ```
-systemctl start ovirt-dashboard-dr
+systemctl start ovirt-engine-disaster-recovery
 
 ```
 
 * Status
 
 ```
-systemctl status ovirt-dashboard-dr
+systemctl status ovirt-engine-disaster-recovery
 
 ```
 
 * Stop
 
 ```
-systemctl stop ovirt-dashboard-dr
+systemctl stop ovirt-engine-disaster-recovery
 
 ```
 
 
 ## LOG FILE
 ```
-/var/log/ovirt-dasshboard-dr/application.log
+/var/log/ovirt-engine-disaster-recovery/application.log
 ```
 
 You should monitor this file, for JAVA Exceptions, or SQL Errors.
