@@ -1,12 +1,12 @@
 # README -  oVirt Engine Disaster Recovery #
 
-This is a web application, that uses Java + oVirt API + PostgreSQL, to perform the task needed to recover from a Disaster Recovery. 
+This is a web application that uses Java, oVirt API and PostgreSQL to perform the task needed to for oVirt's Disaster Recovery. 
 
 
 
 ## Assumptions ##
 
-* Every master Storage Domains for each Datacenter, has been replicated from site A to site B
+* Every master Storage domain for each Data Center has been replicated from site A to site B.
 * There is an exact copy of the RHEV-M/Engine available to run on site B, in case of DR.  
 * Please refer to next section. 
  
@@ -174,9 +174,9 @@ systemctl stop ovirt-engine-disaster-recovery
 /var/log/ovirt-engine-disaster-recovery/application.log
 ```
 
-You should monitor this file, for JAVA Exceptions, or SQL Errors.
+You should monitor this file, for Java exceptions or SQL errors.
 
-One common error is MariaDB wrong credentials.
+One common error is supplying wrong credentials to MariaDB.
 
 ## Next Step
 
