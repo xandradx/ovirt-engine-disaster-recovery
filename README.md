@@ -14,7 +14,7 @@ This is a web application, that uses Java + Ovirt API + PostgreSQL, to perform t
 ## How does this work ? ##
 
 * This project try to implement Approach #2, presented on this slides DevConf.cz - 2014 [Disaster Recovery Strategies Using oVirt's new Storage Connection Management Features](http://www.slideshare.net/AllonMureinik/dev-conf-ovirt-dr)
-* The objective was to use 100% the API, during the entire process, but we needed to interact directly with the database due to current pending feature to edit - Storage Connection, without setting the Storage Domains in maintenence mode. - Reference [Updating a Storage Connection](https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Virtualization/3.5/html/Technical_Guide/sect-Methods6.html)
+* The goal was to use 100% the API, during the entire process, but we needed to interact directly with the database due to current pending feature to edit - Storage Connection, without setting the Storage Domains in maintenence mode. - Reference [Updating a Storage Connection](https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Virtualization/3.5/html/Technical_Guide/sect-Methods6.html)
 
 ## Installation Guide ##
 
