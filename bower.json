@@ -1,5 +1,5 @@
 {
-  "name": "OvirtDashboard",
+  "name": "ovirt-engine-disaster-recovery",
   "version": "1.0",
   "authors": [
     "Jose Andrade <jandrad@chocomango.net>",
