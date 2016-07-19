@@ -2,9 +2,10 @@
   "name": "OvirtDashboard",
   "version": "1.0",
   "authors": [
-    "Jose Andrade <jandrad@chocomango.net>"
+    "Jose Andrade <jandrad@chocomango.net>",
+    "Jorge Andrade <jandrade@itm.gt>"
   ],
-  "license": "MIT",
+  "license": "ASL 2.0",
   "ignore": [
     "**/.*",
     "node_modules",
