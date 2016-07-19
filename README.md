@@ -22,7 +22,7 @@ This is a web application that uses Java, oVirt API and PostgreSQL to perform th
 
 * Centos/RHEL 7.x -> latest version __(minimal installation)__
 * Java Oracle 8, *needs testing with OpenJDK*
-* MariaDB/MySQL 5.x
+* MariaDB/MySQL 5.x (for storing application configuration and parameters) 
 * Play Framework 1.4, *we need some help freeing the app, from this framework, we needed to deliver the app fast for a customer, so we used this framework.* [Play Framework](https://www.playframework.com/download)
 
 ### Preparing OS 
