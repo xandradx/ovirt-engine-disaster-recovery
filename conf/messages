@@ -2,7 +2,7 @@
 # For example, for French create a messages.fr file
 #
 
-title = oVirt Dashboard
+title = oVirt Engine Disaster Recovery
 
 ################################################
 #Data tables messages
