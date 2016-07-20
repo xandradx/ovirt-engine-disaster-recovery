@@ -178,7 +178,7 @@ One common error is supplying wrong credentials to MariaDB.
 
 ## Next Step
 
-* [Administration Guide](https://bitbucket.org/chocomango/ovirt-dashboard/downloads/AdministrationGuideOvirtDashboardforDR-draft-v1.pdf)
+* [Administration Guide](https://docs.google.com/document/d/1THvgPaQk_GvbqbvtTXCaw816DgcBHmhBctGwoJBJ7xk/pub)
 * [Spanish Videos](https://www.youtube.com/watch?v=ef_ZmgixzJM&list=PLgtS4_6D5_KUQGnLpaTVZkHJScKcLUZoX&index=2)
 * [English Videos](coming soon)
 
