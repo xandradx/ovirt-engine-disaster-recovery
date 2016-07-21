@@ -104,9 +104,15 @@ mysqladmin create ovirtenginedr -p
 ```
 
 * Import Initial DB
+  * from RPM
 
 ```
 mysql -u root -p ovirtenginedr < /usr/share/doc/ovirt-engine-disaster-recovery-${VERSION}-${RELEASE}/ovirt-engine-disaster-recovery.sql
+```
+  * from SOURCE
+
+```
+mysql -u root -p ovirtenginedr < ~/ovirt-engine-disaster-recovery/docs/ovirt-engine-disaster-recovery.sql
 ```
 
 * Create DB User
