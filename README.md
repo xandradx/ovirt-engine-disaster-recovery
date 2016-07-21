@@ -248,11 +248,21 @@ sudo firewall-cmd --add-port=9000/tcp
 sudo firewall-cmd --add-port=9000/tcp --permanent
 ```
 
+* Install Database
+```
+sudo yum install mariadb -y
+```
+
 * [Configure Database]
 [Configure Database]: https://github.com/xandradx/ovirt-engine-disaster-recovery#configure-database
 
-* [Configure App]
-[Configure App]: https://github.com/xandradx/ovirt-engine-disaster-recovery#application-configuration
+* Create Symbolic Link
+```
+sudo mkdir /etc/ovirt-engine-disaster-recovery
+sudo ln -s ~/ovirt-engine-disaster-recovery/conf/application.conf /etc/ovirt-engine-disaster-recovery/ovirt-engine-disaster-recovery.conf
+```
+  * [Configure App]
+  [Configure App]: https://github.com/xandradx/ovirt-engine-disaster-recovery#application-configuration
 
 * Starting Service
 ```
