@@ -183,6 +183,9 @@ One common error is supplying wrong credentials to MariaDB.
   * unzip
   * bower
   * epel-release
+  * mariadb-server
+
+* Install Deps
 
 ```
 sudo yum install wget -y
@@ -190,6 +193,7 @@ sudo yum install git -y
 sudo yum install unzip -y
 sudo yum install epel-release -y
 sudo yum install npm -y
+sudo yum install mariadb-server -y
 ```
 * Install bower
 ```
@@ -246,11 +250,6 @@ cd ~
 ```
 sudo firewall-cmd --add-port=9000/tcp
 sudo firewall-cmd --add-port=9000/tcp --permanent
-```
-
-* Install Database
-```
-sudo yum install mariadb -y
 ```
 
 * [Configure Database]
