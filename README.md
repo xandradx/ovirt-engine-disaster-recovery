@@ -104,10 +104,14 @@ mysqladmin create ovirtenginedr -p
 ```
 
 * Import Initial DB
-
-```
-mysql -u root -p ovirtenginedr < /usr/share/doc/ovirt-engine-disaster-recovery-${VERSION}-${RELEASE}/ovirt-engine-disaster-recovery.sql
-```
+  * from RPM
+  ```
+  mysql -u root -p ovirtenginedr < /usr/share/doc/ovirt-engine-disaster-recovery-${VERSION}-${RELEASE}/ovirt-engine-disaster-recovery.sql
+  ```
+  * from SOURCE
+  ```
+  mysql -u root -p ovirtenginedr < ~/ovirt-engine-disaster-recovery/docs/ovirt-engine-disaster-recovery.sql
+  ```
 
 * Create DB User
 
@@ -175,6 +179,98 @@ systemctl stop ovirt-engine-disaster-recovery
 You should monitor this file, for Java exceptions or SQL errors.
 
 One common error is supplying wrong credentials to MariaDB.
+
+### Installing oVirt Engine Disaster Recovery from SOURCE
+* Build Deps
+  * wget
+  * git
+  * unzip
+  * bower
+  * epel-release
+  * mariadb-server
+
+* Install Deps
+
+```
+sudo yum install wget -y
+sudo yum install git -y
+sudo yum install unzip -y
+sudo yum install epel-release -y
+sudo yum install npm -y
+sudo yum install mariadb-server -y
+```
+* Install bower
+```
+npm install bower
+```
+
+* Install Java 8
+```
+wget --no-cookies \
+--no-check-certificate \
+--header "Cookie: oraclelicense=accept-securebackup-cookie" \
+"http://download.oracle.com/otn-pub/java/jdk/8u101-b13/jdk-8u101-linux-x64.rpm" \
+-O jdk-8u101-linux-x64.rpm
+
+sudo rpm -Uvh jdk-8u101-linux-x64.rpm
+```
+
+* Download Play Framework
+```
+wget https://downloads.typesafe.com/play/1.4.2/play-1.4.2.zip
+```
+
+* Unzip Play Framework
+```
+unzip play-1.4.2.zip
+```
+
+* Clone REPO
+```
+git clone https://github.com/xandradx/ovirt-engine-disaster-recovery.git
+```
+
+* Log configuration
+```
+sed -i 's/^log4j.appender.Rolling.File=.*/log4j.appender.Rolling.File=\/var\/log\/ovirt-engine-disaster-recovery\/application.log/g' ~/ovirt-engine-disaster-recovery/conf/log4j.properties
+sudo mkdir /var/log/ovirt-engine-disaster-recovery/
+sudo chown $USER:$USER /var/log/ovirt-engine-disaster-recovery/
+```
+
+* Install patternfly
+
+```
+cd ~/ovirt-engine-disaster-recovery/
+~/node_modules/bower/bin/bower install
+```
+
+* Install dependencies Java ( Play Framework )
+```
+cd ~
+~/play-1.4.2/play deps ovirt-engine-disaster-recovery
+```
+
+* Add firewall rule
+```
+sudo firewall-cmd --add-port=9000/tcp
+sudo firewall-cmd --add-port=9000/tcp --permanent
+```
+
+* [Configure Database]
+[Configure Database]: https://github.com/xandradx/ovirt-engine-disaster-recovery#configure-database
+
+* Create Symbolic Link for configuration
+```
+sudo mkdir /etc/ovirt-engine-disaster-recovery
+sudo ln -s ~/ovirt-engine-disaster-recovery/conf/application.conf /etc/ovirt-engine-disaster-recovery/ovirt-engine-disaster-recovery.conf
+```
+  * [Configure App]
+  [Configure App]: https://github.com/xandradx/ovirt-engine-disaster-recovery#application-configuration
+
+* Starting Service
+```
+~/play-1.4.2/play start ovirt-engine-disaster-recovery
+```
 
 ## Next Step
 
