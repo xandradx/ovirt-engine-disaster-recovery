@@ -15,9 +15,10 @@
 
 /precompiled/
 
-/oVirt Dashboard.iws
-/oVirt Dashboard.ipr
-/oVirt Dashboard.iml
+/.idea
+/*.iws
+/*.ipr
+/*.iml
 
 
 /lib/
