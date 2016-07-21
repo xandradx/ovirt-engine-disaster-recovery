@@ -178,11 +178,11 @@ One common error is supplying wrong credentials to MariaDB.
 
 ### Installing oVirt Engine Disaster Recovery from SOURCE
 * Build Deps
-⋅⋅* wget
-⋅⋅* git
-⋅⋅* unzip
-⋅⋅* bower
-⋅⋅* epel-release
+  * wget
+  * git
+  * unzip
+  * bower
+  * epel-release
 
 ```
 sudo yum install wget -y
