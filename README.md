@@ -177,12 +177,12 @@ You should monitor this file, for Java exceptions or SQL errors.
 One common error is supplying wrong credentials to MariaDB.
 
 ### Installing oVirt Engine Disaster Recovery from SOURCE
-#### Build Deps
-* wget
-* git
-* unzip
-* bower
-* epel-release
+* Build Deps
+..* wget
+..* git
+..* unzip
+..* bower
+..* epel-release
 
 ```
 sudo yum install wget -y
@@ -191,12 +191,12 @@ sudo yum install unzip -y
 sudo yum install epel-release -y
 sudo yum install npm -y
 ```
-#### Install bower
+* Install bower
 ```
 npm install bower
 ```
 
-#### Install Java 8
+* Install Java 8
 ```
 wget --no-cookies \
 --no-check-certificate \
@@ -207,54 +207,54 @@ wget --no-cookies \
 sudo rpm -Uvh jdk-8u101-linux-x64.rpm
 ```
 
-#### Download Play Framework
+* Download Play Framework
 ```
 wget https://downloads.typesafe.com/play/1.4.2/play-1.4.2.zip
 ```
 
-#### Unzip Play Framework
+* Unzip Play Framework
 ```
 unzip play-1.4.2.zip
 ```
 
-#### Clone REPO
+* Clone REPO
 ```
 git clone https://github.com/xandradx/ovirt-engine-disaster-recovery.git
 ```
 
-#### Log configuration
+* Log configuration
 ```
 sed -i 's/^log4j.appender.Rolling.File=.*/log4j.appender.Rolling.File=\/var\/log\/ovirt-engine-disaster-recovery\/application.log/g' ~/ovirt-engine-disaster-recovery/conf/log4j.properties
 sudo mkdir /var/log/ovirt-engine-disaster-recovery/
 sudo chown $USER:$USER /var/log/ovirt-engine-disaster-recovery/
 ```
 
-#### Install patternfly
+* Install patternfly
 
 ```
 cd ~/ovirt-engine-disaster-recovery/
 ~/node_modules/bower/bin/bower install
 ```
 
-#### Install dependencies Java ( Play Framework )
+* Install dependencies Java ( Play Framework )
 ```
 cd ~
 ~/play-1.4.2/play deps ovirt-engine-disaster-recovery
 ```
 
-#### Add firewall rule
+* Add firewall rule
 ```
 sudo firewall-cmd --add-port=9000/tcp
 sudo firewall-cmd --add-port=9000/tcp --permanent
 ```
 
-#### [Configure Database]
+* [Configure Database]
 [Configure Database]: https://github.com/xandradx/ovirt-engine-disaster-recovery#configure-database
 
-#### [Configure App]
+* [Configure App]
 [Configure App]: https://github.com/xandradx/ovirt-engine-disaster-recovery#application-configuration
 
-#### Starting Service
+* Starting Service
 ```
 ~/play-1.4.2/play start ovirt-engine-disaster-recovery
 ```
