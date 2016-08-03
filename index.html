@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Ovirt-engine-disaster-recovery : ">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Ovirt-engine-disaster-recovery</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/xandradx/ovirt-engine-disaster-recovery">View on GitHub</a>
+
+          <h1 id="project_title">Ovirt-engine-disaster-recovery</h1>
+          <h2 id="project_tagline"></h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/xandradx/ovirt-engine-disaster-recovery/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/xandradx/ovirt-engine-disaster-recovery/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a id="readme----ovirt-engine-disaster-recovery" class="anchor" href="#readme----ovirt-engine-disaster-recovery" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>README -  oVirt Engine Disaster Recovery</h1>
+
+<p>This is a web application that uses Java, oVirt API and PostgreSQL to perform the task needed to for oVirt's Disaster Recovery. </p>
+
+<h2>
+<a id="assumptions" class="anchor" href="#assumptions" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Assumptions</h2>
+
+<ul>
+<li>Every master Storage domain for each Data Center has been replicated from site A to site B.</li>
+<li>There is an exact copy of the RHEV-M/Engine available to run on site B, in case of DR.<br>
+</li>
+<li>Please refer to next section. </li>
+</ul>
+
+<h2>
+<a id="how-does-this-work-" class="anchor" href="#how-does-this-work-" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>How does this work ?</h2>
+
+<ul>
+<li>This project try to implement Approach #2, presented on this slides DevConf.cz - 2014 <a href="http://www.slideshare.net/AllonMureinik/dev-conf-ovirt-dr">Disaster Recovery Strategies Using oVirt's new Storage Connection Management Features</a>
+</li>
+<li>The goal was to use 100% the API, during the entire process, but we needed to interact directly with the database due to current pending feature to edit - Storage Connection, without setting the Storage Domains in maintenence mode. - Reference <a href="https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Virtualization/3.5/html/Technical_Guide/sect-Methods6.html">Updating a Storage Connection</a>
+</li>
+</ul>
+
+<h2>
+<a id="installation-guide" class="anchor" href="#installation-guide" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation Guide</h2>
+
+<h3>
+<a id="requirements" class="anchor" href="#requirements" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Requirements</h3>
+
+<ul>
+<li>Centos/RHEL 7.x -&gt; latest version <strong>(minimal installation)</strong>
+</li>
+<li>Java Oracle 8, <em>needs testing with OpenJDK</em>
+</li>
+<li>MariaDB/MySQL 5.x (for storing application configuration and parameters) </li>
+<li>Play Framework 1.4, <em>we need some help freeing the app, from this framework, we needed to deliver the app fast for a customer, so we used this framework.</em> <a href="https://www.playframework.com/download">Play Framework</a>
+</li>
+</ul>
+
+<h3>
+<a id="preparing-os" class="anchor" href="#preparing-os" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Preparing OS</h3>
+
+<ul>
+<li>Always update your OS packages, then install required. </li>
+</ul>
+
+<pre><code>yum update -y 
+</code></pre>
+
+<ul>
+<li>Installing Java Oracle 1.8 </li>
+</ul>
+
+<p>For RHEL 7.x</p>
+
+<pre><code>subscription-manager repos --enable rhel-7-server-thirdparty-oracle-java-rpms ; \
+yum install java-1.8.0-oracle -y
+</code></pre>
+
+<p>For Centos 7.x</p>
+
+<p>Download from: <a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">Java 1.8 Oracle</a> </p>
+
+<pre><code>yum localinstall jre-8u91-linux-x64.rpm -y
+</code></pre>
+
+<p>Verify Java version</p>
+
+<pre><code>[root@localhost ~]# java -version
+java version "1.8.0_XX"
+Java(TM) SE Runtime Environment (build 1.8.0_XX)
+Java HotSpot(TM) 64-Bit Server VM (build XX, mixed mode)
+</code></pre>
+
+<p>Open port TCP 9000</p>
+
+<pre><code>firewall-cmd --add-port=9000/tcp --permanent
+systemctl restart firewalld
+
+</code></pre>
+
+<h3>
+<a id="installing-ovirt-engine-disaster-recovery-from-rpm" class="anchor" href="#installing-ovirt-engine-disaster-recovery-from-rpm" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installing oVirt Engine Disaster Recovery from RPM</h3>
+
+<ul>
+<li>Download YUM REPO</li>
+</ul>
+
+<pre><code>cd /etc/yum.repos.d/
+curl -O http://supp01.i-t-m.com/.repo
+
+</code></pre>
+
+<p>This is a temporal repository and can/will be changed in the future !</p>
+
+<ul>
+<li>Install RPMs</li>
+</ul>
+
+<pre><code>yum install -y ovirt-engine-disaster-recovery-app
+</code></pre>
+
+<h3>
+<a id="configure-database" class="anchor" href="#configure-database" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Configure Database</h3>
+
+<ul>
+<li>Start/Enable MariaDB</li>
+</ul>
+
+<pre><code>systemctl enable mariadb
+systemctl start mariadb
+</code></pre>
+
+<ul>
+<li>MariaDB Secure Installation</li>
+</ul>
+
+<pre><code>mysql_secure_installation
+</code></pre>
+
+<ul>
+<li>Create DB</li>
+</ul>
+
+<pre><code>mysqladmin create ovirtenginedr -p
+</code></pre>
+
+<ul>
+<li>
+<p>Import Initial DB</p>
+
+<ul>
+<li>from RPM</li>
+</ul>
+
+<pre><code>mysql -u root -p ovirtenginedr &lt; /usr/share/doc/ovirt-engine-disaster-recovery-${VERSION}-${RELEASE}/ovirt-engine-disaster-recovery.sql
+</code></pre>
+
+<ul>
+<li>from SOURCE</li>
+</ul>
+
+<pre><code>mysql -u root -p ovirtenginedr &lt; ~/ovirt-engine-disaster-recovery/docs/ovirt-engine-disaster-recovery.sql
+</code></pre>
+</li>
+<li><p>Create DB User</p></li>
+</ul>
+
+<pre><code>mysql -u root -p
+
+MariaDB [(none)]&gt; CREATE USER 'ovirtdr'@'localhost' IDENTIFIED BY 'YOURPASSWOR-HERE';
+MariaDB [(none)]&gt; GRANT ALL PRIVILEGES ON ovirtenginedr.* TO 'ovirtdr'@'localhost';
+
+</code></pre>
+
+<h2>
+<a id="application-configuration" class="anchor" href="#application-configuration" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Application Configuration</h2>
+
+<ul>
+<li>Configure Database Parameters</li>
+</ul>
+
+<p>Edit configuration file: <strong>/etc/ovirt-engine-disaster-recovery/ovirt-engine-disaster-recovery.conf</strong></p>
+
+<pre><code># Change Values on Line 91 for MariaDB
+
+90 # To connect to a local MySQL5 database, use:
+91 db=mysql://ovirtdr:YOURPASSWOR-HERE@localhost:3306/ovirtenginedr
+
+# Change Value on Line 215 for PostgreSQL
+
+215 ovirt.db.host = YOUR-RHEV-M-HOSTNAME-HERE # Example: rhevm.internal.itm.gt
+216 ovirt.db.port = 5432
+217 ovirt.db.user = engine
+218 ovirt.db.password = YOUR-PGSQL-ENGINE-PASSWORD-HERE
+219 ovirt.db.name = engine
+
+</code></pre>
+
+<h1>
+<a id="service-administration" class="anchor" href="#service-administration" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Service Administration</h1>
+
+<h2>
+<a id="systemctl-administration" class="anchor" href="#systemctl-administration" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Systemctl Administration</h2>
+
+<ul>
+<li>Start</li>
+</ul>
+
+<pre><code>systemctl start ovirt-engine-disaster-recovery
+
+</code></pre>
+
+<ul>
+<li>Status</li>
+</ul>
+
+<pre><code>systemctl status ovirt-engine-disaster-recovery
+
+</code></pre>
+
+<ul>
+<li>Stop</li>
+</ul>
+
+<pre><code>systemctl stop ovirt-engine-disaster-recovery
+
+</code></pre>
+
+<h2>
+<a id="log-file" class="anchor" href="#log-file" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>LOG FILE</h2>
+
+<pre><code>/var/log/ovirt-engine-disaster-recovery/application.log
+</code></pre>
+
+<p>You should monitor this file, for Java exceptions or SQL errors.</p>
+
+<p>One common error is supplying wrong credentials to MariaDB.</p>
+
+<h3>
+<a id="installing-ovirt-engine-disaster-recovery-from-source" class="anchor" href="#installing-ovirt-engine-disaster-recovery-from-source" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installing oVirt Engine Disaster Recovery from SOURCE</h3>
+
+<ul>
+<li>
+<p>Build Deps</p>
+
+<ul>
+<li>wget</li>
+<li>git</li>
+<li>unzip</li>
+<li>bower</li>
+<li>epel-release</li>
+<li>mariadb-server</li>
+</ul>
+</li>
+<li><p>Install Deps</p></li>
+</ul>
+
+<pre><code>sudo yum install wget -y
+sudo yum install git -y
+sudo yum install unzip -y
+sudo yum install epel-release -y
+sudo yum install npm -y
+sudo yum install mariadb-server -y
+</code></pre>
+
+<ul>
+<li>Install bower</li>
+</ul>
+
+<pre><code>npm install bower
+</code></pre>
+
+<ul>
+<li>Install Java 8</li>
+</ul>
+
+<pre><code>wget --no-cookies \
+--no-check-certificate \
+--header "Cookie: oraclelicense=accept-securebackup-cookie" \
+"http://download.oracle.com/otn-pub/java/jdk/8u101-b13/jdk-8u101-linux-x64.rpm" \
+-O jdk-8u101-linux-x64.rpm
+
+sudo rpm -Uvh jdk-8u101-linux-x64.rpm
+</code></pre>
+
+<ul>
+<li>Download Play Framework</li>
+</ul>
+
+<pre><code>wget https://downloads.typesafe.com/play/1.4.2/play-1.4.2.zip
+</code></pre>
+
+<ul>
+<li>Unzip Play Framework</li>
+</ul>
+
+<pre><code>unzip play-1.4.2.zip
+</code></pre>
+
+<ul>
+<li>Clone REPO</li>
+</ul>
+
+<pre><code>git clone https://github.com/xandradx/ovirt-engine-disaster-recovery.git
+</code></pre>
+
+<ul>
+<li>Log configuration</li>
+</ul>
+
+<pre><code>sed -i 's/^log4j.appender.Rolling.File=.*/log4j.appender.Rolling.File=\/var\/log\/ovirt-engine-disaster-recovery\/application.log/g' ~/ovirt-engine-disaster-recovery/conf/log4j.properties
+sudo mkdir /var/log/ovirt-engine-disaster-recovery/
+sudo chown $USER:$USER /var/log/ovirt-engine-disaster-recovery/
+</code></pre>
+
+<ul>
+<li>Install patternfly</li>
+</ul>
+
+<pre><code>cd ~/ovirt-engine-disaster-recovery/
+~/node_modules/bower/bin/bower install
+</code></pre>
+
+<ul>
+<li>Install dependencies Java ( Play Framework )</li>
+</ul>
+
+<pre><code>cd ~
+~/play-1.4.2/play deps ovirt-engine-disaster-recovery
+</code></pre>
+
+<ul>
+<li>Add firewall rule</li>
+</ul>
+
+<pre><code>sudo firewall-cmd --add-port=9000/tcp
+sudo firewall-cmd --add-port=9000/tcp --permanent
+</code></pre>
+
+<ul>
+<li><p><a href="https://github.com/xandradx/ovirt-engine-disaster-recovery#configure-database">Configure Database</a></p></li>
+<li><p>Create Symbolic Link for configuration</p></li>
+</ul>
+
+<pre><code>sudo mkdir /etc/ovirt-engine-disaster-recovery
+sudo ln -s ~/ovirt-engine-disaster-recovery/conf/application.conf /etc/ovirt-engine-disaster-recovery/ovirt-engine-disaster-recovery.conf
+</code></pre>
+
+<ul>
+<li><a href="https://github.com/xandradx/ovirt-engine-disaster-recovery#application-configuration">Configure App</a></li>
+</ul>
+
+<ul>
+<li>Starting Service</li>
+</ul>
+
+<pre><code>~/play-1.4.2/play start ovirt-engine-disaster-recovery
+</code></pre>
+
+<h2>
+<a id="next-step" class="anchor" href="#next-step" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Next Step</h2>
+
+<ul>
+<li><a href="https://docs.google.com/document/d/1THvgPaQk_GvbqbvtTXCaw816DgcBHmhBctGwoJBJ7xk/pub">Administration Guide</a></li>
+<li><a href="https://www.youtube.com/watch?v=ef_ZmgixzJM&amp;list=PLgtS4_6D5_KUQGnLpaTVZkHJScKcLUZoX&amp;index=2">Spanish Videos</a></li>
+<li><a href="coming%20soon">English Videos</a></li>
+</ul>
+
+<h2>
+<a id="who-do-i-talk-to" class="anchor" href="#who-do-i-talk-to" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Who do I talk to?</h2>
+
+<ul>
+<li>
+<a href="http://chocomango.net">Chocomango</a> - José Eduardo Andrade Escobar <a href="mailto:jandrad@chocomando.net">jandrad@chocomando.net</a> </li>
+<li>
+<a href="http://itm.gt">ITM</a> - Jorge Luis Andrade Escobar <a href="mailto:jandrade@itm.gt">jandrade@itm.gt</a> (yes, we are brothers)</li>
+</ul>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Ovirt-engine-disaster-recovery maintained by <a href="https://github.com/xandradx">xandradx</a></p>
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
