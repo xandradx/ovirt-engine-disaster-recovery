@@ -31,6 +31,7 @@ import play.i18n.Messages;
 import java.io.IOException;
 import java.sql.*;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
@@ -161,13 +162,13 @@ public class DisasterRecoveryActions {
             connection = DriverManager.getConnection(databaseURL, manager.getDbUser(), manager.getDbPassword());
 
             listener.onMessage(null, Messages.get("drp.db.currentconnections"), OperationListener.MessageType.INFO);
-            listConnections(connection, listener);
+            listConnections(api, listener);
 
             updateConnections(api, connections, revert);
             updateIQN(api, iqns, revert);
 
             listener.onMessage(null, Messages.get("drp.db.modifiedconnections"), OperationListener.MessageType.SUCCESS);
-            listConnections(connection, listener);
+            listConnections(api, listener);
 
         } catch (SQLException se) {
             Logger.error(se, "Error updating connections");
@@ -185,25 +186,17 @@ public class DisasterRecoveryActions {
         }
     }
 
-    private static void listConnections(Connection dbConnection, OperationListener listener) throws SQLException{
-
-        String query = "SELECT connection, iqn FROM storage_server_connections WHERE iqn IS NOT NULL;";
-        Statement statement = null;
-
+    private static void listConnections(Api api, OperationListener listener) throws ConnectionUpdateException {
         try {
-            statement = dbConnection.createStatement();
-
-            ResultSet resultSet = statement.executeQuery(query);
-            while (resultSet.next()) {
-                listener.onMessage(null, Messages.get("drp.db.connection", resultSet.getString(2), resultSet.getString(1)), OperationListener.MessageType.INFO);
-            }
-
-        } catch (SQLException e) {
-            throw e;
-        } finally {
-            if (statement != null) {
-                statement.close();
-            }
+            api.getStorageConnections().list().forEach(storageConnection ->
+                    listener.onMessage(null,
+                            Messages.get("drp.db.connection",
+                            storageConnection.getTarget(),
+                            storageConnection.getAddress()),
+                            OperationListener.MessageType.INFO));
+        } catch (Exception e) {
+            Logger.error(e, "Error listing storage connections");
+            throw new ConnectionUpdateException(Messages.get("drp.couldnotlistconnections"));
         }
     }
 

@@ -286,6 +286,7 @@ drp.testingdb.success = Connection to DB successful
 drp.connectingapi = Connecting to API...
 drp.connectingapisuccess = Connection to API successful
 drp.finished = Process finished with status: %s
+drp.couldnotlistconnections = Couldn't list connections
 drp.db.connection = iqn: %s -- connection: %s
 drp.db.noconnections = No storage connections configured
 drp.db.currentconnections = Current connections
