@@ -126,29 +126,6 @@ public class DisasterRecoveryActions {
         }
     }
 
-    public static void testConnection(DatabaseManager manager) throws DBConfigurationException {
-        Connection connection = null;
-
-        try {
-            Class.forName("org.postgresql.Driver");
-            String databaseURL = "jdbc:postgresql://" + manager.getDbHost() + ":" + manager.getDbPort() + "/" + manager.getDbName() + "";
-            connection = DriverManager.getConnection(databaseURL, manager.getDbUser(), manager.getDbPassword());
-        } catch (SQLException se) {
-            Logger.error(se, "Error updating connections");
-            throw new DBConfigurationException(Messages.get("drp.db.couldnotconnect"));
-        } catch (ClassNotFoundException ce) {
-            throw new DBConfigurationException(Messages.get("drp.db.nodriver"));
-        } finally {
-            if (connection!=null) {
-                try {
-                    connection.close();
-                } catch (SQLException e) {
-                    Logger.error(e, Messages.get("drp.db.couldnotdisconnect"));
-                }
-            }
-        }
-    }
-
     public static void updateConnections(Api api, List<DatabaseConnection> connections, List<DatabaseIQN> iqns, boolean revert, OperationListener listener) throws ConnectionUpdateException {
         if (connections.isEmpty() && iqns.isEmpty()) {
             throw new ConnectionUpdateException(Messages.get("drp.db.noconnections"));

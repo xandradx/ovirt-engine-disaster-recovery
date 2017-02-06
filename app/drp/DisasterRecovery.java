@@ -74,12 +74,6 @@ public class DisasterRecovery {
         DisasterRecoveryOperation.OperationStatus status = DisasterRecoveryOperation.OperationStatus.PROGRESS;
         try {
             reportInfo(Messages.get("drp.starting", Messages.get(type)));
-
-            //Test database connection
-            reportInfo(Messages.get("drp.testingdb"));
-            testDatabaseConnection();
-            reportSuccess(Messages.get("drp.testingdb.success"));
-
             reportInfo(Messages.get("drp.connectingapi"));
             api = OvirtApi.getApi();
             reportSuccess(Messages.get("drp.connectingapisuccess"));
@@ -309,36 +303,6 @@ public class DisasterRecovery {
         }
 
         return definition;
-    }
-
-    private DatabaseManager getManager() {
-        String dbHost = Play.configuration.getProperty("ovirt.db.host");
-        String dbPort = Play.configuration.getProperty("ovirt.db.port");
-        String dbName = Play.configuration.getProperty("ovirt.db.name");
-        String dbUser = Play.configuration.getProperty("ovirt.db.user");
-        String dbPassword = Play.configuration.getProperty("ovirt.db.password");
-        if (dbHost!=null && dbPort != null && dbName != null && dbUser != null && dbPassword != null) {
-            return new DatabaseManager(dbHost, dbPort, dbName, dbUser, dbPassword);
-        }
-
-        return null;
-    }
-
-    private void testDatabaseConnection() throws DBConfigurationException, InvalidConfigurationException {
-
-        List<DatabaseConnection> connections = DatabaseConnection.find("active = :a").bind("a",true).fetch();
-        List<DatabaseIQN> iqns = DatabaseIQN.find("active = :a").bind("a", true).fetch();
-
-        if (connections.isEmpty() || iqns.isEmpty()) {
-            throw new InvalidConfigurationException(Messages.get("drp.noconnections"));
-        }
-
-        DatabaseManager manager = getManager();
-        if (manager == null) {
-            throw new DBConfigurationException(Messages.get("drp.nodbcredentials"));
-        } else {
-            DisasterRecoveryActions.testConnection(manager);
-        }
     }
 
     private void updateConnections(RemoteHost.RecoveryType type) throws ConnectionUpdateException {
