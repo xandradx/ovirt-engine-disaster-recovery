@@ -142,7 +142,7 @@ public class DisasterRecovery {
             }
 
             reportInfo(Messages.get("drp.updatingdbconnections"));
-            updateDatabase(type);
+            updateConnections(type);
 
             //Activating remote hosts
             for (Host remoteHost : definition.getRemoteHosts()) {
@@ -341,18 +341,12 @@ public class DisasterRecovery {
         }
     }
 
-    private void updateDatabase(RemoteHost.RecoveryType type) throws ConnectionUpdateException, DBConfigurationException{
+    private void updateConnections(RemoteHost.RecoveryType type) throws ConnectionUpdateException {
 
         List<DatabaseConnection> connections = DatabaseConnection.find("active = :a").bind("a", true).fetch();
         List<DatabaseIQN> iqns = DatabaseIQN.find("active = :a").bind("a", true).fetch();
 
-        DatabaseManager manager = getManager();
-
-        if (manager == null) {
-            throw new DBConfigurationException(Messages.get("drp.nodbcredentials"));
-        } else {
-            DisasterRecoveryActions.updateConnections(api, manager, connections, iqns, type==RemoteHost.RecoveryType.FAILBACK, listener);
-        }
+        DisasterRecoveryActions.updateConnections(api, connections, iqns, type==RemoteHost.RecoveryType.FAILBACK, listener);
     }
 
     private void reportInfo(String message) {

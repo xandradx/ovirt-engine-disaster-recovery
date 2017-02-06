@@ -149,41 +149,19 @@ public class DisasterRecoveryActions {
         }
     }
 
-    public static void updateConnections(Api api, DatabaseManager manager, List<DatabaseConnection> connections, List<DatabaseIQN> iqns, boolean revert, OperationListener listener) throws ConnectionUpdateException, DBConfigurationException {
+    public static void updateConnections(Api api, List<DatabaseConnection> connections, List<DatabaseIQN> iqns, boolean revert, OperationListener listener) throws ConnectionUpdateException {
         if (connections.isEmpty() && iqns.isEmpty()) {
             throw new ConnectionUpdateException(Messages.get("drp.db.noconnections"));
         }
 
-        Connection connection = null;
+        listener.onMessage(null, Messages.get("drp.db.currentconnections"), OperationListener.MessageType.INFO);
+        listConnections(api, listener);
 
-        try {
-            Class.forName("org.postgresql.Driver");
-            String databaseURL = "jdbc:postgresql://" + manager.getDbHost() + ":" + manager.getDbPort() + "/" + manager.getDbName() + "";
-            connection = DriverManager.getConnection(databaseURL, manager.getDbUser(), manager.getDbPassword());
+        updateConnections(api, connections, revert);
+        updateIQN(api, iqns, revert);
 
-            listener.onMessage(null, Messages.get("drp.db.currentconnections"), OperationListener.MessageType.INFO);
-            listConnections(api, listener);
-
-            updateConnections(api, connections, revert);
-            updateIQN(api, iqns, revert);
-
-            listener.onMessage(null, Messages.get("drp.db.modifiedconnections"), OperationListener.MessageType.SUCCESS);
-            listConnections(api, listener);
-
-        } catch (SQLException se) {
-            Logger.error(se, "Error updating connections");
-            throw new DBConfigurationException(Messages.get("drp.db.couldnotconnect"));
-        } catch (ClassNotFoundException ce) {
-            throw new DBConfigurationException(Messages.get("drp.db.nodriver"));
-        } finally {
-            if (connection!=null) {
-                try {
-                    connection.close();
-                } catch (SQLException e) {
-                    listener.onMessage(e, Messages.get("drp.db.couldnotdisconnect"), OperationListener.MessageType.ERROR);
-                }
-            }
-        }
+        listener.onMessage(null, Messages.get("drp.db.modifiedconnections"), OperationListener.MessageType.SUCCESS);
+        listConnections(api, listener);
     }
 
     private static void listConnections(Api api, OperationListener listener) throws ConnectionUpdateException {
@@ -194,7 +172,7 @@ public class DisasterRecoveryActions {
                             storageConnection.getTarget(),
                             storageConnection.getAddress()),
                             OperationListener.MessageType.INFO));
-        } catch (Exception e) {
+        } catch (ServerException |  IOException e) {
             Logger.error(e, "Error listing storage connections");
             throw new ConnectionUpdateException(Messages.get("drp.couldnotlistconnections"));
         }
