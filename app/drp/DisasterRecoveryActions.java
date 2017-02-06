@@ -164,7 +164,7 @@ public class DisasterRecoveryActions {
             listConnections(connection, listener);
 
             updateConnections(api, connections, revert);
-            updateIQN(connection, iqns, revert, listener);
+            updateIQN(api, iqns, revert);
 
             listener.onMessage(null, Messages.get("drp.db.modifiedconnections"), OperationListener.MessageType.SUCCESS);
             listConnections(connection, listener);
@@ -210,8 +210,8 @@ public class DisasterRecoveryActions {
     private static void updateConnections(Api api, List<DatabaseConnection> connections, boolean revert) throws ConnectionUpdateException {
         for (DatabaseConnection connection : connections) {
             try {
-                String oldConnection = revert ? connection.originConnection : connection.destinationConnection;
-                String newConnection = revert ? connection.destinationConnection : connection.originConnection;
+                String oldConnection = revert ? connection.destinationConnection : connection.originConnection;
+                String newConnection = revert ? connection.originConnection : connection.destinationConnection;
 
                 // Finding connections to update
                 List<org.ovirt.engine.sdk.decorators.StorageConnection> connectionsToUpdate =
@@ -234,40 +234,29 @@ public class DisasterRecoveryActions {
         }
     }
 
-    private static void updateIQN(Connection dbConnection, List<DatabaseIQN> iqns, boolean revert, OperationListener listener) throws SQLException {
-
+    private static void updateIQN(Api api, List<DatabaseIQN> iqns, boolean revert) throws ConnectionUpdateException {
         for (DatabaseIQN iqn : iqns) {
-
-            PreparedStatement updateIQN = null;
-            String query = "UPDATE storage_server_connections SET iqn = ? WHERE iqn = ? AND iqn IS NOT NULL;";
-
             try {
-                dbConnection.setAutoCommit(false);
-                updateIQN = dbConnection.prepareStatement(query);
+                String oldIQN = revert ? iqn.destinationIQN : iqn.originIQN;
+                String newIQN = revert ? iqn.originIQN : iqn.destinationIQN;
 
-                if (revert) {
-                    updateIQN.setString(2, iqn.destinationIQN);
-                    updateIQN.setString(1, iqn.originIQN);
-                } else {
-                    updateIQN.setString(1, iqn.destinationIQN);
-                    updateIQN.setString(2, iqn.originIQN);
-                }
-                updateIQN.executeUpdate();
-                dbConnection.commit();
-            } catch (SQLException e) {
-                if (dbConnection!=null) {
+                // Finding connections to update
+                List<org.ovirt.engine.sdk.decorators.StorageConnection> connectionsToUpdate =
+                        api.getStorageConnections().list().stream().filter(
+                                storageConnection -> oldIQN.equals(storageConnection.getTarget()))
+                                .collect(Collectors.toList());
+
+                // Update connections
+                connectionsToUpdate.forEach(storageConnection -> {
                     try {
-                        dbConnection.rollback();
-                    } catch (SQLException re) {
-                        listener.onMessage(re, Messages.get("drp.error.rollback"), OperationListener.MessageType.ERROR);
+                        storageConnection.setTarget(newIQN);
+                        storageConnection.update(null, null, null, true);
+                    } catch (Exception e) {
+                        throw new RuntimeException();
                     }
-                }
-            } finally {
-                if (updateIQN!=null) {
-                    updateIQN.close();
-                }
-
-                dbConnection.setAutoCommit(true);
+                });
+            } catch (Exception e) {
+                throw new ConnectionUpdateException(Messages.get("drp.updatingdbconnections.error"));
             }
         }
     }
