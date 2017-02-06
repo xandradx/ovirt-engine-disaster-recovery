@@ -351,7 +351,7 @@ public class DisasterRecovery {
         if (manager == null) {
             throw new DBConfigurationException(Messages.get("drp.nodbcredentials"));
         } else {
-            DisasterRecoveryActions.updateConnections(manager, connections, iqns, type==RemoteHost.RecoveryType.FAILBACK, listener);
+            DisasterRecoveryActions.updateConnections(api, manager, connections, iqns, type==RemoteHost.RecoveryType.FAILBACK, listener);
         }
     }
 

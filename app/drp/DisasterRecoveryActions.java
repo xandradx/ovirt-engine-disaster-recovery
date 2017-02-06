@@ -19,9 +19,11 @@ import drp.objects.DatabaseManager;
 import drp.objects.OperationListener;
 import models.DatabaseConnection;
 import models.DatabaseIQN;
+import org.ovirt.engine.sdk.Api;
 import org.ovirt.engine.sdk.decorators.Host;
 import org.ovirt.engine.sdk.entities.Action;
 import org.ovirt.engine.sdk.entities.PowerManagement;
+import org.ovirt.engine.sdk.entities.StorageConnection;
 import org.ovirt.engine.sdk.exceptions.ServerException;
 import play.Logger;
 import play.i18n.Messages;
@@ -29,6 +31,7 @@ import play.i18n.Messages;
 import java.io.IOException;
 import java.sql.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by jandrad on 23/01/16.
@@ -145,8 +148,7 @@ public class DisasterRecoveryActions {
         }
     }
 
-    public static void updateConnections(DatabaseManager manager, List<DatabaseConnection> connections, List<DatabaseIQN> iqns, boolean revert, OperationListener listener) throws ConnectionUpdateException, DBConfigurationException {
-
+    public static void updateConnections(Api api, DatabaseManager manager, List<DatabaseConnection> connections, List<DatabaseIQN> iqns, boolean revert, OperationListener listener) throws ConnectionUpdateException, DBConfigurationException {
         if (connections.isEmpty() && iqns.isEmpty()) {
             throw new ConnectionUpdateException(Messages.get("drp.db.noconnections"));
         }
@@ -161,7 +163,7 @@ public class DisasterRecoveryActions {
             listener.onMessage(null, Messages.get("drp.db.currentconnections"), OperationListener.MessageType.INFO);
             listConnections(connection, listener);
 
-            updateConnections(connection, connections, revert, listener);
+            updateConnections(api, connections, revert);
             updateIQN(connection, iqns, revert, listener);
 
             listener.onMessage(null, Messages.get("drp.db.modifiedconnections"), OperationListener.MessageType.SUCCESS);
@@ -205,41 +207,29 @@ public class DisasterRecoveryActions {
         }
     }
 
-    private static void updateConnections(Connection dbConnection, List<DatabaseConnection> connections, boolean revert, OperationListener listener) throws SQLException {
-
+    private static void updateConnections(Api api, List<DatabaseConnection> connections, boolean revert) throws ConnectionUpdateException {
         for (DatabaseConnection connection : connections) {
-
-            PreparedStatement updateConnection = null;
-            String query = "UPDATE storage_server_connections SET connection = ? WHERE connection = ? AND iqn IS NOT NULL;";
-
             try {
-                dbConnection.setAutoCommit(false);
-                updateConnection = dbConnection.prepareStatement(query);
+                String oldConnection = revert ? connection.originConnection : connection.destinationConnection;
+                String newConnection = revert ? connection.destinationConnection : connection.originConnection;
 
-                if (revert) {
-                    updateConnection.setString(2, connection.destinationConnection);
-                    updateConnection.setString(1, connection.originConnection);
-                } else {
-                    updateConnection.setString(1, connection.destinationConnection);
-                    updateConnection.setString(2, connection.originConnection);
-                }
+                // Finding connections to update
+                List<org.ovirt.engine.sdk.decorators.StorageConnection> connectionsToUpdate =
+                        api.getStorageConnections().list().stream().filter(
+                                storageConnection -> oldConnection.equals(storageConnection.getAddress()))
+                                .collect(Collectors.toList());
 
-                updateConnection.executeUpdate();
-                dbConnection.commit();
-            } catch (SQLException e) {
-                if (dbConnection!=null) {
+                // Update connections
+                connectionsToUpdate.forEach(storageConnection -> {
                     try {
-                        dbConnection.rollback();
-                    } catch (SQLException re) {
-                        listener.onMessage(re, Messages.get("drp.error.rollback"), OperationListener.MessageType.ERROR);
+                        storageConnection.setAddress(newConnection);
+                        storageConnection.update(null, null, null, true);
+                    } catch (Exception e) {
+                        throw new RuntimeException();
                     }
-                }
-            } finally {
-                if (updateConnection!=null) {
-                    updateConnection.close();
-                }
-
-                dbConnection.setAutoCommit(true);
+                });
+            } catch (Exception e) {
+                throw new ConnectionUpdateException(Messages.get("drp.updatingdbconnections.error"));
             }
         }
     }
