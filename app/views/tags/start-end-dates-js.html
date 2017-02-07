@@ -1,22 +1,3 @@
-
-
-$('#startDateDiv').datepicker({
-    autoclose: true,
-    orientation: "bottom",
-    todayBtn: "linked",
-    todayHighlight: true,
-    format: "dd/mm/yyyy"
-});
-
-$('#endDateDiv').datepicker({
-    autoclose: true,
-    orientation: "bottom",
-    todayBtn: "linked",
-    todayHighlight: true,
-    format: "dd/mm/yyyy"
-});
-
-*{
 $('#startDate').datetimepicker({
     format: 'DD/MM/YYYY',
     locale: 'es',
@@ -46,4 +27,3 @@ $("#startDate").on("dp.change", function (e) {
 $("#endDate").on("dp.change", function (e) {
     $('#startDate').data("DateTimePicker").maxDate(e.date);
 });
-}*

@@ -78,7 +78,6 @@ form.download = Descargar
 form.error = Existen errores en el formulario, por favor verificar
 form.startDate = Fecha inicial
 form.endDate = Fecha final
-form.select.none = Ninguno seleccionado
 
 select.search = Buscar
 select.selectAll = Seleccionar todos
