@@ -14,11 +14,13 @@ This is a web application that uses Java, oVirt API and PostgreSQL to perform th
 ## How does this work ? ##
 
 * This project try to implement Approach #2, presented on this slides DevConf.cz - 2014 [Disaster Recovery Strategies Using oVirt's new Storage Connection Management Features](http://www.slideshare.net/AllonMureinik/dev-conf-ovirt-dr)
+* It uses 100% API
 
 ## Installation Guide ##
 
 ### Requirements
 
+* RHV/oVirt 3.6.10 | RHV/oVirt 4.1
 * Centos/RHEL 7.x -> latest version __(minimal installation)__
 * Java Oracle 8, *needs testing with OpenJDK*
 * MariaDB/MySQL 5.x (for storing application configuration and parameters) 
@@ -134,13 +136,6 @@ Edit configuration file: __/etc/ovirt-engine-disaster-recovery/ovirt-engine-disa
 90 # To connect to a local MySQL5 database, use:
 91 db=mysql://ovirtdr:YOURPASSWOR-HERE@localhost:3306/ovirtenginedr
 
-# Change Value on Line 215 for PostgreSQL
-
-215 ovirt.db.host = YOUR-RHEV-M-HOSTNAME-HERE # Example: rhevm.internal.itm.gt
-216 ovirt.db.port = 5432
-217 ovirt.db.user = engine
-218 ovirt.db.password = YOUR-PGSQL-ENGINE-PASSWORD-HERE
-219 ovirt.db.name = engine
 
 ```
 
