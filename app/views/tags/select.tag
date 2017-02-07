@@ -21,7 +21,7 @@
     serializedAttrs  = play.templates.FastTags.serialize(_attrs, "size", "name", "items", "labelProperty", "value", "valueProperty")
 }%
 
-<select name="${_name}" ${_size?'size="'+_size+'"':''} ${serializedAttrs}>
+<select name="${_name}" ${_size?'size="'+_size+'"':''} ${serializedAttrs} data-none-selected-text="&{'form.select.none'}">
     #{doBody /}
     #{list items:_items, as:'i'}
         #{option _valueProperty && i.hasProperty(_valueProperty) ? i[_valueProperty] : i}&{(_labelProperty && i.hasProperty(_labelProperty) ? play.utils.HTML.htmlEscape(i[_labelProperty]?.toString()) : i?.toString())?.replace("%", "%%")}#{/option}

@@ -15,11 +15,21 @@
 <div class="form-group ${field.error ? 'has-error':''}">
     <label class="col-sm-4 control-label" for="${field.id}">${messages.get(_label?:field.name)}</label>
     <div class="col-sm-8">
-        #{if _multiple}
-            #{select-multiple pName, items: _items, valueProperty:_valueProperty, labelProperty:_labelProperty, values:_value, class:"selectpicker", id:field.id /}
+        #{if _required}
+            #{if _multiple}
+                #{select-multiple pName, items: _items, valueProperty:_valueProperty, labelProperty:_labelProperty, values:_value, class:"selectpicker form-control", id:field.id, required:_required /}
+            #{/if}
+            #{else}
+                #{select pName, items: _items, valueProperty:_valueProperty, labelProperty:_labelProperty, value:_value, class:"selectpicker form-control", id:field.id, required:_required /}
+            #{/else}
         #{/if}
         #{else}
-            #{select pName, items: _items, valueProperty:_valueProperty, labelProperty:_labelProperty, value:_value, class:"selectpicker", id:field.id /}
+            #{if _multiple}
+                #{select-multiple pName, items: _items, valueProperty:_valueProperty, labelProperty:_labelProperty, values:_value, class:"selectpicker form-control", id:field.id /}
+            #{/if}
+            #{else}
+                #{select pName, items: _items, valueProperty:_valueProperty, labelProperty:_labelProperty, value:_value, class:"selectpicker form-control", id:field.id /}
+            #{/else}
         #{/else}
         #{if field.error}<p id="${field.id}-error" class="help-block">${field.error}</p>#{/if}
     </div>

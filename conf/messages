@@ -78,6 +78,7 @@ form.download = Download
 form.error = Please verify for errors, on the form
 form.startDate = Start Date
 form.endDate = End Data
+form.select.none = None selected
 
 select.search = Find
 select.selectAll = Select All
