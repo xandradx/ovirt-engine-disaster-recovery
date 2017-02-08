@@ -22,7 +22,7 @@ This is a web application that uses Java, oVirt API and PostgreSQL to perform th
 
 * RHV/oVirt 3.6.10 | RHV/oVirt 4.1
 * Centos/RHEL 7.x -> latest version __(minimal installation)__
-* Java Oracle 8, *needs testing with OpenJDK*
+* Java Oracle|OpenJDK 8
 * MariaDB/MySQL 5.x (for storing application configuration and parameters) 
 * Play Framework 1.4, *we need some help freeing the app, from this framework, we needed to deliver the app fast for a customer, so we used this framework.* [Play Framework](https://www.playframework.com/download)
 
@@ -33,7 +33,9 @@ This is a web application that uses Java, oVirt API and PostgreSQL to perform th
 ```
 yum update -y 
 ```
-* Installing Java Oracle 1.8 
+#### Installing Java 1.8 
+
+* ORACLE
 
 For RHEL 7.x
 
@@ -48,6 +50,14 @@ Download from: [Java 1.8 Oracle](http://www.oracle.com/technetwork/java/javase/d
 
 ```
 yum localinstall jre-8u91-linux-x64.rpm -y
+```
+
+* OpenJDK
+
+For RHEL 7.x | Centos 7.x
+
+```
+yum install java-1.8.0-openjdk-headless 
 ```
 
 Verify Java version
@@ -73,10 +83,10 @@ systemctl restart firewalld
 
 ```
 cd /etc/yum.repos.d/
-curl -O http://supp01.i-t-m.com/.repo
+curl -O http://supp01.i-t-m.com/repos/ovirt-engine-disaster-recovery.repo
 
 ```
-This is a temporal repository and can/will be changed in the future !
+This is a nightly build !! 
 
 * Install RPMs
 
