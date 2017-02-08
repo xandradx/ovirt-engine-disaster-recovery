@@ -83,10 +83,10 @@ systemctl restart firewalld
 
 ```
 cd /etc/yum.repos.d/
-curl -O http://supp01.i-t-m.com/.repo
+curl -O http://supp01.i-t-m.com/repos/ovirt-engine-disaster-recovery.repo
 
 ```
-This is a temporal repository and can/will be changed in the future !
+This is a nightly build !! 
 
 * Install RPMs
 
