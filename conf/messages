@@ -65,7 +65,7 @@ validation.invalid = Wrong value
 ################################################
 #General messages
 ################################################
-backend.title = oVirt Dashboard
+backend.title = oVirt Engine Disaster Recovery
 state.active = Active
 state.inactive = Inactive
 form.cancel = Cancel
@@ -260,7 +260,7 @@ start.failover = Failover
 drp.verifyinghosts = Verifyng hosts
 drp.originhost = Source Host (%s) status: %s
 drp.destinationhost = Target Host (%s) status: %s
-drp.hostsmaintenancerequired = Every Host, must be on maintenance to start controller process
+drp.hostsmaintenancerequired = Every Host, must be on maintenance to start controlled process
 drp.hostsnotready = Contingency Hosts are not in the correct state
 drp.hostsready = Host ready to start controlled process
 drp.nohosts = No hosts available

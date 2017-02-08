@@ -65,7 +65,7 @@ validation.invalid = Valor incorrecto
 ################################################
 #General messages
 ################################################
-backend.title = oVirt Dashboard
+backend.title = oVirt Engine Disaster Recovery
 state.active = Activo
 state.inactive = Inactivo
 form.cancel = Cancelar
