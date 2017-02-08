@@ -122,7 +122,7 @@
 </div>
 <!-- /.panel -->
 
-#{api-loader isAdmin: isAdmin/}
+#{api-loader isAdmin: isAdmin, hasStartVM:configuration.hasManagerStartup() /}
 <div id="main_actions_div">
     <h1>&{'configuration.currentConnections'}</h1>
     <div class="panel panel-default">

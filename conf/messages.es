@@ -160,6 +160,7 @@ configuration.tab.hosts = Hosts
 configuration.tab.connections = Almacenamiento
 
 configuration.managerIp = Host VM Manager (contingencia)
+configuration.startVMManager = Iniciar VM Manager (contingencia)
 configuration.managerUser = Usuario - Host (contingencia)
 configuration.managerKeyLocation = Ubicación llave privada (SSH)
 configuration.managerBinLocation = Comando Inicio Manager (contingencia)
@@ -239,6 +240,7 @@ ws.error.exception = Occurió un error inesperado, por favor intente de nuevo m�
 
 manager.unreachable.title = API no disponible
 manager.unreachable.message = El API no se encuentra disponible en este momento. Por favor enciéndalo ingresando a la <br>consola administrativa o presione el siguiente botón para encenderlo.
+manager.unreachable.message_nopowerup = El API no se encuentra disponible en este momento. Por favor enciéndalo ingresando a la <br>consola administrativa.
 manager.unreachable.turnon = Encender
 manager.unreachable.tryagain = Reintentar
 manager.unreachable.configuration = Ir a configuración

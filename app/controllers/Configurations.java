@@ -27,6 +27,13 @@ public class Configurations extends AuthenticatedController {
 
     public static void save(@Valid Configuration configuration) {
 
+        if (configuration.startVMManager) {
+            validation.required("configuration.managerUser", configuration.managerUser);
+            validation.required("configuration.managerBinLocation", configuration.managerBinLocation);
+            validation.required("configuration.managerKeyLocation", configuration.managerKeyLocation);
+            validation.required("configuration.managerCommand", configuration.managerCommand);
+        }
+
         if (validation.hasErrors()) {
             params.flash();
             flash.error(Messages.get("form.error"));
@@ -42,9 +49,10 @@ public class Configurations extends AuthenticatedController {
     }
 
     public static void editStorageConnections() {
+        Configuration configuration = Configuration.generalConfiguration();
         List<DatabaseConnection> connections = DatabaseConnection.find("active = :a").bind("a", true).fetch();
         List<DatabaseIQN> iqns = DatabaseIQN.find("active = :a").bind("a", true).fetch();
-        render(connections, iqns);
+        render(connections, iqns, configuration);
     }
 
     public static void saveConnections(@Valid List<DatabaseConnection> connections, @Valid List<DatabaseIQN> iqns) {
@@ -72,7 +80,8 @@ public class Configurations extends AuthenticatedController {
     }
 
     public static void editHosts() {
-        render();
+        Configuration configuration = Configuration.generalConfiguration();
+        render(configuration);
     }
 
     public static void getHosts() {

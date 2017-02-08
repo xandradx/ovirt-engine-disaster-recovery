@@ -3,6 +3,7 @@ package controllers;
 import dto.response.ServiceResponse;
 import helpers.GlobalConstants;
 import jobs.services.*;
+import models.Configuration;
 import play.libs.F;
 import play.mvc.With;
 
@@ -11,7 +12,8 @@ import play.mvc.With;
 public class Dashboard extends AuthenticatedController {
 
     public static void index() {
-        render();
+        Configuration configuration = Configuration.generalConfiguration();
+        render(configuration);
     }
 
     public static void getDataCenters() {

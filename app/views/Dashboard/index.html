@@ -20,7 +20,7 @@ container-cards-pf
 
 <h1>#{get 'title'/}</h1>
 
-#{api-loader isAdmin: isAdmin/}
+#{api-loader isAdmin: isAdmin, hasStartVM:configuration.hasManagerStartup() /}
 
 <div id="main_actions_div">
 

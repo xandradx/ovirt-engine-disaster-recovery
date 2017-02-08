@@ -11,22 +11,27 @@
                 #{form-input fieldName:'configuration.managerIp'/}
             </div>
             <div class="col-md-6">
-                #{form-input fieldName:'configuration.managerUser'/}
+                #{form-checkbox fieldName:'configuration.startVMManager', value:configuration.startVMManager/}
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-md-6">
-                #{form-input fieldName:'configuration.managerKeyLocation'/}
+        <div id="manager_startup" style="${!configuration.startVMManager ? 'display:none;' : ''}">
+            <div class="row">
+                <div class="col-md-6">
+                    #{form-input fieldName:'configuration.managerUser'/}
+                </div>
+                <div class="col-md-6">
+                    #{form-input fieldName:'configuration.managerKeyLocation'/}
+                </div>
             </div>
-            <div class="col-md-6">
-                #{form-input fieldName:'configuration.managerBinLocation'/}
-            </div>
-        </div>
 
-        <div class="row">
-            <div class="col-md-6">
-                #{form-input fieldName:'configuration.managerCommand'/}
+            <div class="row">
+                <div class="col-md-6">
+                    #{form-input fieldName:'configuration.managerBinLocation'/}
+                </div>
+                <div class="col-md-6">
+                    #{form-input fieldName:'configuration.managerCommand'/}
+                </div>
             </div>
         </div>
 
@@ -108,5 +113,9 @@
             $("#general-loading-div").hide();
         });
     }
+
+    $("#configuration_startVMManager").on("change", function() {
+        $("#manager_startup").toggle(this.checked);
+    });
 
 </script>

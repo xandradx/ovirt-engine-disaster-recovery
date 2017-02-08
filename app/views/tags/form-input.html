@@ -6,7 +6,6 @@
         %{
             fieldValue = field.flash != null ? field.flash : field.value;
         }%
-
         #{input for:field.name, id:field.id, class:"form-control", value:fieldValue, type: _type?:"text" /}
         #{if field.error}<p id="${field.id}-error" class="help-block">${field.error}</p>#{/if}
     </div>

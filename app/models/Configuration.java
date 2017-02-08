@@ -53,27 +53,25 @@ public class Configuration extends Model {
     @Column(length = 20)
     public String trustStorePassword;
 
+    public boolean startVMManager;
+
     @Required
     @MaxSize(50)
     @Column(length = 50)
     public String managerIp;
 
-    @Required
     @MaxSize(100)
     @Column(length = 100)
     public String managerUser;
 
-    @Required
     @MaxSize(100)
     @Column(length = 100)
     public String managerKeyLocation;
 
-    @Required
     @MaxSize(100)
     @Column(length = 100)
     public String managerBinLocation;
 
-    @Required
     @MaxSize(100)
     @Column(length = 100)
     public String managerCommand;
@@ -104,6 +102,7 @@ public class Configuration extends Model {
         managerBinLocation = configuration.managerBinLocation;
         managerCommand = configuration.managerCommand;
         trustStorePassword = configuration.trustStorePassword;
+        startVMManager = configuration.startVMManager;
 
 
         if (configuration.trustStore!=null && configuration.trustStore.exists()) {
@@ -113,6 +112,14 @@ public class Configuration extends Model {
 
             trustStore = configuration.trustStore;
         }
+    }
+
+    public boolean hasManagerStartup() {
+        return this.startVMManager &&
+                this.managerUser != null && !this.managerUser.isEmpty() &&
+                this.managerKeyLocation != null && !this.managerKeyLocation.isEmpty() &&
+                this.managerBinLocation != null && !this.managerBinLocation.isEmpty() &&
+                this.managerCommand != null && !this.managerCommand.isEmpty();
     }
 
     @PreUpdate

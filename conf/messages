@@ -166,6 +166,7 @@ configuration.managerBinLocation = Command to start VM - manager (contingency)
 configuration.managerCommand = Arguments (contingency)
 
 configuration.apiURL = API URL
+configuration.startVMManager = Start VM manager (contingency)
 configuration.apiPassword = API Password
 configuration.apiUser = API User Name
 configuration.trustStore = Truststore
@@ -238,7 +239,8 @@ ws.api.error.connection = Error establishing connection to API
 ws.error.exception = Unexpected error, please try latter
 
 manager.unreachable.title = API unavailable
-manager.unreachable.message = API unavailable. Please power up the Contingency VM for RHEV-M o click this button if this environment support, powering up the VM.
+manager.unreachable.message = API unavailable. Please power up the Contingency VM for RHEV-M or <br>click this button if this environment support, powering up the VM.
+manager.unreachable.message_nopowerup = API unavailable. Please power up the Contingency VM for RHEV-M.
 manager.unreachable.turnon = Power Up
 manager.unreachable.tryagain = Retry
 manager.unreachable.configuration = Settings

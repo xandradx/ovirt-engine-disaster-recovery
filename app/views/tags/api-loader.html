@@ -9,12 +9,17 @@
                 <i class="fa fa-exclamation-triangle"></i>
             </div>
             <h1>&{'manager.unreachable.title'}</h1>
+            #{if _hasStartVM}
             <p>&{'manager.unreachable.message'}</p>
             <div class="blank-slate-pf-main-action">
                 <button class="btn btn-primary btn-lg" onclick="turnOnApi()">
                     &{'manager.unreachable.turnon'}
                 </button>
             </div>
+            #{/if}
+            #{else}
+            <p>&{'manager.unreachable.message_nopowerup'}</p>
+            #{/else}
             <div class="blank-slate-pf-secondary-action">
                 <button class="btn btn-default" onclick="checkManagerStatus()">
                     &{'manager.unreachable.tryagain'}
