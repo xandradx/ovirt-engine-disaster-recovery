@@ -3,6 +3,7 @@ package controllers;
 import dto.response.ServiceResponse;
 import helpers.GlobalConstants;
 import jobs.services.HostsJob;
+import jobs.services.ManagerJob;
 import jobs.services.StorageConnectionsJob;
 import models.Configuration;
 import models.DatabaseConnection;
@@ -27,11 +28,26 @@ public class Configurations extends AuthenticatedController {
 
     public static void save(@Valid Configuration configuration) {
 
+        Configuration generalConfiguration = Configuration.generalConfiguration();
+
         if (configuration.startVMManager) {
             validation.required("configuration.managerUser", configuration.managerUser);
             validation.required("configuration.managerBinLocation", configuration.managerBinLocation);
-            validation.required("configuration.managerKeyLocation", configuration.managerKeyLocation);
             validation.required("configuration.managerCommand", configuration.managerCommand);
+
+            if (configuration.managerKey==null || !configuration.managerKey.exists()) {
+                validation.required("configuration.managerPassword", configuration.managerPassword);
+            }
+        }
+
+        if (configuration.managerKey!=null && configuration.managerKey.exists()) {
+
+        }
+
+        if (configuration.validateCertificate) {
+            if (generalConfiguration.trustStore == null || !generalConfiguration.trustStore.exists()) {
+                validation.required("configuration.trustStore", configuration.trustStore);
+            }
         }
 
         if (validation.hasErrors()) {
@@ -40,7 +56,6 @@ public class Configurations extends AuthenticatedController {
             validation.keep();
         } else {
             flash.success(Messages.get("form.success"));
-            Configuration generalConfiguration = Configuration.generalConfiguration();
             generalConfiguration.applyConfiguration(configuration);
             generalConfiguration.save();
         }
@@ -123,6 +138,16 @@ public class Configurations extends AuthenticatedController {
         if (configuration.trustStore!=null && configuration.trustStore.getFile().exists()) {
             response.setContentTypeIfNotSet(configuration.trustStore.type());
             renderBinary(configuration.trustStore.getFile());
+        }
+
+        notFound();
+    }
+
+    public static void downloadManagerKey() {
+        Configuration configuration = Configuration.generalConfiguration();
+        if (configuration.managerKey!=null && configuration.managerKey.getFile().exists()) {
+            response.setContentTypeIfNotSet(configuration.managerKey.type());
+            renderBinary(configuration.managerKey.getFile());
         }
 
         notFound();

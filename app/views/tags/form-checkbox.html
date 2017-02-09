@@ -2,7 +2,7 @@
 <div class="form-group">
     <label class="col-sm-4 control-label">${messages.get(field.name)}</label>
     <label class="col-sm-8">
-		&nbsp;<input type="checkbox" ${ field.flash == "on" ? "checked" : ((_value) ? "checked" : "")} name="${field.name}" id="${field.id}">&nbsp;
+		&nbsp;<input type="checkbox" ${ field.flash?.getAt(0) == "o" ? "checked" : ((_value) ? "checked" : "")} name="${field.name}" id="${field.id}">&nbsp;
 		<input name="${field.name}" type="hidden" value="false"/>
     </label>
 </div>

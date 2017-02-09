@@ -14,6 +14,7 @@
  */
 package models;
 
+import play.Logger;
 import play.data.validation.MaxSize;
 import play.data.validation.Required;
 import play.db.jpa.Blob;
@@ -66,7 +67,9 @@ public class Configuration extends Model {
 
     @MaxSize(100)
     @Column(length = 100)
-    public String managerKeyLocation;
+    public String managerPassword;
+
+    public Blob managerKey;
 
     @MaxSize(100)
     @Column(length = 100)
@@ -98,9 +101,16 @@ public class Configuration extends Model {
         validateCertificate = configuration.validateCertificate;
         managerIp = configuration.managerIp;
         managerUser = configuration.managerUser;
-        managerKeyLocation = configuration.managerKeyLocation;
+
+        if (configuration.managerKey !=null && configuration.managerKey.exists()) {
+            if (managerKey.exists()) {
+                managerKey.getFile().delete();
+            }
+        }
+        managerKey = configuration.managerKey;
         managerBinLocation = configuration.managerBinLocation;
         managerCommand = configuration.managerCommand;
+        managerPassword = configuration.managerPassword;
         trustStorePassword = configuration.trustStorePassword;
         startVMManager = configuration.startVMManager;
 
@@ -117,7 +127,7 @@ public class Configuration extends Model {
     public boolean hasManagerStartup() {
         return this.startVMManager &&
                 this.managerUser != null && !this.managerUser.isEmpty() &&
-                this.managerKeyLocation != null && !this.managerKeyLocation.isEmpty() &&
+                ( (this.managerKey!=null && this.managerKey.exists()) || (this.managerPassword!=null && !this.managerPassword.isEmpty()) ) &&
                 this.managerBinLocation != null && !this.managerBinLocation.isEmpty() &&
                 this.managerCommand != null && !this.managerCommand.isEmpty();
     }
@@ -127,6 +137,7 @@ public class Configuration extends Model {
     public void encryptPassword() {
         if (apiPassword!=null) {
             apiPassword = Crypto.encryptAES(apiPassword);
+            managerPassword = Crypto.encryptAES(managerPassword);
         }
     }
 
@@ -134,6 +145,14 @@ public class Configuration extends Model {
     public void decryptPassword() {
         if (apiPassword!=null) {
             apiPassword = Crypto.decryptAES(apiPassword);
+
+            if (managerPassword!=null) {
+                try {
+                    managerPassword = Crypto.decryptAES(managerPassword);
+                } catch (Exception e) {
+                    Logger.error("Could not decrypt manager password");
+                }
+            }
         }
     }
 }

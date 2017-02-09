@@ -6,34 +6,7 @@
     <div class="panel-body">
         #{form (configuration?.id) ? @Configurations.save() : "", method:"POST", id:"form", role:"form", enctype: "multipart/form-data", class:'form-horizontal'}
 
-        <div class="row">
-            <div class="col-md-6">
-                #{form-input fieldName:'configuration.managerIp'/}
-            </div>
-            <div class="col-md-6">
-                #{form-checkbox fieldName:'configuration.startVMManager', value:configuration.startVMManager/}
-            </div>
-        </div>
-
-        <div id="manager_startup" style="${!configuration.startVMManager ? 'display:none;' : ''}">
-            <div class="row">
-                <div class="col-md-6">
-                    #{form-input fieldName:'configuration.managerUser'/}
-                </div>
-                <div class="col-md-6">
-                    #{form-input fieldName:'configuration.managerKeyLocation'/}
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-6">
-                    #{form-input fieldName:'configuration.managerBinLocation'/}
-                </div>
-                <div class="col-md-6">
-                    #{form-input fieldName:'configuration.managerCommand'/}
-                </div>
-            </div>
-        </div>
+        <h2>API</h2>
 
         <div class="row">
             <div class="col-md-6">
@@ -48,28 +21,86 @@
             <div class="col-md-6">
                 #{form-input fieldName:'configuration.apiPassword', type:"password"/}
             </div>
+        </div>
+
+        <hr/>
+
+        <h2>Certificate</h2>
+
+        <div class="row">
             <div class="col-md-6">
                 #{form-checkbox fieldName:'configuration.validateCertificate', value:configuration.validateCertificate/}
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-md-6">
-                #{form-input fieldName:'configuration.trustStorePassword', type:"password"/}
+        <div id="truststore" style="${!configuration.validateCertificate && flash.get('configuration.validateCertificate')?.getAt(0) != 'o' ? 'display:none;' : ''}">
+            <div class="row">
+                <div class="col-md-6">
+                    #{form-input-plain
+                    type:"file",
+                    class:" ",
+                    name:"configuration.trustStore",
+                    error: errors.forKey("configuration.trustStore"),
+                    downloadLink: configuration?.trustStore?.exists() ? @Configurations.downloadTrustStore() : null
+                    /}
+                </div>
+                <div class="col-md-6">
+                    #{form-input fieldName:'configuration.trustStorePassword', type:"password"/}
+                </div>
             </div>
         </div>
 
+        <hr/>
+
+        <h2>Manager</h2>
+
         <div class="row">
             <div class="col-md-6">
-                #{form-input-plain
-                type:"file",
-                class:" ",
-                name:"configuration.trustStore",
-                error: errors.forKey("configuration.trustStore"),
-                downloadLink: configuration?.trustStore?.exists() ? @Configurations.downloadTrustStore() : null
-                /}
+                #{form-checkbox fieldName:'configuration.startVMManager', value:configuration.startVMManager/}
             </div>
         </div>
+
+        <div id="manager_startup" style="${!configuration.startVMManager && flash.get('configuration.startVMManager')?.getAt(0) != 'o' ? 'display:none;' : ''}">
+
+            <div class="row">
+                <div class="col-md-6">
+                    #{form-input fieldName:'configuration.managerIp'/}
+                </div>
+                <div class="col-md-6">
+                    #{form-input fieldName:'configuration.managerUser'/}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    #{form-input fieldName:'configuration.managerPassword', type:"password"/}
+                </div>
+                <div class="col-md-6">
+                    #{form-input-plain
+                        type:"file",
+                        class:" ",
+                        name:"configuration.managerKey",
+                        error: errors.forKey("configuration.managerKey"),
+                        downloadLink: configuration?.managerKey?.exists() ? @Configurations.downloadManagerKey() : null
+                    /}
+                </div>
+            </div>
+
+            <div class="row">
+
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    #{form-input fieldName:'configuration.managerBinLocation'/}
+                </div>
+                <div class="col-md-6">
+                    #{form-input fieldName:'configuration.managerCommand'/}
+                </div>
+            </div>
+        </div>
+
+        <hr/>
 
         <button type="submit" class="btn btn-primary pull-right">&{'form.save'}</button>
 
@@ -116,6 +147,10 @@
 
     $("#configuration_startVMManager").on("change", function() {
         $("#manager_startup").toggle(this.checked);
+    });
+
+    $("#configuration_validateCertificate").on("change", function() {
+        $("#truststore").toggle(this.checked);
     });
 
 </script>

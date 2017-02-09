@@ -14,13 +14,19 @@
  */
 package jobs.services;
 
+import com.jcabi.ssh.SSH;
+import com.jcabi.ssh.SSHByPassword;
+import com.jcabi.ssh.Shell;
 import drp.OvirtApi;
 import dto.response.ServiceResponse;
-import helpers.ShellHelper;
 import models.Configuration;
 import org.ovirt.engine.sdk.Api;
 import play.Logger;
+import play.i18n.Messages;
 import play.jobs.Job;
+
+import java.io.File;
+import java.util.Scanner;
 
 /**
  * Created by jandrad on 31/01/16.
@@ -28,9 +34,7 @@ import play.jobs.Job;
 public class ManagerJob extends Job {
 
     @Override
-    public Boolean doJobWithResult() throws Exception {
-
-        ServiceResponse serviceResponse = null;
+    public ServiceResponse doJobWithResult() throws Exception {
 
         Configuration configuration = Configuration.generalConfiguration();
         String host = configuration.apiURL;
@@ -45,42 +49,51 @@ public class ManagerJob extends Job {
                     hostName = hostName.substring(0, index);
                 }
 
-                String keyLocation = configuration.managerKeyLocation;
                 String user = configuration.managerUser;
                 String ip = configuration.managerIp;
                 String bin = configuration.managerBinLocation;
                 String operation = configuration.managerCommand;
 
-                String command = "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i " + keyLocation + " " + user + "@" + ip + " " + bin + " " + operation;
-                int result = ShellHelper.executeCommand(command);
-
-                if (result == 0) {
-
-                    long startTime = System.currentTimeMillis();
-                    Api api = null;
-                    do {
-
-                        Thread.sleep(10000);
-
-                        try {
-                            api = OvirtApi.getApi();
-                        } catch (Exception e) {
-                            Logger.debug("Api not ready yet");
-                        }
-
-                    } while (api == null && (System.currentTimeMillis() - startTime) < 120000);
-
-                    api.close();
-                    return api != null;
+                Shell shell;
+                if (configuration.managerKey!=null && configuration.managerKey.exists()) {
+                    File keyFile = configuration.managerKey.getFile();
+                    String keyContent = new Scanner(keyFile).useDelimiter("\\Z").next();
+                    shell = new SSH(ip, 22, user, keyContent);
+                } else {
+                    shell = new SSHByPassword(ip, 22, user, configuration.managerPassword);
                 }
 
-                return false;
+                try {
+                    String stdout = new Shell.Plain(new Shell.Safe(shell)).exec(bin + " " + operation);
+                    Logger.debug("Output: %s", stdout);
+
+                } catch (IllegalArgumentException e) {
+                    return ServiceResponse.error(Messages.get("manager.startupfailed"));
+                }
+
+                long startTime = System.currentTimeMillis();
+                Api api = null;
+                do {
+                    try {
+                        api = OvirtApi.getApi();
+                    } catch (Exception e) {
+                        Logger.debug("Api not ready yet");
+                    }
+
+                } while (api == null && (System.currentTimeMillis() - startTime) < 60000);
+
+                if (api!=null) {
+                    api.close();
+                    return ServiceResponse.success("");
+                } else {
+                    return ServiceResponse.error(Messages.get("manager.startupfailed"));
+                }
 
             } catch (Exception e) {
                 Logger.error(e, "Could not get manager status");
             }
         }
 
-        return false;
+        return ServiceResponse.error(Messages.get("manager.startupfailed"));
     }
 }

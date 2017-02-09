@@ -165,6 +165,8 @@ configuration.managerUser = Usuario - Host (contingencia)
 configuration.managerKeyLocation = Ubicación llave privada (SSH)
 configuration.managerBinLocation = Comando Inicio Manager (contingencia)
 configuration.managerCommand = Comando Argumentos (contingencia)
+configuration.managerPassword = Contraseña
+configuration.managerKey = Llave SSH
 
 configuration.apiURL = URL API
 configuration.apiPassword = Password API
