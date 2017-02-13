@@ -1,4 +1,4 @@
-%define 	play_version play-1.4.2
+%define 	play_version play-1.4.4
 %define 	uid    199
 %define 	gid    199
 %define 	user   ovirtdr
