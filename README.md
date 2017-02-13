@@ -284,5 +284,5 @@ sudo ln -s ~/ovirt-engine-disaster-recovery/conf/application.conf /etc/ovirt-eng
 
 ## Who do I talk to? ##
 
-* [Chocomango](http://chocomango.net) - José Eduardo Andrade Escobar <jandrad@chocomando.net> 
+* [Chocomango](http://chocomango.net) - José Eduardo Andrade Escobar <jandrad@chocomango.net> 
 * [ITM](http://itm.gt) - Jorge Luis Andrade Escobar <jandrade@itm.gt> (yes, we are brothers)
