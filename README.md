@@ -20,7 +20,7 @@ This is a web application that uses Java, oVirt API and PostgreSQL to perform th
 
 ### Requirements
 
-* RHV/oVirt 3.6.10 | RHV/oVirt 4.1
+* RHV/oVirt 3.6.10+ | RHV/oVirt 4.0, 4.1
 * Centos/RHEL 7.x -> latest version __(minimal installation)__
 * Java Oracle|OpenJDK 8
 * MariaDB/MySQL 5.x (for storing application configuration and parameters) 
